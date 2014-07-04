@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9E5D98B2-8425-4403-894C-A7EA1326DD6A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Glumer</RootNamespace>
+    <ProjectName>Glumer</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;GLUMER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\SDL-1.2.15\include;$(ProjectDir)..\Shared</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\SDL-1.2.15\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL.lib;OpenGL32.lib;GlU32.Lib</AdditionalDependencies>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>Glumer.MAP</MapFileName>
+      <MapExports>true</MapExports>
+      <ModuleDefinitionFile>Glumer.DEF</ModuleDefinitionFile>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>md "$(OutDir)..\..\Publish" 
+md "$(OutDir)..\..\Publish\$(Configuration)"
+xcopy "$(OutDir)$(TargetName).???" "$(OutDir)..\..\Publish\$(Configuration)" /Y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;GLUMER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\SDL-1.2.15\include;$(ProjectDir)..\Shared</AdditionalIncludeDirectories>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\SDL-1.2.15\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL.lib;OpenGL32.lib;GlU32.Lib</AdditionalDependencies>
+      <ModuleDefinitionFile>Glumer.DEF</ModuleDefinitionFile>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>md "$(OutDir)..\..\Publish" 
+md "$(OutDir)..\..\Publish\$(Configuration)"
+xcopy "$(OutDir)$(TargetName).???" "$(OutDir)..\..\Publish\$(Configuration)" /Y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\GitHub\Bubbles\Shared\TimerWrapper.h" />
+    <ClInclude Include="cGlumShapeFactoryState.h" />
+    <ClInclude Include="cGluperDirection.h" />
+    <ClInclude Include="cGlumShapeBase.h" />
+    <ClInclude Include="cGlumShapeFactory_ShapeContainer.h" />
+    <ClInclude Include="cGlumShape_HUDLongRadar.h" />
+    <ClInclude Include="cGlumShape_HUDShortRadar.h" />
+    <ClInclude Include="cGlumShape_Rock.h" />
+    <ClInclude Include="cGlumShape_SwitchGadget.h" />
+    <ClInclude Include="cHUD_Colour.h" />
+    <ClInclude Include="cMovementBase.h" />
+    <ClInclude Include="cMovement_Camera.h" />
+    <ClInclude Include="cGluperCenter.h" />
+    <ClInclude Include="cGluperOrientation.h" />
+    <ClInclude Include="cGluperScale.h" />
+    <ClInclude Include="cObjectBase.h" />
+    <ClInclude Include="cObjectMoveableBase.h" />
+    <ClInclude Include="cPolyLetter.h" />
+    <ClInclude Include="cGlumShape_Console.h" />
+    <ClInclude Include="cSelectableBase.h" />
+    <ClInclude Include="cTimer_RockMotion.h" />
+    <ClInclude Include="cTimer_PistonMotion.h" />
+    <ClInclude Include="cGlumShapeFactory.h" />
+    <ClInclude Include="Glumer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\GitHub\Bubbles\Shared\TimerWrapper.cpp" />
+    <ClCompile Include="cGlumShapeFactory.cpp" />
+    <ClCompile Include="cGlumShape_HUDLongRadar.cpp" />
+    <ClCompile Include="cGlumShape_HUDShortRadar.cpp" />
+    <ClCompile Include="cGlumShape_Rock.cpp" />
+    <ClCompile Include="cGlumShape_SwitchGadget.cpp" />
+    <ClCompile Include="cMovement_Camera.cpp" />
+    <ClCompile Include="cGluperCenter.cpp" />
+    <ClCompile Include="cGluperOrientation.cpp" />
+    <ClCompile Include="cObjectMoveableBase.cpp" />
+    <ClCompile Include="cPolyLetter.cpp" />
+    <ClCompile Include="cGlumShape_Console.cpp" />
+    <ClCompile Include="cSelectableBase.cpp" />
+    <ClCompile Include="cTimer_RockMotion.cpp" />
+    <ClCompile Include="Glumer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Glumer.def" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Gluper">
+      <UniqueIdentifier>{3335e495-fc45-43c0-bc49-2d8b28890750}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Glum">
+      <UniqueIdentifier>{a64a68fe-1bf8-420a-8bc6-4138c737dc2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Glum">
+      <UniqueIdentifier>{4b1db6c1-c17d-41ee-9bf3-838abbf59d73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shared">
+      <UniqueIdentifier>{f5d9d727-423a-4180-a146-af5fe4552928}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shared">
+      <UniqueIdentifier>{1f8f78e2-7981-4616-9b6f-ca4eae6d3704}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gluper">
+      <UniqueIdentifier>{6823657e-e355-477c-b8ce-3d0c78920254}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gluper\4th Dimention">
+      <UniqueIdentifier>{df3b9768-c525-45c3-9e9c-576b3916918d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gluper\4th Dimention">
+      <UniqueIdentifier>{8dee5635-b252-4dbc-a475-0027dcb53c15}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cHUD_Colour.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cTimer_PistonMotion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cGluperOrientation.h">
+      <Filter>Header Files\Gluper</Filter>
+    </ClInclude>
+    <ClInclude Include="cGluperCenter.h">
+      <Filter>Header Files\Gluper</Filter>
+    </ClInclude>
+    <ClInclude Include="cGluperScale.h">
+      <Filter>Header Files\Gluper</Filter>
+    </ClInclude>
+    <ClInclude Include="cGluperDirection.h">
+      <Filter>Header Files\Gluper</Filter>
+    </ClInclude>
+    <ClInclude Include="cGlumShape_HUDLongRadar.h">
+      <Filter>Header Files\Glum</Filter>
+    </ClInclude>
+    <ClInclude Include="cGlumShapeFactory_ShapeContainer.h">
+      <Filter>Header Files\Glum</Filter>
+    </ClInclude>
+    <ClInclude Include="cGlumShape_HUDShortRadar.h">
+      <Filter>Header Files\Glum</Filter>
+    </ClInclude>
+    <ClInclude Include="cGlumShape_SwitchGadget.h">
+      <Filter>Header Files\Glum</Filter>
+    </ClInclude>
+    <ClInclude Include="cGlumShapeBase.h">
+      <Filter>Header Files\Glum</Filter>
+    </ClInclude>
+    <ClInclude Include="cGlumShapeFactory.h">
+      <Filter>Header Files\Glum</Filter>
+    </ClInclude>
+    <ClInclude Include="cMovementBase.h">
+      <Filter>Header Files\Gluper\4th Dimention</Filter>
+    </ClInclude>
+    <ClInclude Include="cSelectableBase.h">
+      <Filter>Header Files\Gluper\4th Dimention</Filter>
+    </ClInclude>
+    <ClInclude Include="cObjectBase.h">
+      <Filter>Header Files\Gluper\4th Dimention</Filter>
+    </ClInclude>
+    <ClInclude Include="cPolyLetter.h">
+      <Filter>Header Files\Glum</Filter>
+    </ClInclude>
+    <ClInclude Include="cObjectMoveableBase.h">
+      <Filter>Header Files\Gluper\4th Dimention</Filter>
+    </ClInclude>
+    <ClInclude Include="cGlumShape_Console.h">
+      <Filter>Header Files\Glum</Filter>
+    </ClInclude>
+    <ClInclude Include="cGlumShape_Rock.h">
+      <Filter>Header Files\Glum</Filter>
+    </ClInclude>
+    <ClInclude Include="cTimer_RockMotion.h">
+      <Filter>Header Files\Glum</Filter>
+    </ClInclude>
+    <ClInclude Include="cMovement_Camera.h">
+      <Filter>Header Files\Glum</Filter>
+    </ClInclude>
+    <ClInclude Include="Glumer.h" />
+    <ClInclude Include="..\..\..\GitHub\Bubbles\Shared\TimerWrapper.h">
+      <Filter>Header Files\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="cGlumShapeFactoryState.h">
+      <Filter>Header Files\Glum</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="cMovement_Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cGluperCenter.cpp">
+      <Filter>Source Files\Gluper</Filter>
+    </ClCompile>
+    <ClCompile Include="cGluperOrientation.cpp">
+      <Filter>Source Files\Gluper</Filter>
+    </ClCompile>
+    <ClCompile Include="cGlumShape_HUDLongRadar.cpp">
+      <Filter>Source Files\Glum</Filter>
+    </ClCompile>
+    <ClCompile Include="cGlumShape_HUDShortRadar.cpp">
+      <Filter>Source Files\Glum</Filter>
+    </ClCompile>
+    <ClCompile Include="cGlumShape_SwitchGadget.cpp">
+      <Filter>Source Files\Glum</Filter>
+    </ClCompile>
+    <ClCompile Include="cGlumShapeFactory.cpp">
+      <Filter>Source Files\Glum</Filter>
+    </ClCompile>
+    <ClCompile Include="cSelectableBase.cpp">
+      <Filter>Source Files\Gluper\4th Dimention</Filter>
+    </ClCompile>
+    <ClCompile Include="cPolyLetter.cpp">
+      <Filter>Source Files\Glum</Filter>
+    </ClCompile>
+    <ClCompile Include="cObjectMoveableBase.cpp">
+      <Filter>Source Files\Gluper\4th Dimention</Filter>
+    </ClCompile>
+    <ClCompile Include="cGlumShape_Console.cpp">
+      <Filter>Source Files\Glum</Filter>
+    </ClCompile>
+    <ClCompile Include="cGlumShape_Rock.cpp">
+      <Filter>Source Files\Glum</Filter>
+    </ClCompile>
+    <ClCompile Include="cTimer_RockMotion.cpp">
+      <Filter>Source Files\Glum</Filter>
+    </ClCompile>
+    <ClCompile Include="Glumer.cpp" />
+    <ClCompile Include="..\..\..\GitHub\Bubbles\Shared\TimerWrapper.cpp">
+      <Filter>Source Files\Shared</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Glumer.def" />
+  </ItemGroup>
+</Project>
