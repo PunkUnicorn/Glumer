@@ -7,6 +7,7 @@
 
 #include "STDCALL.h"
 #include "DLL_PUBLIC.h"
+#include "CoordCallback.h"
 
 namespace Glumer 
 {
@@ -60,7 +61,7 @@ extern "C" DLL_PUBLIC bool STDCALL ScrollConsoleText(unsigned int id, unsigned i
 extern "C" DLL_PUBLIC unsigned int STDCALL CreateCamera(void);
 
 // Callback for the collision engine Bubbles to get items coordinates
-typedef void STDCALL GetCoordsFunc(unsigned int /*engineId*/, unsigned int /*bubbleId also glumId*/, float &/*X*/, float &/*Y*/, float &/*Z*/); // From Bubbles
+//typedef void STDCALL GetCoordsFunc(unsigned int /*engineId*/, unsigned int /*bubbleId also glumId*/, float &/*X*/, float &/*Y*/, float &/*Z*/); // From Bubbles
 extern "C" DLL_PUBLIC GetCoordsFunc* STDCALL CallToGetCoords(void); 
 
 // Delete a glumer item created with Create... functions

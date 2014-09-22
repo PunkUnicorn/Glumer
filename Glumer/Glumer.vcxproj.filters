@@ -109,6 +109,18 @@
     <ClInclude Include="cGlumShapeFactoryState.h">
       <Filter>Header Files\Glum</Filter>
     </ClInclude>
+    <ClInclude Include="..\Shared\CoordCallback.h">
+      <Filter>Header Files\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\DLL_PUBLIC.h">
+      <Filter>Header Files\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\STDCALL.h">
+      <Filter>Header Files\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\TraceFunc.h">
+      <Filter>Header Files\Shared</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cMovement_Camera.cpp">

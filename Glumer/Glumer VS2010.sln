@@ -5,10 +5,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Glumer", "Glumer.vcxproj", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{AB6826D3-78A7-4C8D-9610-419FC9FBF9A1}"
 	ProjectSection(SolutionItems) = preProject
+		..\Shared\CoordCallback.h = ..\Shared\CoordCallback.h
 		..\Shared\DLL_PUBLIC.h = ..\Shared\DLL_PUBLIC.h
 		..\Shared\STDCALL.h = ..\Shared\STDCALL.h
 		..\Shared\TimerWrapper.cpp = ..\Shared\TimerWrapper.cpp
 		..\Shared\TimerWrapper.h = ..\Shared\TimerWrapper.h
+		..\Shared\TraceFunc.h = ..\Shared\TraceFunc.h
 	EndProjectSection
 EndProject
 Global

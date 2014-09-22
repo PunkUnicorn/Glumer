@@ -101,6 +101,10 @@ xcopy "$(OutDir)$(TargetName).???" "$(OutDir)..\..\Publish\$(Configuration)" /Y<
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\GitHub\Bubbles\Shared\TimerWrapper.h" />
+    <ClInclude Include="..\Shared\CoordCallback.h" />
+    <ClInclude Include="..\Shared\DLL_PUBLIC.h" />
+    <ClInclude Include="..\Shared\STDCALL.h" />
+    <ClInclude Include="..\Shared\TraceFunc.h" />
     <ClInclude Include="cGlumShapeFactoryState.h" />
     <ClInclude Include="cGluperDirection.h" />
     <ClInclude Include="cGlumShapeBase.h" />

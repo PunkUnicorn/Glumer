@@ -355,9 +355,6 @@ extern "C" DLL_PUBLIC void STDCALL HitTest(unsigned int mouse_x, unsigned int mo
    { }
 }
 
-//from BubbleBubble.h so merge GetCoord callback definitions into the include h file, make it shared between this and Bubbles
-//typedef void STDCALL GetCoordsFunc(unsigned int /*engineId*/, unsigned int /*bubbleId*/, float &/*X*/, float &/*Y*/, float &/*Z*/);
-
 static void STDCALL GetCoords(unsigned int engineId, unsigned int bubbleId, float &X, float &Y, float &Z)
 {
    try
