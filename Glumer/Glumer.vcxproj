@@ -103,6 +103,7 @@ xcopy "$(OutDir)$(TargetName).???" "$(OutDir)..\..\Publish\$(Configuration)" /Y<
     <ClInclude Include="..\..\..\GitHub\Bubbles\Shared\TimerWrapper.h" />
     <ClInclude Include="..\Shared\CoordCallback.h" />
     <ClInclude Include="..\Shared\DLL_PUBLIC.h" />
+    <ClInclude Include="..\Shared\Glumer.h" />
     <ClInclude Include="..\Shared\STDCALL.h" />
     <ClInclude Include="..\Shared\TraceFunc.h" />
     <ClInclude Include="cGlumShapeFactoryState.h" />
@@ -127,7 +128,6 @@ xcopy "$(OutDir)$(TargetName).???" "$(OutDir)..\..\Publish\$(Configuration)" /Y<
     <ClInclude Include="cTimer_RockMotion.h" />
     <ClInclude Include="cTimer_PistonMotion.h" />
     <ClInclude Include="cGlumShapeFactory.h" />
-    <ClInclude Include="Glumer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\GitHub\Bubbles\Shared\TimerWrapper.cpp" />

@@ -102,7 +102,6 @@
     <ClInclude Include="cMovement_Camera.h">
       <Filter>Header Files\Glum</Filter>
     </ClInclude>
-    <ClInclude Include="Glumer.h" />
     <ClInclude Include="..\..\..\GitHub\Bubbles\Shared\TimerWrapper.h">
       <Filter>Header Files\Shared</Filter>
     </ClInclude>
@@ -119,6 +118,9 @@
       <Filter>Header Files\Shared</Filter>
     </ClInclude>
     <ClInclude Include="..\Shared\TraceFunc.h">
+      <Filter>Header Files\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Glumer.h">
       <Filter>Header Files\Shared</Filter>
     </ClInclude>
   </ItemGroup>
