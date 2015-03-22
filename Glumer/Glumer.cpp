@@ -48,30 +48,32 @@ extern "C" DLL_PUBLIC unsigned int STDCALL GetRenderCount(void)
    }
 }
 
-extern "C" DLL_PUBLIC void STDCALL Delete(unsigned int deleteId)
+extern "C" DLL_PUBLIC bool STDCALL Delete(unsigned int deleteId)
 {
    try
    {
       TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
       cGlumShapeBase::PTR thing = { (factory.Get(deleteId).ptr) };
-      if (thing.ptr == NULL) return;
+      if (thing.ptr == NULL) return false;
       factory.Delete(thing, deleteId);
+	  return true;
    }
    catch (...)
-   { }
+   { return false; }
 }
 
-extern "C" DLL_PUBLIC void STDCALL SetInvisible(unsigned glumId, bool visible)
+extern "C" DLL_PUBLIC bool STDCALL SetInvisible(unsigned glumId, bool visible)
 {
    try
    {
       TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());        
       cGlumShapeBase::PTR thing = { (factory.Get(glumId).ptr) };
-      if (thing.ptr == NULL) return;
+      if (thing.ptr == NULL) return false;
       factory.SetInvisible(thing, visible);
+	  return true;
    }
    catch (...)
-   { }
+   { return false; }
 }
 
 extern "C" DLL_PUBLIC unsigned int STDCALL CreateCamera(void)
@@ -94,21 +96,44 @@ extern "C" DLL_PUBLIC unsigned int STDCALL CreateCamera(void)
    }
 }
 
-extern "C" DLL_PUBLIC unsigned int STDCALL CreateRock(float scale, float x, float y, float z, Glumer::GlumerOnClicked *onClicked)
+// Depreciated
+//extern "C" DLL_PUBLIC unsigned int STDCALL CreateRock(float scale, float x, float y, float z, Glumer::GlumerOnClicked *onClicked)
+//{
+//   try
+//   {
+//      TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
+//      cGlumShape_Rock::PTR rockPimp = factory.CreateRock(&hudColour, scale, false, onClicked);
+//      if (rockPimp.ptr == NULL) return 0;
+//      cGlumShape_Rock &rock = *rockPimp.ptr;
+//      cGluperCenter &center = rock.FactoryGetCenter();
+//      center.FactorySetXYZ(x, y, z);
+//      rock.CopyBuffer();
+//
+//      if (factory.IsCameraSet())
+//         rock.Start(factory.GetCamera());
+//      return rock.GetID();
+//   }
+//   catch (...)
+//   {
+//      return 0;
+//   }
+//}
+
+extern "C" DLL_PUBLIC unsigned int STDCALL CreatePolyhedron(float scale, PolyhedronType type, float x, float y, float z, Glumer::GlumerOnClicked *onClicked)
 {
    try
    {
       TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
-      cGlumShape_Rock::PTR rockPimp = factory.CreateRock(&hudColour, scale, false, onClicked);
-      if (rockPimp.ptr == NULL) return 0;
-      cGlumShape_Rock &rock = *rockPimp.ptr;
-      cGluperCenter &center = rock.FactoryGetCenter();
+	  cGlumShape_RegularPolyhedron::PTR shapePimp = factory.CreateRegularPolyhedron(&hudColour, type, scale, false, onClicked);
+      if (shapePimp.ptr == NULL) return 0;
+      cGlumShape_RegularPolyhedron &shape = *shapePimp.ptr;
+      cGluperCenter &center = shape.FactoryGetCenter();
       center.FactorySetXYZ(x, y, z);
-      rock.CopyBuffer();
+      shape.CopyBuffer();
 
       if (factory.IsCameraSet())
-         rock.Start(factory.GetCamera());
-      return rock.GetID();
+         shape.Start(factory.GetCamera());
+      return shape.GetID();
    }
    catch (...)
    {
@@ -116,7 +141,8 @@ extern "C" DLL_PUBLIC unsigned int STDCALL CreateRock(float scale, float x, floa
    }
 }
 
-extern "C" DLL_PUBLIC unsigned int STDCALL CreateBullet(float scale, float x, float y, float z, float dirX, float dirY, float dirZ)
+// Depreciated
+/*extern "C" DLL_PUBLIC unsigned int STDCALL CreateBullet(float scale, float x, float y, float z, float dirX, float dirY, float dirZ)
 {
    try
    {
@@ -138,15 +164,34 @@ extern "C" DLL_PUBLIC unsigned int STDCALL CreateBullet(float scale, float x, fl
    {
       return 0;
    }
-}
+}*/
 
-extern "C" DLL_PUBLIC bool STDCALL SetRockOnClicked(unsigned int id, Glumer::GlumerOnClicked *onClicked)
+// Depreciated
+/*extern "C" DLL_PUBLIC bool STDCALL SetRockOnClicked(unsigned int id, Glumer::GlumerOnClicked *onClicked)
 {
    try
    {
       TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
       bool found = false;
       cGlumShape_Rock::PTR thing = *(factory.mRock.Get(id, found));
+      if (thing.ptr == NULL) return false;
+      thing.ptr->FactorySetOnCliced(onClicked);
+      return true;
+   }
+   catch (...)
+   {
+      return false;
+   }
+}*/
+
+extern "C" DLL_PUBLIC bool STDCALL SetPolyhedronOnClicked(unsigned int id, Glumer::GlumerOnClicked *onClicked)
+{
+   try
+   {
+      TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
+      bool found = false;
+	  cGlumShape_RegularPolyhedron::PTR thing = *(factory.mRegularPolyhedron.Get(id, found));
+      if (thing.ptr == NULL) return false;
       thing.ptr->FactorySetOnCliced(onClicked);
       return true;
    }
@@ -156,13 +201,31 @@ extern "C" DLL_PUBLIC bool STDCALL SetRockOnClicked(unsigned int id, Glumer::Glu
    }
 }
 
-extern "C" DLL_PUBLIC bool STDCALL GetRockRadius(unsigned int id, float &radius)
+// Depreciated
+/*extern "C" DLL_PUBLIC bool STDCALL GetRockRadius(unsigned int id, float &radius)
 {
    try
    {
       TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
       bool found = false;
       cGlumShape_Rock::PTR thing = *(factory.mRock.Get(id, found));
+      if (found == false) return false;
+      radius = thing.ptr->GetRadius();
+      return true;
+   }
+   catch (...)
+   {
+      return false;
+   }
+}*/
+
+extern "C" DLL_PUBLIC bool STDCALL GetPolyhedronRadius(unsigned int glumId, float &radius)
+{
+   try
+   {
+      TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
+      bool found = false;
+	  cGlumShape_RegularPolyhedron::PTR thing = *(factory.mRegularPolyhedron.Get(glumId, found));
       if (found == false) return false;
       radius = thing.ptr->GetRadius();
       return true;
@@ -181,6 +244,7 @@ extern "C" DLL_PUBLIC unsigned int STDCALL CreateSwitch(float scale, float x, fl
       cGlumShape_SwitchGadget::PTR switchPimp
          = factory.CreateSwitchGadget(&hudColour, scale, pulseWhenOn ? &cGlumShape_SwitchGadget::PistonShift_OnOffPulse :
                                                                        &cGlumShape_SwitchGadget::PistonShift_OnOffClick, onClickedBool, NULL);
+	  if (switchPimp.ptr == NULL) return 0;
       cGlumShape_SwitchGadget &switchG = *switchPimp.ptr;
       cGluperCenter &center = switchG.FactoryGetCenter();
       center.FactorySetXYZ(x, y, z);
@@ -204,6 +268,9 @@ extern "C" DLL_PUBLIC unsigned int STDCALL CreateButton(float scale, float x, fl
       TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
       cGlumShape_SwitchGadget::PTR switchPimp
          = factory.CreateSwitchGadget(&hudColour, scale, &cGlumShape_SwitchGadget::PistonShift_ButtonClick, NULL, onClicked);
+
+	  if (switchPimp.ptr == NULL) return 0;
+
       cGlumShape_SwitchGadget &switchG = *switchPimp.ptr;
       cGluperCenter &center = switchG.FactoryGetCenter();
       center.FactorySetXYZ(x, y, z);
@@ -222,42 +289,42 @@ extern "C" DLL_PUBLIC unsigned int STDCALL CreateButton(float scale, float x, fl
 
 extern "C" DLL_PUBLIC unsigned int STDCALL CreateConsole(float scale, float x, float y, float z)
 {
-   try
-   {
-      TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
-      cGlumShape_Console::PTR consolePimp = factory.CreateConsole(&hudColour, scale);
-    
-      cGlumShape_Console &console = *consolePimp.ptr;
-      cGluperCenter &center = console.FactoryGetCenter();
-      center.FactorySetXYZ(x, y, z);
-      console.CopyBuffer();
+	try
+	{
+		TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
+		cGlumShape_Console::PTR consolePimp = factory.CreateConsole(&hudColour, scale);
+		if (consolePimp.ptr == NULL) return 0;
+		cGlumShape_Console &console = *consolePimp.ptr;
+		cGluperCenter &center = console.FactoryGetCenter();
+		center.FactorySetXYZ(x, y, z);
+		console.CopyBuffer();
 
-      if (factory.IsCameraSet())
-         console.Start(factory.GetCamera());
+		if (factory.IsCameraSet())
+			console.Start(factory.GetCamera());
 
-      return console.GetID();
-   }
-   catch (...)
-   {
-      return 0;
-   }
+		return console.GetID();
+	}
+	catch (...)
+	{
+		return 0;
+	}
 }
 
 extern "C" DLL_PUBLIC bool STDCALL SetConsoleText(unsigned int id, const char *text, unsigned int text_size)
 {
-   try
-   {
-      TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
-      bool haveFound = false;
-      cGlumShape_Console::PTR found = *(factory.mConsole.Get(id, haveFound));
-      if (haveFound)
-         found.ptr->SetMessage(text);   
-      return haveFound;
-   }
-   catch (...)
-   {
-      return false;
-   }
+	try
+	{
+		TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
+		bool haveFound = false;
+		cGlumShape_Console::PTR found = *(factory.mConsole.Get(id, haveFound));
+		if (haveFound)
+			found.ptr->SetMessage(text);   
+		return haveFound;
+	}
+	catch (...)
+	{
+		return false;
+	}
 }
 
 extern "C" DLL_PUBLIC bool STDCALL AddConsoleText(unsigned int id, const char *text, unsigned int text_size)

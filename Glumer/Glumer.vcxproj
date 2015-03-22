@@ -21,12 +21,14 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -66,11 +68,12 @@
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <PostBuildEvent>
-      <Command>md "$(OutDir)..\..\Publish" 
+      <Command>
+md "$(OutDir)..\..\Publish" 
 md "$(OutDir)..\..\Publish\$(Configuration)"
 xcopy "$(OutDir)$(TargetName).???" "$(OutDir)..\..\Publish\$(Configuration)" /Y
 
-xcopy "$(SolutionDir)$(ConfigurationName)\$(TargetName).*" "$(SolutionDir)..\..\Publish\$(Configuration)\*.*" /Y</Command>
+REM xcopy "$(SolutionDir)$(ConfigurationName)\$(TargetName).*" "$(SolutionDir)..\..\Publish\$(Configuration)\*.*" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -96,11 +99,12 @@ xcopy "$(SolutionDir)$(ConfigurationName)\$(TargetName).*" "$(SolutionDir)..\..\
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <PostBuildEvent>
-      <Command>md "$(OutDir)..\..\Publish" 
+      <Command>
+md "$(OutDir)..\..\Publish" 
 md "$(OutDir)..\..\Publish\$(Configuration)"
 xcopy "$(OutDir)$(TargetName).???" "$(OutDir)..\..\Publish\$(Configuration)" /Y
 
-xcopy "$(SolutionDir)$(ConfigurationName)\$(TargetName).*" "$(SolutionDir)..\..\Publish\$(Configuration)\*.*" /Y</Command>
+REM xcopy "$(SolutionDir)$(ConfigurationName)\$(TargetName).*" "$(SolutionDir)..\..\Publish\$(Configuration)\*.*" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -111,6 +115,7 @@ xcopy "$(SolutionDir)$(ConfigurationName)\$(TargetName).*" "$(SolutionDir)..\..\
     <ClInclude Include="..\Shared\STDCALL.h" />
     <ClInclude Include="..\Shared\TraceFunc.h" />
     <ClInclude Include="cGlumShapeFactoryState.h" />
+    <ClInclude Include="cGlumShape_RegularPolyhedron.h" />
     <ClInclude Include="cGluperDirection.h" />
     <ClInclude Include="cGlumShapeBase.h" />
     <ClInclude Include="cGlumShapeFactory_ShapeContainer.h" />
@@ -138,7 +143,7 @@ xcopy "$(SolutionDir)$(ConfigurationName)\$(TargetName).*" "$(SolutionDir)..\..\
     <ClCompile Include="cGlumShapeFactory.cpp" />
     <ClCompile Include="cGlumShape_HUDLongRadar.cpp" />
     <ClCompile Include="cGlumShape_HUDShortRadar.cpp" />
-    <ClCompile Include="cGlumShape_Rock.cpp" />
+    <ClCompile Include="cGlumShape_RegularPolyhedron.cpp" />
     <ClCompile Include="cGlumShape_SwitchGadget.cpp" />
     <ClCompile Include="cMovement_Camera.cpp" />
     <ClCompile Include="cGluperCenter.cpp" />

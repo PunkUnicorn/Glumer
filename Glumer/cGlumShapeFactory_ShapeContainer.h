@@ -63,17 +63,17 @@ public:
 
    static typename T_GAMESHAPE::PTR CreateNew(unsigned int id, cHUD_Colour *hud_colour)
    {
-	   T_GAMESHAPE::PTR new_shape;
-	   new_shape.ptr = new T_GAMESHAPE(id, hud_colour);
+		T_GAMESHAPE::PTR new_shape;
+		new_shape.ptr = new T_GAMESHAPE(id, hud_colour);
 
-      // lock scope
-      {
-         TimerWrapper::cMutexWrapper::Lock lock(&mReadWriteLock);
-    	   mList.push_back(new_shape);
-         Purge();
-      }
+		// lock scope
+		{
+			TimerWrapper::cMutexWrapper::Lock lock(&mReadWriteLock);
+			mList.push_back(new_shape);
+			Purge();
+		}
 
-	   return new_shape;
+		return new_shape;
    }
 
    static void Delete(typename std::vector<typename T_GAMESHAPE::PTR>::iterator deleteMe)

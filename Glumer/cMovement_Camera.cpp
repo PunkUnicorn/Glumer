@@ -48,11 +48,8 @@ void cMovement_Camera::/*cMovementBase::*/EventPossition(void)
 
 void cMovement_Camera::EventTimer(void)
 {
-   SDL_Delay(0); // Breath
-   cGlumShapeBase::AddToCenter(mDirection);
-   SDL_Delay(0);
-   cGlumShapeBase::mOrientation.AddToAngle(mOrientation.GetAngleIncrement());
-   SDL_Delay(0);
+	cGlumShapeBase::AddToCenter(mDirection);
+	cGlumShapeBase::mOrientation.AddToAngle(mOrientation.GetAngleIncrement());
 	if (mOrientation.GetAngle() > 359.9999f)
 	{
 		mOrientation.FactorySetAngle(0.0f);

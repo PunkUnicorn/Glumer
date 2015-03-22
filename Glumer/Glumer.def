@@ -8,8 +8,9 @@ Start=_Start@4
 HitTest=_HitTest@12
 DrawScene=_DrawScene@12
 
-CreateRock=_CreateRock@20
-CreateBullet=_CreateBullet@28
+;CreateRock=_CreateRock@20
+;CreateBullet=_CreateBullet@28
+CreatePolyhedron=_CreatePolyhedron@24
 CreateSwitch=_CreateSwitch@24
 CreateButton=_CreateButton@20
 CreateConsole=_CreateConsole@16
@@ -18,8 +19,10 @@ GetRenderCount=_GetRenderCount@0
 Delete=_Delete@4
 SetInvisible=_SetInvisible@8
 
-SetRockOnClicked=_SetRockOnClicked@8
-GetRockRadius=_GetRockRadius@8
+;SetRockOnClicked=_SetRockOnClicked@8
+;GetRockRadius=_GetRockRadius@8
+SetPolyhedronOnClicked=_SetPolyhedronOnClicked@8
+GetPolyhedronRadius=_GetPolyhedronRadius@8
 SetConsoleText=_SetConsoleText@12
 AddConsoleText=_AddConsoleText@12
 AddConsoleCode=_AddConsoleCode@12

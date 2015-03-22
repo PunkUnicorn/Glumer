@@ -10,10 +10,15 @@ namespace Glumer
 {
 
 // template instances
-cGlumShapeFactory_ShapeContainer<cGlumShape_Rock> cGlumShapeFactory::mRock;
+/*cGlumShapeFactory_ShapeContainer<cGlumShape_Rock> cGlumShapeFactory::mRock;
 std::vector<cGlumShape_Rock::PTR> cGlumShapeFactory_ShapeContainer<cGlumShape_Rock>::mList;
 std::vector<cGlumShape_Rock::PTR> cGlumShapeFactory_ShapeContainer<cGlumShape_Rock>::mRecycleBin;
-TimerWrapper::cMutexWrapper cGlumShapeFactory_ShapeContainer<cGlumShape_Rock>::mReadWriteLock;
+TimerWrapper::cMutexWrapper cGlumShapeFactory_ShapeContainer<cGlumShape_Rock>::mReadWriteLock;*/
+
+cGlumShapeFactory_ShapeContainer<cGlumShape_RegularPolyhedron> cGlumShapeFactory::mRegularPolyhedron;
+std::vector<cGlumShape_RegularPolyhedron::PTR> cGlumShapeFactory_ShapeContainer<cGlumShape_RegularPolyhedron>::mList;
+std::vector<cGlumShape_RegularPolyhedron::PTR> cGlumShapeFactory_ShapeContainer<cGlumShape_RegularPolyhedron>::mRecycleBin;
+TimerWrapper::cMutexWrapper cGlumShapeFactory_ShapeContainer<cGlumShape_RegularPolyhedron>::mReadWriteLock;
 
 cGlumShapeFactory_ShapeContainer<cGlumShape_SwitchGadget> cGlumShapeFactory::mSwitchGadget;
 std::vector<cGlumShape_SwitchGadget::PTR> cGlumShapeFactory_ShapeContainer<cGlumShape_SwitchGadget>::mList;
@@ -59,7 +64,8 @@ void cGlumShapeFactory::Start(unsigned int cameraId)
       camera.ptr->Start(NULL);
    }
 
-   mRock.Start(mCurrentCamera);
+   //mRock.Start(mCurrentCamera);
+   mRegularPolyhedron.Start(mCurrentCamera);
    mRadar.Start(mCurrentCamera);
    mHud.Start(mCurrentCamera);
    mSwitchGadget.Start(mCurrentCamera);   
@@ -86,7 +92,8 @@ void cGlumShapeFactory::DrawScene(cHUD_Colour *hud_colour)
          cObjectMoveableBase::FireEventShow);
 }
 
-cGlumShape_Rock::PTR cGlumShapeFactory::CreateRock(cHUD_Colour *hud_colour, float scale, bool start, Glumer::GlumerOnClicked *onClicked)
+// Depreciated
+/*cGlumShape_Rock::PTR cGlumShapeFactory::CreateRock(cHUD_Colour *hud_colour, float scale, bool start, Glumer::GlumerOnClicked *onClicked)
 {
 	cGlumShape_Rock::PTR new_one;
 	new_one = mRock.CreateNew(++mNextFreeID, hud_colour);
@@ -104,9 +111,38 @@ cGlumShape_Rock::PTR cGlumShapeFactory::CreateRock(cHUD_Colour *hud_colour, floa
       mFactoryState.SelectableDrawListAdd(new_one.ptr, new_one.ptr->GetID());
    }
 	return new_one;
+}*/
+
+
+cGlumShape_RegularPolyhedron::PTR cGlumShapeFactory::CreateRegularPolyhedron(cHUD_Colour *hud_colour, PolyhedronType type, float scale, bool start, Glumer::GlumerOnClicked *onClicked)
+{
+	cGlumShape_RegularPolyhedron::PTR new_one;
+	new_one = mRegularPolyhedron.CreateNew(++mNextFreeID, hud_colour);
+	new_one.ptr->FactorySetShape(type);
+	new_one.ptr->FactorySetOnCliced(onClicked);
+
+	static unsigned int intervalDelay = 20;
+	intervalDelay += 20;
+	new_one.ptr->FactorySetDelay(intervalDelay);
+	if (intervalDelay == 100)
+		intervalDelay = 20;
+
+	// lock scope
+	{
+		new_one.ptr->FactorySetRadius(scale);
+
+		cGlumShapeBase::PTR gsbPimp = { (cGlumShapeBase*) new_one.ptr };
+		cObjectMoveableBase::PTR pimp = { dynamic_cast<cObjectMoveableBase *>( new_one.ptr ) };
+		if (pimp.ptr == NULL) throw -123456;
+		mFactoryState.DrawListAdd(pimp, new_one.ptr->GetID());
+		mFactoryState.FactoryListAdd(gsbPimp);
+		mFactoryState.SelectableDrawListAdd(new_one.ptr, new_one.ptr->GetID());
+	}
+	return new_one;
 }
 
-cGlumShape_Rock::PTR cGlumShapeFactory::CreateBullet(cHUD_Colour *hud_colour, float scale, bool start)
+// Depreciated
+/*cGlumShape_Rock::PTR cGlumShapeFactory::CreateBullet(cHUD_Colour *hud_colour, float scale, bool start)
 {
 	cGlumShape_Rock::PTR new_one;
 	new_one = mRock.CreateNew(++mNextFreeID, hud_colour);
@@ -122,7 +158,7 @@ cGlumShape_Rock::PTR cGlumShapeFactory::CreateBullet(cHUD_Colour *hud_colour, fl
       mFactoryState.FactoryListAdd(gsbPimp);
    }
 	return new_one;
-}
+}*/
 
 cGlumShape_SwitchGadget::PTR cGlumShapeFactory::CreateSwitchGadget(cHUD_Colour *hud_colour, float scale, cTimer_PistonMotion::PistonValueChanged *onpistonchange, GlumerOnClickedBool *onclickedbool, GlumerOnClicked *onclicked)
 {

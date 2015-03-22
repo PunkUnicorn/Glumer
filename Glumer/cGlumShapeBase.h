@@ -30,7 +30,7 @@ protected:
    Uint32 mDeletedAt;
 
 public:
-   static const unsigned int MOVEMENT_UPDATE_INTERVAL = 20;
+   static const unsigned int MOVEMENT_UPDATE_INTERVAL = 60;
    inline bool IsShown(void) const { return (mInvisible || mMarkedForDelete) == false; }
    virtual void Start(cMovementBase *world_offset) { };
    virtual void Stop(void) { };

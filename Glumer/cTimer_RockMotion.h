@@ -13,6 +13,7 @@
 namespace Glumer
 {
 
+// motion pump
 class cTimer_RockMotion : public TimerWrapper::cTimerWrapper
 {
 	private:

@@ -123,6 +123,9 @@
     <ClInclude Include="..\Shared\Glumer.h">
       <Filter>Header Files\Shared</Filter>
     </ClInclude>
+    <ClInclude Include="cGlumShape_RegularPolyhedron.h">
+      <Filter>Header Files\Glum</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cMovement_Camera.cpp">
@@ -158,15 +161,15 @@
     <ClCompile Include="cGlumShape_Console.cpp">
       <Filter>Source Files\Glum</Filter>
     </ClCompile>
-    <ClCompile Include="cGlumShape_Rock.cpp">
-      <Filter>Source Files\Glum</Filter>
-    </ClCompile>
     <ClCompile Include="cTimer_RockMotion.cpp">
       <Filter>Source Files\Glum</Filter>
     </ClCompile>
     <ClCompile Include="Glumer.cpp" />
     <ClCompile Include="..\..\..\GitHub\Bubbles\Shared\TimerWrapper.cpp">
       <Filter>Source Files\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="cGlumShape_RegularPolyhedron.cpp">
+      <Filter>Source Files\Glum</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

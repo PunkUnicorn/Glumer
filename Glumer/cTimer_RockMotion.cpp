@@ -10,12 +10,9 @@ namespace Glumer
 
 void cTimer_RockMotion::EventTimer(void)
 {
-   SDL_Delay(0); // Breath
-   mCommon->AddToCenter(mCommon->GetDirection());
+	mCommon->AddToCenter(mCommon->GetDirection());
 
-   SDL_Delay(0);
-   mCommon->FactoryGetOrientation().AddToAngle(mCommon->GetOrientation().GetAngleIncrement());
-   SDL_Delay(0);
+	mCommon->FactoryGetOrientation().AddToAngle(mCommon->GetOrientation().GetAngleIncrement());
 	if (mCommon->GetOrientation().GetAngle() > 359.9999f)
 	{
 		mCommon->FactoryGetOrientation().FactorySetAngle(0.0f);
