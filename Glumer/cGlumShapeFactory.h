@@ -8,8 +8,8 @@
 #include "cGlumShapeFactory_ShapeContainer.h"
 #include "cGlumShape_Rock.h"
 #include "cGlumShape_RegularPolyhedron.h"
-#include "cGlumShape_HUDLongRadar.h"
-#include "cGlumShape_HUDShortRadar.h"
+//#include "cGlumShape_HUDLongRadar.h"
+//#include "cGlumShape_HUDShortRadar.h"
 #include "cGlumShape_SwitchGadget.h"
 #include "cGlumShape_Console.h"
 #include "TimerWrapper.h"
@@ -39,12 +39,10 @@ public:
 	// annoying template system seemed like a good idea but was not
 	// they are just meant to be containers
 	// Important Note: This shit is fucked and bullshit
-	// move to factory state or something
-	//static cGlumShapeFactory_ShapeContainer<cGlumShape_Rock> mRock;
 	static cGlumShapeFactory_ShapeContainer<cGlumShape_RegularPolyhedron> mRegularPolyhedron;
 	static cGlumShapeFactory_ShapeContainer<cGlumShape_SwitchGadget> mSwitchGadget;
-	static cGlumShapeFactory_ShapeContainer<cGlumShape_HUDShortRadar> mRadar;
-	static cGlumShapeFactory_ShapeContainer<cGlumShape_HUDLongRadar> mHud;
+	//static cGlumShapeFactory_ShapeContainer<cGlumShape_HUDShortRadar> mRadar;
+	//static cGlumShapeFactory_ShapeContainer<cGlumShape_HUDLongRadar> mHud;
 	static cGlumShapeFactory_ShapeContainer<cGlumShape_Console> mConsole;
 	static cGlumShapeFactory_ShapeContainer<cMovement_Camera> mCamera;
 
@@ -53,7 +51,10 @@ public:
 	
 	unsigned int GetCount(void)
 	{
-		return /*mRock.ListSize() + */mSwitchGadget.ListSize() + mRadar.ListSize() + mHud.ListSize() + mConsole.ListSize() + mCamera.ListSize() + mRegularPolyhedron.ListSize();
+		return mSwitchGadget.ListSize() + 
+			//mRadar.ListSize() + 
+			//mHud.ListSize() + 
+			mConsole.ListSize() + mCamera.ListSize() + mRegularPolyhedron.ListSize();
 	}
 
 	void Init(void) { };
@@ -63,7 +64,6 @@ public:
 	void DrawScene(cHUD_Colour *hud_colour);
 	inline void HitTest(unsigned int mouse_x, unsigned int mouse_y, unsigned int mouse_z)
 	{
-		//TimerWrapper::cMutexWrapper::Lock lock();
 		cSelectableBase::EventClick(mFactoryState.GetSelectableDrawListLock(), mFactoryState.GetSelectableDrawList(), mFactoryState.GetSelectableDrawListIndex(), mouse_x, mouse_y, mouse_z);
 	}
 
@@ -82,12 +82,11 @@ public:
 		center.GetXYZ(X, Y, Z);
 	}
 
-	//cGlumShape_Rock::PTR CreateRock(cHUD_Colour *hud_colour, float scale, bool start, Glumer::GlumerOnClicked *onClicked);
 	cGlumShape_RegularPolyhedron::PTR CreateRegularPolyhedron(cHUD_Colour *hud_colour, PolyhedronType type, float scale, bool start, Glumer::GlumerOnClicked *onClicked);
-	//cGlumShape_Rock::PTR CreateBullet(cHUD_Colour *hud_colour, float scale, bool start);
+	cGlumShape_RegularPolyhedron::PTR CreateGLCommand(cHUD_Colour *hud_colour, float scale, int GL_BEGIN_MODE_TYPE, float floats[], unsigned int floatCount, Glumer::GlumerOnClicked *onClicked);
 	cGlumShape_SwitchGadget::PTR CreateSwitchGadget(cHUD_Colour *hud_colour, float scale, cTimer_PistonMotion::PistonValueChanged *onpistonchange, GlumerOnClickedBool *onclickedbool, GlumerOnClicked *onclicked);
-	cGlumShape_HUDShortRadar::PTR CreateHUDShortRadar(cHUD_Colour *hud_colour, float range, float scale);
-	cGlumShape_HUDLongRadar::PTR CreateHUDLongRadar(cHUD_Colour *hud_colour, float range, float scale);
+	//cGlumShape_HUDShortRadar::PTR CreateHUDShortRadar(cHUD_Colour *hud_colour, float range, float scale);
+	//cGlumShape_HUDLongRadar::PTR CreateHUDLongRadar(cHUD_Colour *hud_colour, float range, float scale);
 	cGlumShape_Console::PTR CreateConsole(cHUD_Colour *hud_colour, float scale);
 	cMovement_Camera::PTR CreateCamera(void);
    
@@ -115,15 +114,6 @@ private:
 			if (found) 
 				mRegularPolyhedron.Delete(delIterator);   
 		}
-
-		/*if (found == false)
-		{
-			std::vector<cGlumShape_Rock::PTR>::iterator delIterator 
-				= mRock.Get(glumId, found);
-
-			if (found) 
-				mRock.Delete(delIterator);   
-		}*/
 
 		if (found == false)
 		{

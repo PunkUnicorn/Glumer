@@ -43,6 +43,7 @@ struct cPolyhedronType
 	static PolyhedronType const Unknown = 0; 
 	static PolyhedronType const Cube = 400; 
 	static PolyhedronType const Octahedron = 800; 
+	static PolyhedronType const GLCommand = 1600;
 };
 
 // CreatePolyhedron

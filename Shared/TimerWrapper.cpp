@@ -34,7 +34,7 @@ void cTimerWrapper::AddTimer(cTimerWrapper *my_timer_instance)
 //static class function
 void cTimerWrapper::AddThread(cTimerWrapper *my_timer_instance)
 {
-   my_timer_instance->mThreadID = SDL_CreateThread(thread_function, my_timer_instance);
+   my_timer_instance->mThreadID = SDL_CreateThread(thread_function, "Glum", my_timer_instance);
 }
 
 // static class function

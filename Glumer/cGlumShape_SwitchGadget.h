@@ -14,6 +14,7 @@
 
 #include <Windows.h>
 #include <gl/gl.h>
+#include <gl/GLU.h>
 #include "cGlumShape_Console.h"
 #define BUILDING_DLL
 #include "Glumer.h"
@@ -76,13 +77,24 @@ class cGlumShape_SwitchGadget : public cGlumShapeBase, public cObjectMoveableBas
 				   {
 					   glScalef(mScale.mScaleX * mScale.mScaleX, mScale.mScaleY * mScale.mScaleY, mScale.mScaleZ * mScale.mScaleZ);
 				   }
+				   
 				   // square (not cube)
-				   glBegin(GL_QUADS);					
+				   glBegin(GL_QUADS);
 					   glVertex3f( unit+mXSizeMod, unit, unit);
 					   glVertex3f(-unit, unit, unit);
 					   glVertex3f(-unit,-unit, unit);
 					   glVertex3f( unit+mXSizeMod,-unit, unit);
-				   glEnd();
+					glEnd();
+
+					glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
+
+					glBegin(GL_QUADS);
+					   glVertex3f(unit + mXSizeMod, unit, unit-0.1f);
+					   glVertex3f(-unit, unit, unit - 0.1f);
+					   glVertex3f(-unit, -unit, unit - 0.1f);
+					   glVertex3f(unit + mXSizeMod, -unit, unit - 0.1f);
+
+					glEnd();
             }
             catch (...)
             {
@@ -154,8 +166,9 @@ class cGlumShape_SwitchGadget : public cGlumShapeBase, public cObjectMoveableBas
             mLineWidth(0.1f), 
             mDefaultLineWidth(0.1f)
 		{
-         cObjectMoveableBase::mObject = this;
-         cSelectableBase::FactorySetGuts(this/*, this*/);
+			cObjectMoveableBase::mObject = this;
+			cSelectableBase::FactorySetGuts(this);
+			
 			cMovementBase::PTR ptr;
 			ptr.ptr = &mCenter;
 			mMovementStack.push_back(ptr);
@@ -185,13 +198,14 @@ class cGlumShape_SwitchGadget : public cGlumShapeBase, public cObjectMoveableBas
 				delete mPistonMotion;
 		};
 
-		inline void cObjectBase::EventShow(void)
+		inline void EventShow(void)
 		{
-         if (cGlumShapeBase::IsShown() == false) return;
-         Show();
+			//cGlumShapeBase::
+			if (IsShown() == false) return;
+				Show();
 		};
 
-		void cSelectableBase::EventSelected(void);
+		void EventSelected(void);
 
 		bool mSelected;
 };

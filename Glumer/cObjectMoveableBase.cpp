@@ -20,7 +20,10 @@ cObjectMoveableBase::cObjectMoveableBase(cObjectBase *make_moveable) : mObject(m
 void cObjectMoveableBase::EventShow(void)
 {
    EventPossition();
+   glPushAttrib(GL_CURRENT_BIT);
    mObject->EventShow();
+   glPopAttrib();
+
 }
 
 }

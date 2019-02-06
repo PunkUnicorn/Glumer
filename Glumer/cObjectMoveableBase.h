@@ -42,7 +42,7 @@ public:
     {
        std::for_each(mMovementStack.begin(), mMovementStack.end(), FireEventPossition);
     }
-    void cObjectBase::EventShow(void);
+    void EventShow(void);
 	 inline static void FireEventShow(cObjectMoveableBase::PTR &showme)
 	 {
 		glLoadIdentity();

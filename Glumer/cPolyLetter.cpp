@@ -106,7 +106,7 @@ float const cPolyLetter::N80f[]        = {0.5f, 1.0f, 0.0f,   0.875f, 0.875f, 0.
 
 float const cPolyLetter::N90f[]        = {1.0f, 0.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.125f, 1.0f, 0.0f,   0.0f, 0.875f, 0.0f,   0.0f, 0.75f, 0.0f,    0.125f, 0.66f, 0.0f,   0.66f, 0.66f, 0.0f,   1.0f, 0.66f, 0.0f, cPolyLetter_ENDSTROKE};
 
-float const cPolyLetter::MINUSf[]      = {0.33f, 0.5f, 0.0f,   0.66f, 0.5f, 0.0f,   cPolyLetter_ENDSTROKE};
+float const cPolyLetter::MINUSf[]      = {0.13f, 0.5f, 0.0f,   0.86f, 0.5f, 0.0f,   cPolyLetter_ENDSTROKE};
 float const cPolyLetter::DOTf[]        = {0.5f, 0.1f, 0.0f,   0.6f, 0.1f, 0.0f,   cPolyLetter_ENDSTROKE};
 
 float const cPolyLetter::ERROR0f[]     = {0.0f, 0.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, 0.0f,   cPolyLetter_ENDSTROKE};
@@ -150,16 +150,16 @@ void cPolyLetter::DrawLetterInternal(const cPolyLetter *me, char &letter, const 
 
 	 /*LoadStrokes(letter, me->mLeftToRightIndex, me->mTopToBottomIndex, pstroke0, pstroke1, pstroke2);*/
 
-   glPushMatrix();
-         glColor3ub(0, 0, 0); 
-         //glBegin(GL_TRIANGLE_FAN);
-	         glLineWidth(5.0f);
-   		   Shape(pstroke0, pstroke1, pstroke2);
+		glPushMatrix();
+		glColor3ub(me->mHUD_Colour->m_red, me->mHUD_Colour->m_green, me->mHUD_Colour->m_blue);
+		//glBegin(GL_TRIANGLE_FAN);
+	    glLineWidth(5.0f);
+   		Shape(pstroke0, pstroke1, pstroke2);
          //glEnd();
 
-         glColor3ub(me->mHUD_Colour->m_red, me->mHUD_Colour->m_green, me->mHUD_Colour->m_blue); 
-         const float defaultLineWidth = 0.1f;
-	      glLineWidth(defaultLineWidth);
+		glColor3ub(0, 0, 0);
+		const float defaultLineWidth = 2.f;
+	     glLineWidth(defaultLineWidth);
          //glBegin(GL_LINE_LOOP);//GL_TRIANGLE_FAN );//
    		   Shape(pstroke0, pstroke1, pstroke2);
          //glEnd();
@@ -489,25 +489,25 @@ void cPolyLetter::LoadStrokes(char &letter, int &mLeftToRightIndex, int &mTopToB
             }
             break;
 
-        case '\0x1':
-            mLeftToRightIndex = tabSize * 1;
-            break;
+        // case '\x1':
+            // mLeftToRightIndex = tabSize * 1;
+            // break;
 
-        case '\0x2':
-            mLeftToRightIndex = tabSize * 2;
-            break;
+        // case '\x2':
+            // mLeftToRightIndex = tabSize * 2;
+            // break;
 
-        case '\0x4':
-            mLeftToRightIndex = tabSize * 4;
-            break;
+        // case '\x4':
+            // mLeftToRightIndex = tabSize * 4;
+            // break;
 
-        case '\0x6':
-            mLeftToRightIndex = tabSize * 6;
-            break;
+        // case '\x6':
+            // mLeftToRightIndex = tabSize * 6;
+            // break;
 
-        case '\0x8':
-            mLeftToRightIndex = tabSize * 8;
-            break;
+        // case '\x8':
+            // mLeftToRightIndex = tabSize * 8;
+            // break;
 
         default:
             *pstroke0 = cPolyLetter::ERROR0f;

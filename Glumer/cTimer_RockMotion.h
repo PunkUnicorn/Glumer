@@ -28,8 +28,11 @@ class cTimer_RockMotion : public TimerWrapper::cTimerWrapper
 		inline cTimer_RockMotion(cGlumShapeBase *common, unsigned int delay) 
          : mCommon(common)
 		{
-			TimerWrapper::cTimerWrapper::FactorySetDelay(delay);
-			TimerWrapper::cTimerWrapper::AddTimer(this);
+			//TimerWrapper::cTimerWrapper::
+			FactorySetDelay(delay);
+			
+			//TimerWrapper::cTimerWrapper::
+			AddTimer(this);
 		};
 
 		inline ~cTimer_RockMotion(void) {}

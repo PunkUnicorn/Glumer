@@ -11,8 +11,8 @@
 namespace Glumer
 {
 
-class cTimer_PistonMotion : public TimerWrapper::cTimerWrapper
-{
+	class cTimer_PistonMotion : public TimerWrapper::cTimerWrapper
+	{
 	public:
 		typedef void PistonValueChanged(cTimer_PistonMotion * /*who raised*/, cGlumShapeBase * /*you*/, float /*value*/, bool /*is this a reset callback*/ isReset);
 
@@ -32,7 +32,7 @@ class cTimer_PistonMotion : public TimerWrapper::cTimerWrapper
 
 	public:
 		inline float CalculateInitialValue() { return CalculateInitialValue(mMin, mMax); }
-		inline float CalculateInitialValue(float min, float max) { return (mMin + mMax)/2.0f; }		
+		inline float CalculateInitialValue(float min, float max) { return (mMin + mMax) / 2.0f; }
 
 		inline float Min(void) const { return mMin; }
 		inline float Max(void) const { return mMax; }
@@ -41,10 +41,10 @@ class cTimer_PistonMotion : public TimerWrapper::cTimerWrapper
 		inline int TopCount(void) const { return mTopCount; }
 		inline int BottomCount(void) const { return mBottomCount; }
 		inline bool GetPause(void) const { return mPaused; }
-		inline void SetPause(bool wut) { cTimerWrapper::SetPause(wut); cTimer_PistonMotion::mPaused  =  wut; }
+		inline void SetPause(bool wut) { cTimerWrapper::SetPause(wut); cTimer_PistonMotion::mPaused = wut; }
 
-		inline cTimer_PistonMotion(cGlumShapeBase *common, PistonValueChanged *onpistonchange) 
-			: mCommon(common), mDirectionUp(true), mMin(0.0f), mMax(0.0f), mMid(0.0f), mIncrement(0.0f), 
+		inline cTimer_PistonMotion(cGlumShapeBase *common, PistonValueChanged *onpistonchange)
+			: mCommon(common), mDirectionUp(true), mMin(0.0f), mMax(0.0f), mMid(0.0f), mIncrement(0.0f),
 			mOnPistonValueChanged(onpistonchange), mPaused(true), mCurrentValue(0.0f), mTopCount(0), mBottomCount(0)
 		{
 			TimerWrapper::cTimerWrapper::FactorySetDelay(60);
@@ -57,7 +57,7 @@ class cTimer_PistonMotion : public TimerWrapper::cTimerWrapper
 		{
 			if (mPaused)
 				return;
-			
+
 			mCurrentValue += mDirectionUp ? mIncrement : -mIncrement;
 
 			if (mDirectionUp && mMax < mCurrentValue)
@@ -66,7 +66,7 @@ class cTimer_PistonMotion : public TimerWrapper::cTimerWrapper
 				mTopCount++;
 				mCurrentValue = mMax;
 			}
-			else if (mDirectionUp == false &&  mCurrentValue < mMin)
+			else if (mDirectionUp == false && mCurrentValue < mMin)
 			{
 				mDirectionUp = true;
 				mBottomCount++;
@@ -75,7 +75,7 @@ class cTimer_PistonMotion : public TimerWrapper::cTimerWrapper
 
 			mOnPistonValueChanged(this, mCommon, mCurrentValue, false);
 		}
-		
+
 		inline void SetRange(float min, float max, float increment, float initialValue)
 		{
 			mMin = min;
@@ -98,7 +98,7 @@ class cTimer_PistonMotion : public TimerWrapper::cTimerWrapper
 			mOnPistonValueChanged(this, mCommon, mCurrentValue, true);
 			SetPause(paused);
 		}
-};
+	};
 
 }
 

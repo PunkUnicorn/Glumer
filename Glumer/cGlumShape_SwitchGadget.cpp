@@ -7,7 +7,6 @@
 
 namespace Glumer
 {
-
 // static
 void cGlumShape_SwitchGadget::PistonShift_OnOffPulse(cTimer_PistonMotion *sender, cGlumShapeBase *common, float value, bool reset)
 {

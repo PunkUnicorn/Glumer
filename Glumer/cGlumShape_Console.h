@@ -9,6 +9,7 @@
 #include "cPolyLetter.h"
 #include "cObjectMoveableBase.h"
 #include "cGlumShapeBase.h"
+#include "cTimer_RockMotion.h"
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -42,6 +43,8 @@ private:
    cHUD_Colour *mHUD_Colour;
    int mLeftToRightIndex;
    int mTopToBottomIndex;
+   unsigned int mDelay;
+   cTimer_RockMotion *mTimer;
 
    inline void DrawLine(std::string &draw_me)
    {
@@ -73,14 +76,24 @@ private:
 public:
    virtual void Start(cMovementBase *world_offset) 
    {
-      cObjectMoveableBase::mObject = this;
-		cMovementBase::PTR ptr;
-		ptr.ptr = &mCenter;
-		mMovementStack.push_back(ptr);
-		ptr.ptr = &mOrientation;
-		mMovementStack.push_back(ptr);	
+	   if (mTimer != NULL) throw -941;
+  //    cObjectMoveableBase::mObject = this;
+		//cMovementBase::PTR ptr;
+		//ptr.ptr = &mCenter;
+		//mMovementStack.push_back(ptr);
+		//ptr.ptr = &mOrientation;
+		//mMovementStack.push_back(ptr);	
+	   cMovementBase::PTR world_offset_ptr;
+	   world_offset_ptr.ptr = world_offset;
+	   mMovementStack.insert(mMovementStack.begin(), world_offset_ptr);
+
+	   mTimer = new cTimer_RockMotion(this, mDelay);
    };
-   virtual void Stop(void) { }
+   virtual void Stop(void) 
+   {
+	   mTimer->SetPause(true);
+	   mTimer->Abort();
+   }
 
    inline float GetScale(void) const {return mScale;};
    inline void SetScale(float newScale) {mScale=newScale;};
@@ -143,9 +156,48 @@ public:
       }
 	 }
     cGlumShape_Console(unsigned int id, cHUD_Colour *hud_colour, float scale = 1.0f);
+	virtual ~cGlumShape_Console()
+	{
+		if (mTimer != NULL)
+		{
+			mTimer->Abort();
+			while (mTimer->HasAborted() == false)
+				SDL_Delay(1);
 
-    void /*cObjectMoveableBase::*/EventShow(void);
-};
+			delete mTimer;
+		}
+	}
+
+	virtual void /*cGlumShape_Console::*/EventShow(void)
+	{
+		if (cGlumShapeBase::IsShown() == false) return;
+
+		std::vector<std::string> copyOfLines;
+		// lock scope
+		{
+			TimerWrapper::cMutexWrapper::Lock lock(&debug_lock);
+			copyOfLines.assign(mMessageLines.begin(), mMessageLines.end());
+		}
+
+		glPushMatrix();
+		glColor3ub(mHUD_Colour->m_red, mHUD_Colour->m_green, mHUD_Colour->m_blue);
+
+		glScalef(mScale, mScale, mScale);
+
+		const float mLineWidth = 1.0f;
+		const float mDefaultLineWidth = 0.1f;
+
+		glLineWidth(0.01f);
+		mTopToBottomIndex = 0;
+		int end = copyOfLines.size() - 1;
+		if (end != -1)
+			for (int i = 0; i <= end; i++)
+			{
+				DrawLine(copyOfLines[i]);
+			}
+
+		glPopMatrix();
+	}};
 
 }
 

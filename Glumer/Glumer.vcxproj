@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -15,20 +15,21 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Glumer</RootNamespace>
     <ProjectName>Glumer</ProjectName>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -52,15 +53,16 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;GLUMER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\SDL-1.2.15\include;$(ProjectDir)..\Shared</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)SDL2-2.0.9\include;$(ProjectDir)..\Shared</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\SDL-1.2.15\lib\x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL.lib;OpenGL32.lib;GlU32.Lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)SDL2-2.0.9\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;OpenGL32.lib;GlU32.Lib</AdditionalDependencies>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>Glumer.MAP</MapFileName>
       <MapExports>true</MapExports>
@@ -84,7 +86,7 @@ REM xcopy "$(SolutionDir)$(ConfigurationName)\$(TargetName).*" "$(SolutionDir)..
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;GLUMER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\SDL-1.2.15\include;$(ProjectDir)..\Shared</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)SDL2-2.0.9\include;$(ProjectDir)..\Shared</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
@@ -93,8 +95,8 @@ REM xcopy "$(SolutionDir)$(ConfigurationName)\$(TargetName).*" "$(SolutionDir)..
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\SDL-1.2.15\lib\x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL.lib;OpenGL32.lib;GlU32.Lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)SDL2-2.0.9\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;OpenGL32.lib;GlU32.Lib</AdditionalDependencies>
       <ModuleDefinitionFile>Glumer.DEF</ModuleDefinitionFile>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>
@@ -108,19 +110,18 @@ REM xcopy "$(SolutionDir)$(ConfigurationName)\$(TargetName).*" "$(SolutionDir)..
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\GitHub\Bubbles\Shared\TimerWrapper.h" />
+    <ClInclude Include="..\Bubbles\Shared\TimerWrapper.h" />
     <ClInclude Include="..\Shared\CoordCallback.h" />
     <ClInclude Include="..\Shared\DLL_PUBLIC.h" />
     <ClInclude Include="..\Shared\Glumer.h" />
     <ClInclude Include="..\Shared\STDCALL.h" />
     <ClInclude Include="..\Shared\TraceFunc.h" />
+    <ClInclude Include="cGlumGlCommand.h" />
     <ClInclude Include="cGlumShapeFactoryState.h" />
     <ClInclude Include="cGlumShape_RegularPolyhedron.h" />
     <ClInclude Include="cGluperDirection.h" />
     <ClInclude Include="cGlumShapeBase.h" />
     <ClInclude Include="cGlumShapeFactory_ShapeContainer.h" />
-    <ClInclude Include="cGlumShape_HUDLongRadar.h" />
-    <ClInclude Include="cGlumShape_HUDShortRadar.h" />
     <ClInclude Include="cGlumShape_Rock.h" />
     <ClInclude Include="cGlumShape_SwitchGadget.h" />
     <ClInclude Include="cHUD_Colour.h" />
@@ -139,10 +140,8 @@ REM xcopy "$(SolutionDir)$(ConfigurationName)\$(TargetName).*" "$(SolutionDir)..
     <ClInclude Include="cGlumShapeFactory.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\GitHub\Bubbles\Shared\TimerWrapper.cpp" />
+    <ClCompile Include="..\Shared\TimerWrapper.cpp" />
     <ClCompile Include="cGlumShapeFactory.cpp" />
-    <ClCompile Include="cGlumShape_HUDLongRadar.cpp" />
-    <ClCompile Include="cGlumShape_HUDShortRadar.cpp" />
     <ClCompile Include="cGlumShape_RegularPolyhedron.cpp" />
     <ClCompile Include="cGlumShape_SwitchGadget.cpp" />
     <ClCompile Include="cMovement_Camera.cpp" />
@@ -153,6 +152,7 @@ REM xcopy "$(SolutionDir)$(ConfigurationName)\$(TargetName).*" "$(SolutionDir)..
     <ClCompile Include="cGlumShape_Console.cpp" />
     <ClCompile Include="cSelectableBase.cpp" />
     <ClCompile Include="cTimer_RockMotion.cpp" />
+    <ClCompile Include="Glu.cpp" />
     <ClCompile Include="Glumer.cpp" />
   </ItemGroup>
   <ItemGroup>

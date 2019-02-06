@@ -26,10 +26,47 @@ public:
 			return ptr->GetID() == id;
 		}
 	} PTR;
-	typedef enum Shape { Four, Six, Eight, Twelve, Twenty };
+	enum Shape { Four, Eight };
 
 private:
 	Shape mShape;
+	inline void Cube(float radius) const
+	{
+		// THIS FUNCTION HAS NEVER BEEN RUN
+		//glBegin(GL_QUADS);
+				// front
+				glVertex3f(0.0f, 0.0f, 0.0f);
+				glVertex3f(1.0f, 0.0f, 0.0f);
+				glVertex3f(1.0f, 1.0f, 0.0f);
+				glVertex3f(0.0f, 1.0f, 0.0f);
+				// back
+				glVertex3f(0.0f, 0.0f, -1.0f);
+				glVertex3f(1.0f, 0.0f, -1.0f);
+				glVertex3f(1.0f, 1.0f, -1.0f);
+				glVertex3f(0.0f, 1.0f, -1.0f);
+				// right
+				glVertex3f(1.0f, 0.0f, 0.0f);
+				glVertex3f(1.0f, 0.0f, -1.0f);
+				glVertex3f(1.0f, 1.0f, -1.0f);
+				glVertex3f(1.0f, 1.0f, 0.0f);
+				// left
+				glVertex3f(0.0f, 0.0f, 0.0f);
+				glVertex3f(0.0f, 0.0f, -1.0f);
+				glVertex3f(0.0f, 1.0f, -1.0f);
+				glVertex3f(0.0f, 1.0f, 0.0f);
+				// top
+				glVertex3f(0.0f, 1.0f, 0.0f);
+				glVertex3f(1.0f, 1.0f, 0.0f);
+				glVertex3f(1.0f, 1.0f, -1.0f);
+				glVertex3f(0.0f, 1.0f, -1.0f);
+				// bottom
+				glVertex3f(0.0f, 0.0f, 0.0f);
+				glVertex3f(1.0f, 0.0f, 0.0f);
+				glVertex3f(1.0f, 0.0f, -1.0f);
+				glVertex3f(0.0f, 0.0f, -1.0f);
+		//glEnd();		
+	}
+	
 	inline void Octahedron(float radius) const
 	{
 		glVertex3f( 0.0f, radius, 0.0f);
@@ -72,9 +109,13 @@ private:
 	{
 		switch (mShape)
 		{
-		case cGlumShape_Rock::Eight:
-			Octahedron(radius);
-			break;
+			case cGlumShape_Rock::Eight:
+				Octahedron(radius);
+				break;
+				
+			case cGlumShape_Rock::Four:
+				Cube(radius);
+				break;
 
 		//http://www.glprogramming.com/red/chapter02.html
 		}
@@ -104,7 +145,7 @@ public:
 	inline float GetRadius(void) const { return mRadius; };
 	inline void FactorySetRadius(float radius) { mRadius = radius; };
 	inline void FactorySetOnCliced(GlumerOnClicked *onClicked) { mOnClicked = onClicked; }
-	inline void FactorySetDelay(unsigned int delay) { mDelay = mDelay; }
+	inline void FactorySetDelay(unsigned int delay) { mDelay = delay; }
 	inline unsigned int GetDelay(void) const { return mDelay; }
 
 	virtual void NormaliseDirection(void) 

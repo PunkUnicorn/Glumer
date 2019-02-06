@@ -8,15 +8,17 @@
 namespace Glumer
 {
 
-void cTimer_RockMotion::EventTimer(void)
-{
-	mCommon->AddToCenter(mCommon->GetDirection());
-
-	mCommon->FactoryGetOrientation().AddToAngle(mCommon->GetOrientation().GetAngleIncrement());
-	if (mCommon->GetOrientation().GetAngle() > 359.9999f)
+	void cTimer_RockMotion::EventTimer(void)
 	{
-		mCommon->FactoryGetOrientation().FactorySetAngle(0.0f);
+		mCommon->AddToCenter(mCommon->GetDirection());
+
+		mCommon->FactoryGetOrientation().AddToAngle(mCommon->GetOrientation().GetAngleIncrement());
+		const float threshold = 360.0f;
+		float angle = mCommon->GetOrientation().GetAngle();
+		if (angle >= threshold)
+		{
+			mCommon->FactoryGetOrientation().FactorySetAngle(angle - threshold);
+		}
 	}
-}
 
 }

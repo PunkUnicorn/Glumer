@@ -20,6 +20,8 @@ namespace Glumer
 static const float WORLD_RADIUS = 5000.0f;
 static const float WORLD_DIAMITER = 10000.0f;
 
+TimerWrapper::cMutexWrapper cSelectableBase::mSelectableLock;
+
 //int cSelectableBase::mNextFreeName=0;
 //cSelectableBase* cSelectableBase::mFirst=NULL;
 
@@ -82,8 +84,8 @@ void cSelectableBase::EventClick(TimerWrapper::cMutexWrapper *lock, std::vector<
             //lock scope
             try
             {
-               TimerWrapper::cMutexWrapper::Lock lock(lock);
-			      std::for_each(draw_selectable.begin(), draw_selectable.end(), cSelectableBase::FireEventShow);
+              TimerWrapper::cMutexWrapper::Lock lock(&mSelectableLock);
+							std::for_each(draw_selectable.begin(), draw_selectable.end(), cSelectableBase::FireEventShow);
             }
             catch (...)
             {
@@ -117,7 +119,7 @@ void cSelectableBase::EventClick(TimerWrapper::cMutexWrapper *lock, std::vector<
             
         if (hits != 0 && found_name != 0)
         {     
-            TimerWrapper::cMutexWrapper::Lock lock(lock);
+            TimerWrapper::cMutexWrapper::Lock lock(&mSelectableLock);
 
             std::vector<unsigned int>::iterator selected;
             std::vector<cObjectBase *>::iterator drawItem = draw_selectable.begin();

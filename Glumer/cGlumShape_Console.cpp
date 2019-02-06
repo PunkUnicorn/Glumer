@@ -15,39 +15,20 @@ namespace Glumer
 //TimerFromBubbles::cMutexWrapper cGlumShape_Console::debug_lock;
 
 cGlumShape_Console::cGlumShape_Console(unsigned int id, cHUD_Colour *hud_colour, float scale/*=1.0f*/) 
-   : cGlumShapeBase(id), mHUD_Colour(hud_colour), mLeftToRightIndex(0), mTopToBottomIndex(0), 
+   : cGlumShapeBase(id), cObjectMoveableBase(), mHUD_Colour(hud_colour), mLeftToRightIndex(0), mTopToBottomIndex(0), mDelay(cGlumShapeBase::MOVEMENT_UPDATE_INTERVAL), mTimer(NULL),
    /*mActionThread0(), mActionThread1(), mActionThread2(), mActionThreadIndex(0), */mMessageLines(), mScale(scale), debug_lock()
 {
    cObjectMoveableBase::mObject = this;
 	mMessageLines.reserve(25);
-   /*mActionThread0.Init();
-   mActionThread1.Init();
-   mActionThread2.Init();*/
+
+
+	cMovementBase::PTR ptr;
+	ptr.ptr = &mCenter;
+	mMovementStack.push_back(ptr);
+	ptr.ptr = &mOrientation;
+	mMovementStack.push_back(ptr);
 }
         
-void cGlumShape_Console::EventShow(void)
-{
-   if (cGlumShapeBase::IsShown() == false) return;
 
-   std::vector<std::string> copyOfLines;
-   // lock scope
-   {      
-      TimerWrapper::cMutexWrapper::Lock lock(&debug_lock);
-      copyOfLines.assign(mMessageLines.begin(), mMessageLines.end());
-   }
-
-   glPushMatrix();
-
-      glScalef(mScale, mScale, mScale);
-      mTopToBottomIndex = 0;
-      int end = copyOfLines.size()-1;
-      if (end != -1) 
-         for (int i = 0; i <= end; i++)
-         {
-            DrawLine(copyOfLines[i]); 
-         }
-
-   glPopMatrix();
-}
 
 }

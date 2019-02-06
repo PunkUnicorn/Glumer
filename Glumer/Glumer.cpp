@@ -26,8 +26,7 @@ extern "C" DLL_PUBLIC bool STDCALL InitGlumer(void)
 	{
 		return false;
 	}
-
-   factory.Init();
+	factory.Init();
 	return true;
 }
 
@@ -140,6 +139,30 @@ extern "C" DLL_PUBLIC unsigned int STDCALL CreatePolyhedron(float scale, Polyhed
       return 0;
    }
 }
+
+extern "C" DLL_PUBLIC unsigned int STDCALL CreateGLCommand(float scale, int GL_BEGIN_MODE_TYPE, float x, float y, float z, float floats[], unsigned int floatCount, Glumer::GlumerOnClicked *onClicked)
+{
+	try
+	{
+		TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
+		cGlumShape_RegularPolyhedron::PTR shapePimp = factory.CreateGLCommand(&hudColour, scale, GL_BEGIN_MODE_TYPE, floats, floatCount, onClicked);
+		if (shapePimp.ptr == NULL) return 0;
+		cGlumShape_RegularPolyhedron &shape = *shapePimp.ptr;
+		cGluperCenter &center = shape.FactoryGetCenter();
+		center.FactorySetXYZ(x, y, z);
+		shape.CopyBuffer();
+
+		if (factory.IsCameraSet())
+			shape.Start(factory.GetCamera());
+		return shape.GetID();
+	}
+	catch (...)
+	{
+		return 0;
+	}
+}
+
+
 
 // Depreciated
 /*extern "C" DLL_PUBLIC unsigned int STDCALL CreateBullet(float scale, float x, float y, float z, float dirX, float dirY, float dirZ)

@@ -38,7 +38,7 @@ public:
    static void Purge(void)
    {
       std::vector<typename T_GAMESHAPE::PTR> deleteList;
-      std::vector<typename T_GAMESHAPE::PTR>::iterator deleteIt = mRecycleBin.begin();
+      typename std::vector<typename T_GAMESHAPE::PTR>::iterator deleteIt = mRecycleBin.begin();
       Uint32 now = SDL_GetTicks();
       for (; deleteIt != mRecycleBin.end(); deleteIt++)
       {
@@ -63,7 +63,7 @@ public:
 
    static typename T_GAMESHAPE::PTR CreateNew(unsigned int id, cHUD_Colour *hud_colour)
    {
-		T_GAMESHAPE::PTR new_shape;
+		typename T_GAMESHAPE::PTR new_shape;
 		new_shape.ptr = new T_GAMESHAPE(id, hud_colour);
 
 		// lock scope
@@ -81,7 +81,7 @@ public:
       TimerWrapper::cMutexWrapper::Lock lock(&mReadWriteLock);
       typename T_GAMESHAPE::PTR blank = { NULL };
 
-      std::vector<typename T_GAMESHAPE::PTR>::iterator freeRecycleSlot = 
+      typename std::vector<typename T_GAMESHAPE::PTR>::iterator freeRecycleSlot = 
                std::find_if(mRecycleBin.begin(), mRecycleBin.end(), cBlank());
 
       if (freeRecycleSlot == mRecycleBin.end())
@@ -95,7 +95,7 @@ public:
 
    static void Start(cMovementBase *world_offset)
    {
-      for (std::vector<typename T_GAMESHAPE::PTR>::iterator item = mList.begin();
+      for (typename std::vector<typename T_GAMESHAPE::PTR>::iterator item = mList.begin();
          item != mList.end(); item++)
       {
          item->ptr->Start(world_offset);

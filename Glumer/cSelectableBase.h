@@ -24,26 +24,29 @@ namespace Glumer
 class cSelectableBase
 {
    private:
-        // facilitate enumeration through all selectable items
-        //static int mNextFreeName;
-        //static cSelectableBase *mFirst;
-        //cSelectableBase *mNext;
-		 unsigned int mName;
-
-        // handy de-refs to avoid expensive RTTI
-        //cObjectBase *mMeAsBase; 
-       cObjectMoveableBase *mMeAsMoveable;
+		// facilitate enumeration through all selectable items
+		//static int mNextFreeName;
+		//static cSelectableBase *mFirst;
+		//cSelectableBase *mNext;
+		unsigned int mName;
+		static TimerWrapper::cMutexWrapper mSelectableLock;
+		// handy de-refs to avoid expensive RTTI
+		//cObjectBase *mMeAsBase; 
+		cObjectMoveableBase *mMeAsMoveable;
 
    public:
       unsigned int GetName(void) const { return mName; };
 
-		virtual void EventSelected(void) = 0;
+	  virtual void EventSelected(void) = 0;
 
       void DrawSelectionArea(void)
       {
-         glPushName(GetName());
-            if (mMeAsMoveable != NULL) mMeAsMoveable->cObjectMoveableBase::EventShow();
-         glPopName();
+          glPushName(GetName());
+				 
+          if (mMeAsMoveable != NULL) 
+			 mMeAsMoveable->cObjectMoveableBase::EventShow();
+						
+          glPopName();
       }
       inline void FactorySetGuts(cObjectMoveableBase *asMoveable)
       {
