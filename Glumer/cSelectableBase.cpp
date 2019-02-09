@@ -55,7 +55,7 @@ cSelectableBase::cSelectableBase(unsigned int id)
 	copywrite nehe productions
 */
 // static class function
-void cSelectableBase::EventClick(TimerWrapper::cMutexWrapper *lock, std::vector<cObjectBase *> &draw_selectable, std::vector<unsigned int/*glum Id*/> &index, unsigned int mouse_x, unsigned int mouse_y, int mouse_z)
+bool cSelectableBase::EventClick(TimerWrapper::cMutexWrapper *lock, std::vector<cObjectBase *> &draw_selectable, std::vector<unsigned int/*glum Id*/> &index, unsigned int mouse_x, unsigned int mouse_y, int mouse_z)
 {
     GLint	viewport[4];
     GLuint	*buffer;
@@ -117,6 +117,7 @@ void cSelectableBase::EventClick(TimerWrapper::cMutexWrapper *lock, std::vector<
             }       
         }
             
+		bool hit = false;
         if (hits != 0 && found_name != 0)
         {     
             TimerWrapper::cMutexWrapper::Lock lock(&mSelectableLock);
@@ -134,6 +135,7 @@ void cSelectableBase::EventClick(TimerWrapper::cMutexWrapper *lock, std::vector<
                   cSelectableBase *selectable = dynamic_cast<cSelectableBase *>(*drawItem);
                   if (selectable != NULL)
                   {
+					  hit = true;
                      selectable->EventSelected();
                      break; // the EventSelected may have changed the draw_selectable iterator so get out of here
                   }
@@ -144,6 +146,7 @@ void cSelectableBase::EventClick(TimerWrapper::cMutexWrapper *lock, std::vector<
         
     //glPopName();
     delete[] buffer;
+	return hit;
 }
 
 

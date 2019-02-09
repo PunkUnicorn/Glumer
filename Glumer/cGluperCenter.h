@@ -11,39 +11,39 @@
 namespace Glumer
 {
 
-class cGluperCenter : public cMovementBase
-{
-private:
-	float mX, mY, mZ;
-        
-public:
-   cGluperCenter(float X=0.0f, float Y=0.0f, float Z=0.0f) : mX(X), mY(Y), mZ(Z) { };
-   virtual ~cGluperCenter(void) {};
-
-   inline void operator += (const cGluperDirection &direction)
+	class cGluperCenter : public cMovementBase
 	{
-      float x, y, z;
-      direction.GetXYZ(x, y, z);
-		AddToXYZ(x, y, z);
-	}
+	private:
+		float mX, mY, mZ;
 
-   void GetXYZ(float &x, float &y, float &z) const
-   {
-      x = mX;
-      y = mY;
-      z = mZ;
-   }
+	public:
+		cGluperCenter(float X = 0.0f, float Y = 0.0f, float Z = 0.0f) : mX(X), mY(Y), mZ(Z) { };
+		virtual ~cGluperCenter(void) {};
 
-   void AddToXYZ(float x, float y, float z) { mX += x; mY += y; mZ += z; };
-   void FactorySetXYZ(float x, float y, float z) { mX = x; mY = y; mZ = z; };
+		inline void operator += (const cGluperDirection &direction)
+		{
+			float x, y, z;
+			direction.GetXYZ(x, y, z);
+			AddToXYZ(x, y, z);
+		}
 
-	typedef struct
-	{
-		const cGluperCenter *ptr;
-	} PTR;
+		void GetXYZ(float &x, float &y, float &z) const
+		{
+			x = mX;
+			y = mY;
+			z = mZ;
+		}
 
-	void /*cMovementBase::*/EventPossition(void);
-};
+		void AddToXYZ(float x, float y, float z) { mX += x; mY += y; mZ += z; };
+		void FactorySetXYZ(float x, float y, float z) { mX = x; mY = y; mZ = z; };
+
+		typedef struct
+		{
+			const cGluperCenter *ptr;
+		} PTR;
+
+		void /*cMovementBase::*/EventPossition(void);
+	};
 
 }
 

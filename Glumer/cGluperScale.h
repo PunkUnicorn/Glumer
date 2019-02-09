@@ -10,11 +10,10 @@
 namespace Glumer
 {
 
-//#include <windows.h>
 #include <gl/Gl.h>
 
-class cGluperScale : public cMovementBase
-{
+	class cGluperScale : public cMovementBase
+	{
 	public:
 		typedef struct
 		{
@@ -24,11 +23,11 @@ class cGluperScale : public cMovementBase
 		float mScaleY;
 		float mScaleZ;
 
-        cGluperScale(float scaleX=1.0f, float scaleY=1.0f, float scaleZ=1.0f) 
-            : cMovementBase(), mScaleX(scaleX), mScaleY(scaleY), mScaleZ(scaleZ) { };
+		cGluperScale(float scaleX = 1.0f, float scaleY = 1.0f, float scaleZ = 1.0f)
+			: cMovementBase(), mScaleX(scaleX), mScaleY(scaleY), mScaleZ(scaleZ) { };
 
-        virtual ~cGluperScale(void) {};
-        
+		virtual ~cGluperScale(void) {};
+
 		void /*cMovementBase::*/EventPossition(void)
 		{
 			if (cMovementBase::GetIgnore())
@@ -36,7 +35,7 @@ class cGluperScale : public cMovementBase
 
 			glScalef(mScaleX, mScaleY, mScaleZ);
 		}
-};
+	};
 
 }
 

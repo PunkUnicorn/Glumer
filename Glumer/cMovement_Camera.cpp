@@ -32,11 +32,6 @@ namespace Glumer
 		if (cMovementBase::GetIgnore())
 			return;
 
-		//glRotatef(GetPitch(),1.0f, 0.0f, 0.0f);
-		 //glRotatef(GetYaw(),	0.0f, 1.0f, 0.0f);
-		 //glRotatef(GetRoll(),	0.0f, 0.0f, 1.0f);
-
-
 		float x, y, z;
 		float angle, angleInc;
 		mOrientation.GetXYZAngleAndIncrement(angle, x, y, z, angleInc);
@@ -50,9 +45,12 @@ namespace Glumer
 	{
 		cGlumShapeBase::AddToCenter(mDirection);
 		cGlumShapeBase::mOrientation.AddToAngle(mOrientation.GetAngleIncrement());
-		if (mOrientation.GetAngle() > 359.9999f)
+
+		const float threshold = 360.0f;
+		float angle = mOrientation.GetAngle();
+		if (angle >= threshold)
 		{
-			mOrientation.FactorySetAngle(0.0f);
+			mOrientation.FactorySetAngle(angle - threshold);
 		}
 	}
 

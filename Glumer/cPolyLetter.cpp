@@ -143,66 +143,24 @@ static void Shape(const float **pstroke0, const float **pstroke1, const float **
 // static class member        
 void cPolyLetter::DrawLetterInternal(const cPolyLetter *me, char &letter, const float **pstroke0, const float **pstroke1, const float **pstroke2)
 {
-	// const float *one=NULL, *two=NULL, *three=NULL;
-   // const float **pstroke0=&one;
-   // const float **pstroke1=&two;
-   // const float **pstroke2=&three;
-
-	 /*LoadStrokes(letter, me->mLeftToRightIndex, me->mTopToBottomIndex, pstroke0, pstroke1, pstroke2);*/
 
 		glPushMatrix();
 		glColor3ub(me->mHUD_Colour->m_red, me->mHUD_Colour->m_green, me->mHUD_Colour->m_blue);
-		//glBegin(GL_TRIANGLE_FAN);
+
 	    glLineWidth(5.0f);
    		Shape(pstroke0, pstroke1, pstroke2);
-         //glEnd();
+
 
 		glColor3ub(0, 0, 0);
 		const float defaultLineWidth = 2.f;
 	     glLineWidth(defaultLineWidth);
-         //glBegin(GL_LINE_LOOP);//GL_TRIANGLE_FAN );//
+
    		   Shape(pstroke0, pstroke1, pstroke2);
-         //glEnd();
-	      //glLineWidth(mDefaultLineWidth)      
-            
+   
 
-      //glScalef(0.6f, 0.9f, 0.9f);
-
-      //const float charSize = 0.4f;
-      //glTranslatef(charSize * me->mLeftToRightIndex, -charSize * me->mTopToBottomIndex, charSize);
-            
-      
-      /*const float charSizeScale = 4.0f;
-      glBegin(GL_LINE_STRIP);
-      if (*pstroke0 != NULL)
-      {
-         for (int i=0; (*pstroke0)[i] < cPolyLetter_ENDSTROKE; i+=3)
-               glVertex3f((*pstroke0)[i]/charSizeScale, (*pstroke0)[i+1]/charSizeScale, (*pstroke0)[i+2]/charSizeScale);
-      }
-      glEnd();
-    
-      glBegin(GL_LINE_STRIP);
-      if (*pstroke1 != NULL)
-      {
-         for (int i=0; (*pstroke1)[i] < cPolyLetter_ENDSTROKE; i+=3)
-               glVertex3f((*pstroke1)[i]/charSizeScale, (*pstroke1)[i+1]/charSizeScale, (*pstroke1)[i+2]/charSizeScale);
-      }
-      glEnd();
-    
-      glBegin(GL_LINE_STRIP);
-      if (*pstroke2 != NULL)
-      {
-         for (int i=0; (*pstroke2)[i] < cPolyLetter_ENDSTROKE; i+=3)
-               glVertex3f((*pstroke2)[i]/charSizeScale, (*pstroke2)[i+1]/charSizeScale, (*pstroke2)[i+2]/charSizeScale);
-      }
-      glEnd();*/
     glPopMatrix();                        
 }
             
-//cPolyLetter::cPolyLetter(cHUD_Colour *hud_colour) : mHUDColour(hud_colour) 
-//{
-//};
-
 void cPolyLetter::LoadStrokes(char &letter, int &mLeftToRightIndex, int &mTopToBottomIndex, int &mTabIndex, const float **pstroke0, const float **pstroke1, const float **pstroke2)
 {
 	switch (letter)

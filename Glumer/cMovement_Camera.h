@@ -16,8 +16,7 @@ namespace Glumer
 class cMovement_Camera : public cGlumShapeBase, public cMovementBase, private TimerWrapper::cTimerWrapper
 {
 	private:
-		//cTimerWrapper::
-		void EventTimer(void);
+		/*cTimerWrapper::*/void EventTimer(void);
 
 	public:
 		typedef struct
@@ -31,14 +30,12 @@ class cMovement_Camera : public cGlumShapeBase, public cMovementBase, private Ti
 
 	  void Init(unsigned int callbackDelay)
 	  {
-			//TimerWrapper::cTimerWrapper::
-			FactorySetDelay(callbackDelay);
+			/*TimerWrapper::cTimerWrapper::*/FactorySetDelay(callbackDelay);
     }
 
 		virtual void Start(cMovementBase *world_offset)
 		{
-			//TimerWrapper::cTimerWrapper::
-			AddThread(this);
+			/*TimerWrapper::cTimerWrapper::*/AddThread(this);
 		}
 
 		cMovement_Camera(unsigned int id, void *hud_colour) : cGlumShapeBase(id) { };

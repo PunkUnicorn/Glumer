@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Diagnostics;
 
-namespace DotnetCore_CSExample
+namespace GlumerLib
 {
     public class Glumer
     {
@@ -16,6 +16,7 @@ namespace DotnetCore_CSExample
             public const int Cube = 400;
             public const int Octahedron = 800;
             public const int GlCommand = 1600;
+            public const int GlCompiledName = 32000;
         }
         public delegate void GetCoordsFunc(uint engineId, uint id, ref float x, ref float y, ref float z);
         public delegate void OnClickedBool(uint raiser, bool state); 
@@ -56,6 +57,9 @@ namespace DotnetCore_CSExample
         public static extern uint CreateGLCommand(float scale, int GL_BEGIN_MODE_TYPE, float x, float y, float z, float[] floats, uint floatCount, OnClicked onClicked);
 
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
+        public static extern uint CreateGLCompiledName(float scale, uint glName, float x, float y, float z, OnClicked onClicked);
+
+        [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern bool SetPolyhedronOnClicked(uint id, OnClicked onClicked);
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern bool GetPolyhedronRadius(uint id, ref float radius);
@@ -90,7 +94,7 @@ namespace DotnetCore_CSExample
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern void DrawScene(int r, int g, int b);
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
-        public static extern void HitTest(uint mouse_x, uint mouse_y, uint mouse_z);
+        public static extern bool HitTest(uint mouse_x, uint mouse_y, uint mouse_z);
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern uint GetRenderCount();
 

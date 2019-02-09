@@ -62,9 +62,9 @@ public:
 
 	void DoubleBufferCoordinates(void);
 	void DrawScene(cHUD_Colour *hud_colour);
-	inline void HitTest(unsigned int mouse_x, unsigned int mouse_y, unsigned int mouse_z)
+	inline bool HitTest(unsigned int mouse_x, unsigned int mouse_y, unsigned int mouse_z)
 	{
-		cSelectableBase::EventClick(mFactoryState.GetSelectableDrawListLock(), mFactoryState.GetSelectableDrawList(), mFactoryState.GetSelectableDrawListIndex(), mouse_x, mouse_y, mouse_z);
+		return cSelectableBase::EventClick(mFactoryState.GetSelectableDrawListLock(), mFactoryState.GetSelectableDrawList(), mFactoryState.GetSelectableDrawListIndex(), mouse_x, mouse_y, mouse_z);
 	}
 
 	void GetCoords(unsigned int bubbleId, float &X, float &Y, float &Z)
@@ -84,6 +84,8 @@ public:
 
 	cGlumShape_RegularPolyhedron::PTR CreateRegularPolyhedron(cHUD_Colour *hud_colour, PolyhedronType type, float scale, bool start, Glumer::GlumerOnClicked *onClicked);
 	cGlumShape_RegularPolyhedron::PTR CreateGLCommand(cHUD_Colour *hud_colour, float scale, int GL_BEGIN_MODE_TYPE, float floats[], unsigned int floatCount, Glumer::GlumerOnClicked *onClicked);
+	cGlumShape_RegularPolyhedron::PTR CreateGLCompiledName(cHUD_Colour *hud_colour, float scale, unsigned int compiledName, Glumer::GlumerOnClicked *onClicked);
+
 	cGlumShape_SwitchGadget::PTR CreateSwitchGadget(cHUD_Colour *hud_colour, float scale, cTimer_PistonMotion::PistonValueChanged *onpistonchange, GlumerOnClickedBool *onclickedbool, GlumerOnClicked *onclicked);
 	//cGlumShape_HUDShortRadar::PTR CreateHUDShortRadar(cHUD_Colour *hud_colour, float range, float scale);
 	//cGlumShape_HUDLongRadar::PTR CreateHUDLongRadar(cHUD_Colour *hud_colour, float range, float scale);

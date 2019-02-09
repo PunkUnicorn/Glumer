@@ -77,6 +77,12 @@ glVertex3f( -radius, -radius, -radius );
 		//glPopMatrix();
 	}
 
+	void GlCompiledName(cGlumGlCommand *command, float scale) const
+	{		
+		glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
+		glCallList(command->GetCompiledName());
+	}
+
 	void GlCommand(cGlumGlCommand *command, float scale) const
 	{
 		const int groups_of_three = 3;
@@ -84,6 +90,7 @@ glVertex3f( -radius, -radius, -radius );
 		if (len % groups_of_three > 0)
 			len -= len % groups_of_three;
 
+		glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
 		glBegin(command->GetCommand());
 
 			float const *floats = command->GetFloats();
@@ -96,90 +103,35 @@ glVertex3f( -radius, -radius, -radius );
 	}
 	inline void Octahedron2(float RADIUS) const
 	{
-		//glBegin(GL_TRIANGLES);
+		//back face points intented like this
 
+			//front face points intented like this
 
-		//original +3
 			glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
 			glNormal3d(0.577350269189, 0.577350269189, 0.577350269189); glVertex3d(RADIUS, 0.0, 0.0); glVertex3d(0.0, RADIUS, 0.0); glVertex3d(0.0, 0.0, RADIUS);
+
 			glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
 			glNormal3d(0.577350269189, 0.577350269189, -0.577350269189); glVertex3d(RADIUS, 0.0, 0.0); glVertex3d(0.0, 0.0, -RADIUS); glVertex3d(0.0, RADIUS, 0.0);
+
 			glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
 			glNormal3d(0.577350269189, -0.577350269189, 0.577350269189); glVertex3d(RADIUS, 0.0, 0.0); glVertex3d(0.0, 0.0, RADIUS); glVertex3d(0.0, -RADIUS, 0.0);
+
 		glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
 		glNormal3d(0.577350269189, -0.577350269189, -0.577350269189); glVertex3d(RADIUS, 0.0, 0.0); glVertex3d(0.0, -RADIUS, 0.0); glVertex3d(0.0, 0.0, -RADIUS);
+
 			glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
 			glNormal3d(-0.577350269189, 0.577350269189, 0.577350269189); glVertex3d(-RADIUS, 0.0, 0.0); glVertex3d(0.0, 0.0, RADIUS); glVertex3d(0.0, RADIUS, 0.0);
+
 		glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
-		//glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
 		glNormal3d(-0.577350269189, 0.577350269189, -0.577350269189); glVertex3d(-RADIUS, 0.0, 0.0); glVertex3d(0.0, RADIUS, 0.0); glVertex3d(0.0, 0.0, -RADIUS);
+
 		glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
 		glNormal3d(-0.577350269189, -0.577350269189, 0.577350269189); glVertex3d(-RADIUS, 0.0, 0.0); glVertex3d(0.0, -RADIUS, 0.0); glVertex3d(0.0, 0.0, RADIUS);
+
 		glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
-		//glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
 		glNormal3d(-0.577350269189, -0.577350269189, -0.577350269189); glVertex3d(-RADIUS, 0.0, 0.0); glVertex3d(0.0, 0.0, -RADIUS); glVertex3d(0.0, -RADIUS, 0.0);
-
-
-		////original +2
-		//glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
-		//glNormal3d(0.577350269189, 0.577350269189, 0.577350269189); glVertex3d(RADIUS, 0.0, 0.0); glVertex3d(0.0, RADIUS, 0.0); glVertex3d(0.0, 0.0, RADIUS);
-		//glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
-		//glNormal3d(0.577350269189, 0.577350269189, -0.577350269189); glVertex3d(RADIUS, 0.0, 0.0); glVertex3d(0.0, 0.0, -RADIUS); glVertex3d(0.0, RADIUS, 0.0);
-		//glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
-		//glNormal3d(0.577350269189, -0.577350269189, 0.577350269189); glVertex3d(RADIUS, 0.0, 0.0); glVertex3d(0.0, 0.0, RADIUS); glVertex3d(0.0, -RADIUS, 0.0);
-		//glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
-		//glNormal3d(0.577350269189, -0.577350269189, -0.577350269189); glVertex3d(RADIUS, 0.0, 0.0); glVertex3d(0.0, -RADIUS, 0.0); glVertex3d(0.0, 0.0, -RADIUS);
-		//glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
-		//glNormal3d(-0.577350269189, 0.577350269189, 0.577350269189); glVertex3d(-RADIUS, 0.0, 0.0); glVertex3d(0.0, 0.0, RADIUS); glVertex3d(0.0, RADIUS, 0.0);
-		//glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
-		////glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
-		//glNormal3d(-0.577350269189, 0.577350269189, -0.577350269189); glVertex3d(-RADIUS, 0.0, 0.0); glVertex3d(0.0, RADIUS, 0.0); glVertex3d(0.0, 0.0, -RADIUS);
-		//glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
-		////glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
-		//glNormal3d(-0.577350269189, -0.577350269189, 0.577350269189); glVertex3d(-RADIUS, 0.0, 0.0); glVertex3d(0.0, -RADIUS, 0.0); glVertex3d(0.0, 0.0, RADIUS);
-		//glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
-		//glNormal3d(-0.577350269189, -0.577350269189, -0.577350269189); glVertex3d(-RADIUS, 0.0, 0.0); glVertex3d(0.0, 0.0, -RADIUS); glVertex3d(0.0, -RADIUS, 0.0);
-
-
-		//original +1
-		//glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
-		//glNormal3d(0.577350269189, 0.577350269189, 0.577350269189); glVertex3d(RADIUS, 0.0, 0.0); glVertex3d(0.0, RADIUS, 0.0); glVertex3d(0.0, 0.0, RADIUS);
-		//glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
-		//glNormal3d(0.577350269189, 0.577350269189, -0.577350269189); glVertex3d(RADIUS, 0.0, 0.0); glVertex3d(0.0, 0.0, -RADIUS); glVertex3d(0.0, RADIUS, 0.0);
-		//glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
-		//glNormal3d(0.577350269189, -0.577350269189, 0.577350269189); glVertex3d(RADIUS, 0.0, 0.0); glVertex3d(0.0, 0.0, RADIUS); glVertex3d(0.0, -RADIUS, 0.0);
-		//glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
-		//glNormal3d(0.577350269189, -0.577350269189, -0.577350269189); glVertex3d(RADIUS, 0.0, 0.0); glVertex3d(0.0, -RADIUS, 0.0); glVertex3d(0.0, 0.0, -RADIUS);
-		//glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
-		//glNormal3d(-0.577350269189, 0.577350269189, 0.577350269189); glVertex3d(-RADIUS, 0.0, 0.0); glVertex3d(0.0, 0.0, RADIUS); glVertex3d(0.0, RADIUS, 0.0);
-		//glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
-		//glNormal3d(-0.577350269189, 0.577350269189, -0.577350269189); glVertex3d(-RADIUS, 0.0, 0.0); glVertex3d(0.0, RADIUS, 0.0); glVertex3d(0.0, 0.0, -RADIUS);
-		//glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
-		//glNormal3d(-0.577350269189, -0.577350269189, 0.577350269189); glVertex3d(-RADIUS, 0.0, 0.0); glVertex3d(0.0, -RADIUS, 0.0); glVertex3d(0.0, 0.0, RADIUS);
-		//glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
-		//glNormal3d(-0.577350269189, -0.577350269189, -0.577350269189); glVertex3d(-RADIUS, 0.0, 0.0); glVertex3d(0.0, 0.0, -RADIUS); glVertex3d(0.0, -RADIUS, 0.0);
-
-		// original
-		//glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
-		//glNormal3d(0.577350269189, 0.577350269189, 0.577350269189); glVertex3d(RADIUS, 0.0, 0.0); glVertex3d(0.0, RADIUS, 0.0); glVertex3d(0.0, 0.0, RADIUS);
-		//glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
-		//glNormal3d(0.577350269189, 0.577350269189, -0.577350269189); glVertex3d(RADIUS, 0.0, 0.0); glVertex3d(0.0, 0.0, -RADIUS); glVertex3d(0.0, RADIUS, 0.0);
-		//glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
-		//glNormal3d(0.577350269189, -0.577350269189, 0.577350269189); glVertex3d(RADIUS, 0.0, 0.0); glVertex3d(0.0, 0.0, RADIUS); glVertex3d(0.0, -RADIUS, 0.0);
-		//glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
-		//glNormal3d(0.577350269189, -0.577350269189, -0.577350269189); glVertex3d(RADIUS, 0.0, 0.0); glVertex3d(0.0, -RADIUS, 0.0); glVertex3d(0.0, 0.0, -RADIUS);
-		//glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
-		//glNormal3d(-0.577350269189, 0.577350269189, 0.577350269189); glVertex3d(-RADIUS, 0.0, 0.0); glVertex3d(0.0, 0.0, RADIUS); glVertex3d(0.0, RADIUS, 0.0);
-		//glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
-		//glNormal3d(-0.577350269189, 0.577350269189, -0.577350269189); glVertex3d(-RADIUS, 0.0, 0.0); glVertex3d(0.0, RADIUS, 0.0); glVertex3d(0.0, 0.0, -RADIUS);
-		//glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
-		//glNormal3d(-0.577350269189, -0.577350269189, 0.577350269189); glVertex3d(-RADIUS, 0.0, 0.0); glVertex3d(0.0, -RADIUS, 0.0); glVertex3d(0.0, 0.0, RADIUS);
-		//glColor3ub(mHUDColour->m_red, mHUDColour->m_green, mHUDColour->m_blue);
-		//glNormal3d(-0.577350269189, -0.577350269189, -0.577350269189); glVertex3d(-RADIUS, 0.0, 0.0); glVertex3d(0.0, 0.0, -RADIUS); glVertex3d(0.0, -RADIUS, 0.0);
-
-
-		//glEnd();
 	}
+
 	inline void Octahedron(float radius) const
 	{
 		glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
@@ -237,21 +189,20 @@ glVertex3f( -radius, -radius, -radius );
 			// black inner shape
 			glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
 			glPushMatrix();
-			glScalef(0.92f, 0.92f, 0.92f);
-			glBegin(GL_POLYGON);
-				Cube(radius);
-			glEnd();
+				glScalef(0.92f, 0.92f, 0.92f);
+				glBegin(GL_POLYGON);
+					Cube(radius);
+				glEnd();
 			glPopMatrix();
 
 			// coloured outer line graphic shell
 			glLineWidth(mLineWidth);
 			glColor3ub(0, 0, 0);
 			glPushMatrix();
-			glScalef(0.929f, 0.929f, 0.929f);
-			glBegin(GL_LINE_LOOP);
-				Cube(radius);
-			glEnd();
-
+				glScalef(0.929f, 0.929f, 0.929f);
+				glBegin(GL_LINE_LOOP);
+					Cube(radius);
+				glEnd();
 			glPopMatrix();
 
 			glLineWidth(mLineWidth / 2.0f);
@@ -294,7 +245,6 @@ glVertex3f( -radius, -radius, -radius );
 			break;
 
 			//http://www.glprogramming.com/red/chapter02.html
-
 		}
 	};
 
@@ -326,6 +276,7 @@ public:
 	inline void FactorySetDelay(unsigned int delay) { mDelay = delay; }
 	inline void FactorySetShape(PolyhedronType type) { mShape = type; }
 	inline void FactorySetGlCommand(int GL_BEGIN_MODE_TYPE, float floats[], unsigned int floatCount) { mGlCommand = new cGlumGlCommand(GL_BEGIN_MODE_TYPE, floats, floatCount); };
+	inline void FactorySetGlCompiledName(int compiledName) { mGlCommand = new cGlumGlCommand(compiledName); };
 	inline unsigned int GetDelay(void) const { return mDelay; }
 
 	virtual void NormaliseDirection(void) 
@@ -360,7 +311,11 @@ public:
 	{
 		if (cGlumShapeBase::IsShown() == false) return;
 
-		if (mCompiled)
+		else if (this->mShape == cPolyhedronType::GlCompiledName)
+		{
+			GlCompiledName(this->mGlCommand, GetRadius());
+		}
+		else if (mCompiled)
 		{
 			glCallList(mListIndex);
 		}
@@ -369,7 +324,7 @@ public:
 			float r = GetRadius();
 			mCompiled = true;
 			mListIndex = glGenLists(1);
-			glNewList(mListIndex, GL_COMPILE);
+			glNewList(mListIndex, GL_COMPILE_AND_EXECUTE);
 
 				if (this->mShape == cPolyhedronType::GLCommand)
 				{

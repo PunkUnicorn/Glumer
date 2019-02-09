@@ -162,6 +162,27 @@ extern "C" DLL_PUBLIC unsigned int STDCALL CreateGLCommand(float scale, int GL_B
 	}
 }
 
+extern "C" DLL_PUBLIC unsigned int STDCALL CreateGLCompiledName(float scale, unsigned int compiledName, float x, float y, float z, Glumer::GlumerOnClicked *onClicked)
+{
+	try
+	{
+		TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
+		cGlumShape_RegularPolyhedron::PTR shapePimp = factory.CreateGLCompiledName(&hudColour, scale, compiledName, onClicked);
+		if (shapePimp.ptr == NULL) return 0;
+		cGlumShape_RegularPolyhedron &shape = *shapePimp.ptr;
+		cGluperCenter &center = shape.FactoryGetCenter();
+		center.FactorySetXYZ(x, y, z);
+		shape.CopyBuffer();
+
+		if (factory.IsCameraSet())
+			shape.Start(factory.GetCamera());
+		return shape.GetID();
+	}
+	catch (...)
+	{
+		return 0;
+	}
+}
 
 
 // Depreciated

@@ -29,13 +29,13 @@ namespace Glumer
 		inline float GetAngle(void) const { return mAngle; };
 		inline float GetAngleIncrement(void) const { return mAngleIncrement; };
 
-		inline void AddToAngle(float addMe) { mAngle = /*AngleBoundCheck(*/mAngle + addMe/*)*/; };
-		inline void AddToAngleXYZ(float x, float y, float z) { mAngleX = /*Normalise(*/mAngleX + x/*)*/; mAngleY = /*Normalise(*/mAngleY + y/*)*/; mAngleZ = /*Normalise(*/mAngleZ + z/*)*/; };
-		inline void AddToAngleIncrement(float addMe) { mAngleIncrement = /*Normalise(*/mAngleIncrement + addMe/*)*/; };
+		inline void AddToAngle(float addMe) { mAngle = mAngle + addMe; };
+		inline void AddToAngleXYZ(float x, float y, float z) { mAngleX = mAngleX + x; mAngleY = mAngleY + y; mAngleZ = /*Normalise(*/mAngleZ + z/*)*/; };
+		inline void AddToAngleIncrement(float addMe) { mAngleIncrement = mAngleIncrement + addMe; };
 
-		inline void FactorySetAngleXYZ(float x, float y, float z) { mAngleX = /*Normalise(*/x/*)*/; mAngleY = /*Normalise(*/y/*)*/; mAngleZ = /*Normalise(*/z/*)*/; };
-		inline void FactorySetAngle(float newVal) { mAngle =/* AngleBoundCheck(*/newVal/*)*/; };
-		inline void FactorySetAngleIncrement(float newVal) { mAngleIncrement = /*Normalise(*/newVal/*)*/; };
+		inline void FactorySetAngleXYZ(float x, float y, float z) { mAngleX = x; mAngleY = y; mAngleZ = z; };
+		inline void FactorySetAngle(float newVal) { mAngle =newVal; };
+		inline void FactorySetAngleIncrement(float newVal) { mAngleIncrement =newVal; };
 
 		typedef struct
 		{

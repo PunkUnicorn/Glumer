@@ -5,19 +5,18 @@
 #ifndef CGLUPERDIRECTION_H
 #define CGLUPERDIRECTION_H
 
-//#include <windows.h> /*max*/
 #include <algorithm>
 
 namespace Glumer
 {
 
-class cGluperDirection
-{
+	class cGluperDirection
+	{
 	private:
 		float mX, mY, mZ;
 
 	public:
-      inline void GetXYZ(float &x, float &y, float &z) const { x = mX; y = mY; z = mZ; };
+		inline void GetXYZ(float &x, float &y, float &z) const { x = mX; y = mY; z = mZ; };
 		inline void AddToXYZ(float x, float y, float z) { mX += x; mY += y; mZ += z; };
 		inline void FactorySetXYZ(float x, float y, float z) { mX = x; mY = y; mZ = z; };
 
@@ -26,9 +25,9 @@ class cGluperDirection
 			cGluperDirection *ptr;
 		} PTR;
 
-		cGluperDirection(float x=0.0f, float y=0.0f, float z=0.0f) : mX(x), mY(y), mZ(z) {};
-      virtual ~cGluperDirection(void) {};
-};
+		cGluperDirection(float x = 0.0f, float y = 0.0f, float z = 0.0f) : mX(x), mY(y), mZ(z) {};
+		virtual ~cGluperDirection(void) {};
+	};
 
 }
 

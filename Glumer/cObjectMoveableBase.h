@@ -15,45 +15,36 @@
 namespace Glumer
 {
 
-/*
-composite class to encapsulate a stack of movement actions against a single object
-*/
-class cObjectMoveableBase : public cObjectBase
-{
-protected:
-    cObjectBase *mObject;
-    static inline void FireEventPossition(cMovementBase::PTR &envoke_me) { envoke_me.ptr->EventPossition(); }
-    std::vector<cMovementBase::PTR> mMovementStack;
+	/*
+	composite class to encapsulate a stack of movement actions against a single object
+	*/
+	class cObjectMoveableBase : public cObjectBase
+	{
+	protected:
+		cObjectBase *mObject;
+		static inline void FireEventPossition(cMovementBase::PTR &envoke_me) { envoke_me.ptr->EventPossition(); }
+		std::vector<cMovementBase::PTR> mMovementStack;
 
-public:
-    typedef struct 
-    {
-      cObjectMoveableBase *ptr;
-      /*bool operator ==(const cObjectMoveableBase::PTR *other) const
-      {
-         return ptr == other->ptr;
-      }*/
-    } PTR;
-                
-    cObjectMoveableBase(cObjectBase *make_moveable=NULL);
-    virtual ~cObjectMoveableBase(void) {};
+	public:
+		typedef struct
+		{
+			cObjectMoveableBase *ptr;
+		} PTR;
 
-    inline void EventPossition(void)
-    {
-       std::for_each(mMovementStack.begin(), mMovementStack.end(), FireEventPossition);
-    }
-    void EventShow(void);
-	 inline static void FireEventShow(cObjectMoveableBase::PTR &showme)
-	 {
-		glLoadIdentity();
-		showme.ptr->cObjectMoveableBase::EventShow();
-	 }
+		cObjectMoveableBase(cObjectBase *make_moveable = NULL);
+		virtual ~cObjectMoveableBase(void) {};
 
-    /* bool operator ==( cObjectMoveableBase::PTR &other, cObjectMoveableBase::PTR &me) const
-     {
-         return me.ptr == other.ptr;
-     }*/
-};
+		inline void EventPossition(void)
+		{
+			std::for_each(mMovementStack.begin(), mMovementStack.end(), FireEventPossition);
+		}
+		void EventShow(void);
+		inline static void FireEventShow(cObjectMoveableBase::PTR &showme)
+		{
+			glLoadIdentity();
+			showme.ptr->cObjectMoveableBase::EventShow();
+		}
+	};
 
 }
 

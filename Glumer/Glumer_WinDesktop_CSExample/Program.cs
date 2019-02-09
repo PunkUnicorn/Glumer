@@ -1,11 +1,12 @@
-﻿using DotnetCore_CSExample;
+﻿using GlumerLib;
 using OpenGL;
 using System;
 using System.Threading;
 using SDL2;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace Glumer_DotnetCore_CSExample
+namespace Glumer_WinDesktop_CSExample
 {
     class Program
     {
@@ -13,14 +14,13 @@ namespace Glumer_DotnetCore_CSExample
         private const float WORLD_DIAMITER = WORLD_RADIUS * 2.0f;
         private const float WORLD_RADIUS_DISPLAY_CLIPPING = 500.0f;
         private const float farDistance = WORLD_RADIUS - WORLD_RADIUS_DISPLAY_CLIPPING;
-
+        static private List<object> GCBuster = new List<object>();
         private const int xres = 640; 
         private const int yres = 480;
         static void Main(string[] args)
         {
             // Init SDL window and GL engine
-            init(out IntPtr gWindow, out IntPtr gContext);
-            SDL.SDL_StartTextInput();
+            OpenGLOnSDL.Init(xres, yres, farDistance, out IntPtr gWindow, out IntPtr gContext);
 
             // Init Glumer engine
             Glumer.InitGlumer();
@@ -48,7 +48,6 @@ namespace Glumer_DotnetCore_CSExample
                 Func<uint, float, string> code4 = (id1, val) => $"Z {val}";
                 Glumer.AddConsoleCode(debugText, code4(id, z), (uint)code1(id).Length);
             };
-            Glumer.OnClicked writeout = debugDump;
             Glumer.OnClickedBool debugDumpBool = (id, state) => debugDump(id);
 
             var swoopingTextList = new List<uint>();
@@ -103,14 +102,80 @@ namespace Glumer_DotnetCore_CSExample
                     count += 0.085f;
                 }
             };
+            var commitPresenter = new ConsoleCommitPresenter();
+            Glumer.OnClicked getCommit = (id) => LibGit2Gist.CommitTests(@"C:\Users\cg1\Documents\Glummer", commitPresenter);
+            
 
-            buttonList.Add(Glumer.CreateButton(0.08f, -0.2f, -0.2f, -2f, debugDump));
+            buttonList.Add(Glumer.CreateButton(0.08f, -0.2f, -0.2f, -2f, getCommit));
             buttonList.Add(Glumer.CreateSwitch(0.08f, -0.2f, 0.2f, -2f, true, debugDumpBool));
             buttonList.Add(Glumer.CreateSwitch(0.08f, 0.2f, 0.2f, -2f, false, debugDumpBool));
+
+            const int gapSize = 500;
+            //int y = -(int)WORLD_RADIUS;
+            List<float[]> floatList = new List<float[]>();
+
+            //for (int x=-(int)WORLD_RADIUS; x < WORLD_RADIUS; x += gapSize)
+            //{
+            //    for (int y= -(int)WORLD_RADIUS; y < WORLD_RADIUS; y+= gapSize)
+            //    {
+            //        //floatList.Add(new float[] { x, y, z });
+            //        floatList.Add(new float[] { x, y, -WORLD_RADIUS, x, y, WORLD_RADIUS,
+            //                                    x, y, WORLD_RADIUS, x, y, -WORLD_RADIUS,
+            //                                    x, y-10.0f, WORLD_RADIUS, x, y-10.0f, -WORLD_RADIUS,
+            //                                    x, y, -WORLD_RADIUS, x, y, WORLD_RADIUS });
+            //    }
+            //}
+            //var floats = floatList.SelectMany(threeFloats => threeFloats).ToArray();
+            //Glumer.CreateGLCommand(1.0f, Gl.LINE_LOOP, 0.0f, 0.0f, 0.0f, floats, (uint)floats.Length, debugDump);
+
+            var listName = Gl.GenLists(1);
+            Gl.NewList(listName, ListMode.Compile);
+            for (int x = -(int)WORLD_RADIUS; x < WORLD_RADIUS; x += gapSize)
+            {
+                Gl.Begin(PrimitiveType.Quads);
+                for (int y = -(int)WORLD_RADIUS; y < 0; y += gapSize)
+                {
+                    Gl.Vertex3(x, y, -WORLD_RADIUS);
+                    Gl.Vertex3(x, y, WORLD_RADIUS);
+                    Gl.Vertex3(x, y, WORLD_RADIUS);
+                    Gl.Vertex3(x, y, -WORLD_RADIUS);
+                    Gl.Vertex3(x, y - 10.0f, WORLD_RADIUS);
+                    Gl.Vertex3(x, y - 10.0f, -WORLD_RADIUS);
+                    Gl.Vertex3(x, y, -WORLD_RADIUS);
+                    Gl.Vertex3(x, y, WORLD_RADIUS);
+                }
+                Gl.End();
+
+                Gl.Begin(PrimitiveType.Quads);
+                for (int z = -(int)WORLD_RADIUS; z<WORLD_RADIUS; z+= gapSize)
+                { 
+                    Gl.Vertex3(x, -WORLD_RADIUS, z);
+                    Gl.Vertex3(x, WORLD_RADIUS, z);
+                    Gl.Vertex3(x, WORLD_RADIUS, z);
+                    Gl.Vertex3(x, -WORLD_RADIUS, z);
+                    Gl.Vertex3(x, WORLD_RADIUS, z - 10.0f);
+                    Gl.Vertex3(x, -WORLD_RADIUS, z - 10.0f);
+                    Gl.Vertex3(x, -WORLD_RADIUS, z);
+                    Gl.Vertex3(x, WORLD_RADIUS, z);
+                }
+                Gl.End();
+            }
+
+            Gl.EndList();
+            //var floats = floatList.SelectMany(threeFloats => threeFloats).ToArray();
+            Glumer.CreateGLCompiledName(1.0f, listName, 0.0f, 0.0f, 0.0f, debugDump);
+
+
+            //Add function pointers that have been passed into unmanaged code, add them also to a managed list 
+            //otherwise these functions (otherwise only passed into unmanaged code) are invisible to C#, and GC 
+            //accidentally disposes them but putting them in a managed list stops GC accidentally disposing them 
+            GCBuster.Add(debugDump); 
+            GCBuster.Add(debugDumpBool);
 
             Gl.Enable(EnableCap.DepthTest | EnableCap.LineSmooth);
             Gl.DepthRange(0.1d, 0.9d);
 
+            SDL.SDL_StartTextInput();
             //While application is running
             bool quit = false;
             int mouse_x = 0;
@@ -128,7 +193,6 @@ namespace Glumer_DotnetCore_CSExample
 
                 //Update screen
                 SDL.SDL_GL_SwapWindow(gWindow);
-
 
                 //Handle events on queue
                 while (SDL.SDL_PollEvent(out SDL.SDL_Event e) != 0)
@@ -151,7 +215,8 @@ namespace Glumer_DotnetCore_CSExample
                             break;
 
                         case SDL.SDL_EventType.SDL_MOUSEBUTTONDOWN:
-                            Glumer.HitTest((uint)mouse_x, (uint)mouse_y, 0);
+                            var hitTestHit = Glumer.HitTest((uint)mouse_x, (uint)mouse_y, 0);
+
                             break;
                     }
                 }
@@ -162,115 +227,7 @@ namespace Glumer_DotnetCore_CSExample
             //Disable text input
             SDL.SDL_StopTextInput();
         }
-
-        static bool init(out IntPtr gWindow, out IntPtr gContext)
-        {
-            gWindow = IntPtr.Zero;
-            gContext = IntPtr.Zero;
-
-            //Initialization flag
-            bool success = true;
-
-            //Initialize SDL
-            if (SDL.SDL_Init(SDL.SDL_INIT_VIDEO) < 0)
-            {
-                Console.WriteLine("SDL could not initialize! SDL Error: {0}\n", SDL.SDL_GetError());
-                success = false;
-            }
-            else
-            {
-                //Use OpenGL 2.1
-                SDL.SDL_GL_SetAttribute(SDL.SDL_GLattr.SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-                SDL.SDL_GL_SetAttribute(SDL.SDL_GLattr.SDL_GL_CONTEXT_MINOR_VERSION, 1);
-
-                //Create window
-                gWindow = SDL.SDL_CreateWindow("SDL W/ OpenGl", SDL.SDL_WINDOWPOS_UNDEFINED, SDL.SDL_WINDOWPOS_UNDEFINED, xres, yres, SDL.SDL_WindowFlags.SDL_WINDOW_OPENGL | SDL.SDL_WindowFlags.SDL_WINDOW_SHOWN);
-                if (gWindow == IntPtr.Zero)
-                {
-                    Console.WriteLine("Window could not be created! SDL Error: %s\n", SDL.SDL_GetError());
-                    success = false;
-                }
-                //When creating an SDL OpenGL window, there are a few more steps we have to take.
-
-                //Before creating the window we need the specify the version we want. We want OpenGL 2.1 so we call SDL_GL_SetAttribute to set the major version to 2 and the minor version to 1.After the version is set we can create an OpenGL window by passing the SDL_WINDOW_OPENGL flag to SDL_CreateWindow.
-                else
-                {
-                    Gl.Initialize();
-                    //Create context
-                    gContext = SDL.SDL_GL_CreateContext(gWindow);
-                    if (gContext == IntPtr.Zero)
-                    {
-                        Console.WriteLine("OpenGL context could not be created! SDL Error: %s\n", SDL.SDL_GetError());
-                        success = false;
-                    }
-                    else
-                    {
-                        //Use Vsync
-                        if (SDL.SDL_GL_SetSwapInterval(1) < 0)
-                        {
-                            Console.WriteLine("Warning: Unable to set VSync! SDL Error: %s\n", SDL.SDL_GetError());
-                        }
-
-                        //Initialize OpenGL
-                        if (!initGL())
-                        {
-                            Console.WriteLine("Unable to initialize OpenGL!\n");
-                            success = false;
-                        }
-                    }
-                }
-            }
-
-            return success;
-        }
-        //After the window has been created successfully we call SDL_GL_CreateContext to create the OpenGL rendering context. If that was successful, we enable Vsync with SDL_GL_SetSwapInterval.
-
-        //After the SDL OpenGL window is created, we then initialize OpenGL's internals with our own initGL function.
-        static bool initGL()
-        {
-            bool success = true;
-            var error = ErrorCode.NoError;
-
-            //Initialize Projection Matrix
-            Gl.MatrixMode(MatrixMode.Projection);
-            Gl.LoadIdentity();
-            Glumer.glPerspective(45, (float)xres / (float)yres, 0.01f, farDistance);
-
-            //Check for error
-            error = Gl.GetError();
-            if (error != ErrorCode.NoError)
-            {
-                Console.WriteLine("Error initializing OpenGL! {0}\n", error.ToString());
-                success = false;
-            }
-
-            //Initialize Modelview Matrix
-            Gl.MatrixMode(MatrixMode.Modelview);
-            Gl.LoadIdentity();
-
-            //Check for error
-            error = Gl.GetError();
-            if (error != ErrorCode.NoError)
-            {
-                Console.WriteLine("Error initializing OpenGL! {0}\n", error.ToString());
-                success = false;
-            }
-            //Here is our first bit of actual OpenGL code.If you were hope to know all of OpenGL by the end of this tutorial, that is not going to be possible.OpenGL is oceanic in size and complexity and there's no way we could cover it in a single tutorial. What we're doing in this demo is learning how to use OpenGL with SDL.
-
-            //First we initialize the projection matrix which controls how perspective work in OpenGL.We initialize it here by setting it to the identity matrix.We check if there was an error and print it to the console.Then we do the same thing with the model view matrix which controls how your rendered objects are viewed and placed.
-
-            Gl.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-            //Check for error
-            error = Gl.GetError();
-            if (error != ErrorCode.NoError)
-            {
-                Console.WriteLine("Error initializing OpenGL! {0}\n", error.ToString());
-                success = false;
-            }
-
-            return success;
-        }
-
+        
         //void handleKeys(byte key, int x, int y)
         //{
         //    //Toggle quad
