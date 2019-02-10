@@ -94,7 +94,7 @@ public:
 
    inline void GetCoords(float &x, float &y, float &z) const { if (mMarkedForDelete == false) mCenter.GetXYZ(x, y, z); else x=y=z=0.0f; };
 	inline const cGluperCenter &GetCenter(void) const { return mBufferedCenter; };
-	inline cGluperCenter &FactoryGetCenter(void) { cGluperCenter &center = mCenter; return center; };	
+	inline cGluperCenter &FactoryGetCenter(void) { cGluperCenter &center = mCenter; return center; };
    inline void AddToCenter(const cGluperDirection &addMe)  { mCenter += addMe; };
 
 	inline const cGluperDirection &GetDirection(void) const { return mBufferedDirection; };

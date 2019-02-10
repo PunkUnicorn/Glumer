@@ -7,6 +7,7 @@
 
 #include "cMovementBase.h"
 #include "cGluperDirection.h"
+#include "cObjectMoveableBase.h"
 
 namespace Glumer
 {
@@ -15,9 +16,14 @@ namespace Glumer
 	{
 	private:
 		float mX, mY, mZ;
-
+		cObjectMoveableBase *mAnchorRotation;
+		cGluperCenter *mAnchor;
 	public:
-		cGluperCenter(float X = 0.0f, float Y = 0.0f, float Z = 0.0f) : mX(X), mY(Y), mZ(Z) { };
+		cGluperCenter(float X = 0.0f, float Y = 0.0f, float Z = 0.0f) : mX(X), mY(Y), mZ(Z), mAnchorRotation(0 /*NULL*/), mAnchor(0 /*NULL*/) { };
+		inline void SetAnchorRotation(cObjectMoveableBase *anchor) { mAnchorRotation = anchor; };
+		inline void SetAnchor(cGluperCenter *anchor) { mAnchor = anchor; };
+		inline const cObjectMoveableBase* const/*can be null*/GetAnchor1()  { return mAnchorRotation; };
+		inline const cMovementBase* const/*can be null*/GetAnchor2() { return mAnchor; };
 		virtual ~cGluperCenter(void) {};
 
 		inline void operator += (const cGluperDirection &direction)
@@ -34,8 +40,8 @@ namespace Glumer
 			z = mZ;
 		}
 
-		void AddToXYZ(float x, float y, float z) { mX += x; mY += y; mZ += z; };
-		void FactorySetXYZ(float x, float y, float z) { mX = x; mY = y; mZ = z; };
+		inline void AddToXYZ(float x, float y, float z) { mX += x; mY += y; mZ += z; };
+		inline void FactorySetXYZ(float x, float y, float z) { mX = x; mY = y; mZ = z; };
 
 		typedef struct
 		{
@@ -44,7 +50,6 @@ namespace Glumer
 
 		void /*cMovementBase::*/EventPossition(void);
 	};
-
 }
 
 #endif

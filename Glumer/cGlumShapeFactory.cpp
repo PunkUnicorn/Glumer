@@ -59,8 +59,6 @@ namespace Glumer
 			camera.ptr->Start(NULL);
 		}
 		mRegularPolyhedron.Start(mCurrentCamera);
-		//mRadar.Start(mCurrentCamera);
-		//mHud.Start(mCurrentCamera);
 		mSwitchGadget.Start(mCurrentCamera);
 		mConsole.Start(mCurrentCamera);
 	}
@@ -83,28 +81,6 @@ namespace Glumer
 		std::for_each(mFactoryState.GetDrawList().begin(), mFactoryState.GetDrawList().end(),
 			cObjectMoveableBase::FireEventShow);
 	}
-
-	// Depreciated
-	/*cGlumShape_Rock::PTR cGlumShapeFactory::CreateRock(cHUD_Colour *hud_colour, float scale, bool start, Glumer::GlumerOnClicked *onClicked)
-	{
-		cGlumShape_Rock::PTR new_one;
-		new_one = mRock.CreateNew(++mNextFreeID, hud_colour);
-	   new_one.ptr->FactorySetOnCliced(onClicked);
-
-	   // lock scope
-	   {
-		  new_one.ptr->FactorySetRadius(scale);
-
-		  cGlumShapeBase::PTR gsbPimp = { (cGlumShapeBase*) new_one.ptr };
-		  cObjectMoveableBase::PTR pimp = { dynamic_cast<cObjectMoveableBase *>( new_one.ptr ) };
-		  if (pimp.ptr == NULL) throw -12345;
-		  mFactoryState.DrawListAdd(pimp, new_one.ptr->GetID());
-		  mFactoryState.FactoryListAdd(gsbPimp);
-		  mFactoryState.SelectableDrawListAdd(new_one.ptr, new_one.ptr->GetID());
-	   }
-		return new_one;
-	}*/
-
 
 	cGlumShape_RegularPolyhedron::PTR cGlumShapeFactory::CreateRegularPolyhedron(cHUD_Colour *hud_colour, PolyhedronType type, float scale, bool start, Glumer::GlumerOnClicked *onClicked)
 	{

@@ -41,8 +41,6 @@ public:
 	// Important Note: This shit is fucked and bullshit
 	static cGlumShapeFactory_ShapeContainer<cGlumShape_RegularPolyhedron> mRegularPolyhedron;
 	static cGlumShapeFactory_ShapeContainer<cGlumShape_SwitchGadget> mSwitchGadget;
-	//static cGlumShapeFactory_ShapeContainer<cGlumShape_HUDShortRadar> mRadar;
-	//static cGlumShapeFactory_ShapeContainer<cGlumShape_HUDLongRadar> mHud;
 	static cGlumShapeFactory_ShapeContainer<cGlumShape_Console> mConsole;
 	static cGlumShapeFactory_ShapeContainer<cMovement_Camera> mCamera;
 
@@ -52,9 +50,9 @@ public:
 	unsigned int GetCount(void)
 	{
 		return mSwitchGadget.ListSize() + 
-			//mRadar.ListSize() + 
-			//mHud.ListSize() + 
-			mConsole.ListSize() + mCamera.ListSize() + mRegularPolyhedron.ListSize();
+			mConsole.ListSize() + 
+			mCamera.ListSize() + 
+			mRegularPolyhedron.ListSize();
 	}
 
 	void Init(void) { };
@@ -87,8 +85,6 @@ public:
 	cGlumShape_RegularPolyhedron::PTR CreateGLCompiledName(cHUD_Colour *hud_colour, float scale, unsigned int compiledName, Glumer::GlumerOnClicked *onClicked);
 
 	cGlumShape_SwitchGadget::PTR CreateSwitchGadget(cHUD_Colour *hud_colour, float scale, cTimer_PistonMotion::PistonValueChanged *onpistonchange, GlumerOnClickedBool *onclickedbool, GlumerOnClicked *onclicked);
-	//cGlumShape_HUDShortRadar::PTR CreateHUDShortRadar(cHUD_Colour *hud_colour, float range, float scale);
-	//cGlumShape_HUDLongRadar::PTR CreateHUDLongRadar(cHUD_Colour *hud_colour, float range, float scale);
 	cGlumShape_Console::PTR CreateConsole(cHUD_Colour *hud_colour, float scale);
 	cMovement_Camera::PTR CreateCamera(void);
    

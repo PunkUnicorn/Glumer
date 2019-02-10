@@ -22,10 +22,10 @@ namespace Glumer
 	{
 	protected:
 		cObjectBase *mObject;
-		static inline void FireEventPossition(cMovementBase::PTR &envoke_me) { envoke_me.ptr->EventPossition(); }
 		std::vector<cMovementBase::PTR> mMovementStack;
 
 	public:
+		static inline void FireEventPossition(cMovementBase::PTR &envoke_me) { envoke_me.ptr->EventPossition(); }
 		typedef struct
 		{
 			cObjectMoveableBase *ptr;

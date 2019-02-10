@@ -31,7 +31,7 @@ namespace Glumer_WinDesktop_CSExample
                     foreach (Commit commit in commits)
                     {
                         commitPresenter.Present(commit);
-                        Console.WriteLine($"{commit.MessageShort}");
+                        //Console.WriteLine($"{commit.MessageShort}");
                         //foreach (Commit p in commit.Parents)
                         //{
                         //    Commit parent = commits.Single(x => x.Id == p.Id);

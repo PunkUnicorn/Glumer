@@ -51,9 +51,9 @@ namespace Glumer_WinDesktop_CSExample
             Glumer.OnClickedBool debugDumpBool = (id, state) => debugDump(id);
 
             var swoopingTextList = new List<uint>();
-            swoopingTextList.Add(Glumer.CreateConsole(0.19f, -.5f, 0, 0));
-            swoopingTextList.Add(Glumer.CreateConsole(0.25f, -0.6f, -0.5f, -0.75f));
-            swoopingTextList.Add(Glumer.CreateConsole(0.3f, -0.7f, +0.5f, 0));
+            //swoopingTextList.Add(Glumer.CreateConsole(0.19f, -.5f, 0, 0));
+            //swoopingTextList.Add(Glumer.CreateConsole(0.25f, -0.6f, -0.5f, -0.75f));
+            //swoopingTextList.Add(Glumer.CreateConsole(0.3f, -0.7f, +0.5f, 0));
             var msg = "Matthews Vector Font";
             var count = 0f;
             foreach (var console in swoopingTextList)
@@ -91,10 +91,11 @@ namespace Glumer_WinDesktop_CSExample
             }
 
 
-            Glumer.OnClickedBool writeoutBool = (id, state) => Console.WriteLine("HIT id {0}, state={1}", id, state);
+            Glumer.OnClickedBool writeoutBool = (id, state) => debugDump(id);
             Glumer.OnClickedBool glumerShapesPause = (id, state) => boxList.ForEach(boxid => Glumer.SetOrientation(boxid, 0f, 0f, 0f, 0f, 0f));
             Glumer.OnClickedBool glumerShapesGo = (id, state) =>
             {
+                debugDump(id);
                 count = 0.25f;
                 foreach (var box in boxList)
                 {
@@ -103,11 +104,21 @@ namespace Glumer_WinDesktop_CSExample
                 }
             };
             var commitPresenter = new ConsoleCommitPresenter();
-            Glumer.OnClicked getCommit = (id) => LibGit2Gist.CommitTests(@"C:\Users\cg1\Documents\Glummer", commitPresenter);
-            
+            Glumer.OnClicked getCommit = (id) => {
+                debugDump(id);
+                LibGit2Gist.CommitTests(@"C:\Users\cg1\Documents\Glummer", commitPresenter);
+            };
+            Glumer.OnClickedBool glumerShapesStart = (id, state) =>
+            {
+                debugDump(id);
+                if (state)
+                    Glumer.SetDirection(boxList[0], 0f, 0f, 0.08f);
+                else
+                    Glumer.SetDirection(boxList[0], 0f, 0f, -0.08f);
+            };
 
             buttonList.Add(Glumer.CreateButton(0.08f, -0.2f, -0.2f, -2f, getCommit));
-            buttonList.Add(Glumer.CreateSwitch(0.08f, -0.2f, 0.2f, -2f, true, debugDumpBool));
+            buttonList.Add(Glumer.CreateSwitch(0.08f, -0.2f, 0.2f, -2f, true, glumerShapesStart));
             buttonList.Add(Glumer.CreateSwitch(0.08f, 0.2f, 0.2f, -2f, false, debugDumpBool));
 
             const int gapSize = 500;
@@ -171,6 +182,20 @@ namespace Glumer_WinDesktop_CSExample
             //accidentally disposes them but putting them in a managed list stops GC accidentally disposing them 
             GCBuster.Add(debugDump); 
             GCBuster.Add(debugDumpBool);
+            GCBuster.Add(glumerShapesGo);
+
+            var rotatingCube = Glumer.CreatePolyhedron(0.2f, Glumer.cPolyhedronType.Octahedron, -0.8f, 0.0f, -1.0f, debugDump);
+            var rotatingText = Glumer.CreateConsole(2f, 0.0f, 1.0f, 0.0f);
+            var rotatingTextContent = "Label";
+            Glumer.SetConsoleText(rotatingText, rotatingTextContent, (uint)rotatingTextContent.Length);
+            //Glumer.SetOrientation(rotatingText, 90f, 1f, 0f, 0f, 0f);
+            Glumer.AddOrientation(rotatingText, 3f, 0f, 1f, 0f, 2f);
+            var rotatingSwitch = Glumer.CreateButton(0.5f, 1f, 0f, 0f, debugDump);
+            Glumer.AddOrientation(rotatingSwitch, 1f, 0f, 1f, 0f, 2f);
+            var win = Glumer.SetAnchor(rotatingText, boxList[0]);
+            win = Glumer.SetAnchorRotation(rotatingCube, boxList[0]);
+            win = Glumer.SetAnchor(rotatingSwitch, boxList[0]);
+            
 
             Gl.Enable(EnableCap.DepthTest | EnableCap.LineSmooth);
             Gl.DepthRange(0.1d, 0.9d);

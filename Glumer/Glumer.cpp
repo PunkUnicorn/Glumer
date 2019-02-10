@@ -95,29 +95,6 @@ extern "C" DLL_PUBLIC unsigned int STDCALL CreateCamera(void)
    }
 }
 
-// Depreciated
-//extern "C" DLL_PUBLIC unsigned int STDCALL CreateRock(float scale, float x, float y, float z, Glumer::GlumerOnClicked *onClicked)
-//{
-//   try
-//   {
-//      TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
-//      cGlumShape_Rock::PTR rockPimp = factory.CreateRock(&hudColour, scale, false, onClicked);
-//      if (rockPimp.ptr == NULL) return 0;
-//      cGlumShape_Rock &rock = *rockPimp.ptr;
-//      cGluperCenter &center = rock.FactoryGetCenter();
-//      center.FactorySetXYZ(x, y, z);
-//      rock.CopyBuffer();
-//
-//      if (factory.IsCameraSet())
-//         rock.Start(factory.GetCamera());
-//      return rock.GetID();
-//   }
-//   catch (...)
-//   {
-//      return 0;
-//   }
-//}
-
 extern "C" DLL_PUBLIC unsigned int STDCALL CreatePolyhedron(float scale, PolyhedronType type, float x, float y, float z, Glumer::GlumerOnClicked *onClicked)
 {
    try
@@ -184,50 +161,6 @@ extern "C" DLL_PUBLIC unsigned int STDCALL CreateGLCompiledName(float scale, uns
 	}
 }
 
-
-// Depreciated
-/*extern "C" DLL_PUBLIC unsigned int STDCALL CreateBullet(float scale, float x, float y, float z, float dirX, float dirY, float dirZ)
-{
-   try
-   {
-      TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
-      cGlumShape_Rock::PTR bulletPimp = factory.CreateBullet(&hudColour, scale, false);
-      if (bulletPimp.ptr == NULL) return 0;
-      cGlumShape_Rock &bullet = *bulletPimp.ptr;
-      cGluperCenter &center = bullet.FactoryGetCenter();
-      center.FactorySetXYZ(x, y, z);
-      cGluperDirection &dir = bullet.FactoryGetDirection();
-      dir.FactorySetXYZ(dirX, dirY, dirZ);
-      bullet.CopyBuffer();
-
-      if (factory.IsCameraSet())
-         bullet.Start(factory.GetCamera());
-      return bullet.GetID();
-   }
-   catch (...)
-   {
-      return 0;
-   }
-}*/
-
-// Depreciated
-/*extern "C" DLL_PUBLIC bool STDCALL SetRockOnClicked(unsigned int id, Glumer::GlumerOnClicked *onClicked)
-{
-   try
-   {
-      TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
-      bool found = false;
-      cGlumShape_Rock::PTR thing = *(factory.mRock.Get(id, found));
-      if (thing.ptr == NULL) return false;
-      thing.ptr->FactorySetOnCliced(onClicked);
-      return true;
-   }
-   catch (...)
-   {
-      return false;
-   }
-}*/
-
 extern "C" DLL_PUBLIC bool STDCALL SetPolyhedronOnClicked(unsigned int id, Glumer::GlumerOnClicked *onClicked)
 {
    try
@@ -244,24 +177,6 @@ extern "C" DLL_PUBLIC bool STDCALL SetPolyhedronOnClicked(unsigned int id, Glume
       return false;
    }
 }
-
-// Depreciated
-/*extern "C" DLL_PUBLIC bool STDCALL GetRockRadius(unsigned int id, float &radius)
-{
-   try
-   {
-      TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
-      bool found = false;
-      cGlumShape_Rock::PTR thing = *(factory.mRock.Get(id, found));
-      if (found == false) return false;
-      radius = thing.ptr->GetRadius();
-      return true;
-   }
-   catch (...)
-   {
-      return false;
-   }
-}*/
 
 extern "C" DLL_PUBLIC bool STDCALL GetPolyhedronRadius(unsigned int glumId, float &radius)
 {
@@ -655,4 +570,117 @@ extern "C" DLL_PUBLIC bool STDCALL AddOrientation(unsigned int id, float angle, 
    {
       return false;
    }
+}
+
+//// If no anchor then your own id is returned
+//extern "C" DLL_PUBLIC unsigned int STDCALL GetAnchor1(unsigned int id)
+//{
+//	try
+//	{
+//		TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
+//		cGlumShapeBase *pmebase = factory.Get(id).ptr;
+//
+//		if (pmebase == NULL) return false;
+//		cGlumShapeBase &me = *pmebase;
+//		const cObjectMoveableBase *anchorCenter = me.FactoryGetCenter().GetAnchor1();
+//		
+//		if (anchorCenter == NULL)
+//			return id;
+//
+//		unsigned int anchor = (dynamic_cast<const cGlumShapeBase*>(anchorCenter))->GetID();
+//		return anchor;
+//	}
+//	catch (...)
+//	{
+//		return id;
+//	}
+//}
+
+// to reset pass anchor same as id
+extern "C" DLL_PUBLIC bool STDCALL SetAnchorRotation(unsigned int id, unsigned int anchor)
+{
+	try
+	{
+		TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
+		cGlumShapeBase *pthing = factory.Get(id).ptr;
+		if (pthing == NULL) return false;
+		cGlumShapeBase &thing = *pthing;
+
+		if (id == anchor)
+		{
+			thing.FactoryGetCenter().SetAnchorRotation(NULL);
+		}
+		else
+		{
+			cGlumShapeBase *pAnchorThing = factory.Get(anchor).ptr;
+			if (pAnchorThing == NULL) return false;
+			thing.FactoryGetCenter().SetAnchorRotation(dynamic_cast<cObjectMoveableBase*>(pAnchorThing));
+		}
+		return true;
+	}
+	catch (...)
+	{
+		return false;
+	}
+}
+
+// If no anchor then your own id is returned
+
+
+// anchor needs to be a cGlumShapeBase in this case, so it can get both the mCenter and the id
+
+
+//extern "C" DLL_PUBLIC unsigned int STDCALL GetAnchor2(unsigned int id)
+//{
+//	try
+//	{
+//		TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
+//		cGlumShapeBase *pmebase = factory.Get(id).ptr;
+//
+//		if (pmebase == NULL) return false;
+//		cGlumShapeBase &me = *pmebase;
+//		const cMovementBase *anchorCenter = me.FactoryGetCenter().GetAnchor2();
+//
+//		if (anchorCenter == NULL)
+//			return id;
+//
+//		unsigned int anchor = (dynamic_cast<const cGlumShapeBase*>(anchorCenter))->GetID();
+//		return anchor;
+//	}
+//	catch (...)
+//	{
+//		return id;
+//	}
+//}
+
+
+// to reset pass anchor same as id
+extern "C" DLL_PUBLIC bool STDCALL SetAnchor(unsigned int id, unsigned int anchor)
+{
+	try
+	{
+		TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
+		cGlumShapeBase *pthing = factory.Get(id).ptr;
+		if (pthing == NULL) return false;
+		cGlumShapeBase &thing = *pthing;
+
+
+		if (id == anchor)
+		{
+			thing.FactoryGetCenter().SetAnchor(NULL);
+		}
+		else
+		{
+			cGlumShapeBase *pAnchorThing = factory.Get(anchor).ptr;
+			if (pAnchorThing == NULL) return false;
+
+			cGluperCenter *anchorCenter = &(pAnchorThing->FactoryGetCenter());
+			thing.FactoryGetCenter().SetAnchor(anchorCenter);
+		}
+		return true;
+	}
+	catch (...)
+	{
+		return false;
+	}
 }

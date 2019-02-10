@@ -1,4 +1,5 @@
-﻿using LibGit2Sharp;
+﻿using GlumerLib;
+using LibGit2Sharp;
 using System;
 
 namespace Glumer_WinDesktop_CSExample
@@ -11,12 +12,12 @@ namespace Glumer_WinDesktop_CSExample
         }
     }
 
-    public class BlockCommitPresenter : IPresentCommit
+    public class TextCommitPresenter : IPresentCommit
     {
         /// <summary>
         /// anchored constructor, anchored to a parent
         /// </summary>
-        public BlockCommitPresenter(object parent)
+        public TextCommitPresenter(uint parent)
         {
 
         }
@@ -24,14 +25,21 @@ namespace Glumer_WinDesktop_CSExample
         /// <summary>
         /// Parentless constructor
         /// </summary>
-        public BlockCommitPresenter(float x, float y, float z)
+        public TextCommitPresenter(float x, float y, float z)
         {
 
         }
 
         public void Present(Commit c)
         {
-            Console.WriteLine(c.MessageShort);
+            var text = $"{c.MessageShort} {c.Sha}";
+            var commitId = Glumer.CreateConsole(1f, 0f, 0f, 0f);
+            Glumer.AddConsoleCode(commitId, text, (uint)text.Length);
+            var random = new Random((int)commitId*137);
+            var random1 = (float)random.NextDouble() * 2f;
+            var random2 = (float)random.NextDouble() * 2f;
+            var random3 = (float)random.NextDouble() * 2f;
+            Glumer.SetDirection(commitId, random1, random2, random3);
         }
     }
 }
