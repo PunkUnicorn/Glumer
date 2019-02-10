@@ -14,32 +14,22 @@ namespace Glumer_WinDesktop_CSExample
 
     public class TextCommitPresenter : IPresentCommit
     {
-        /// <summary>
-        /// anchored constructor, anchored to a parent
-        /// </summary>
-        public TextCommitPresenter(uint parent)
+        private uint commitId;
+        public TextCommitPresenter()
         {
-
-        }
-
-        /// <summary>
-        /// Parentless constructor
-        /// </summary>
-        public TextCommitPresenter(float x, float y, float z)
-        {
-
+            commitId = Glumer.CreateConsole(15f, -50f, 0f, -100f);        
         }
 
         public void Present(Commit c)
         {
-            var text = $"{c.MessageShort} {c.Sha}";
-            var commitId = Glumer.CreateConsole(1f, 0f, 0f, 0f);
+            var text = $"{c.Id} {c.MessageShort}";
             Glumer.AddConsoleCode(commitId, text, (uint)text.Length);
-            var random = new Random((int)commitId*137);
-            var random1 = (float)random.NextDouble() * 2f;
-            var random2 = (float)random.NextDouble() * 2f;
-            var random3 = (float)random.NextDouble() * 2f;
-            Glumer.SetDirection(commitId, random1, random2, random3);
+            //var random = new Random((int)commitId*137);
+            //var random1 = (float)random.NextDouble() / 400f;
+            //var random2 = (float)random.NextDouble() / 400f;
+            //var random3 = (float)random.NextDouble() / 40f;
+            Glumer.AddDirection(commitId, -0.0025f, 0f, 0f);
+            //Glumer.SetOrientation(commitId, 5f, random1, random2, random3, 0.2f);
         }
     }
 }

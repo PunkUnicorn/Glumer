@@ -103,7 +103,7 @@ namespace Glumer_WinDesktop_CSExample
                     count += 0.085f;
                 }
             };
-            var commitPresenter = new ConsoleCommitPresenter();
+            var commitPresenter = new TextCommitPresenter();// ConsoleCommitPresenter();
             Glumer.OnClicked getCommit = (id) => {
                 debugDump(id);
                 LibGit2Gist.CommitTests(@"C:\Users\cg1\Documents\Glummer", commitPresenter);
@@ -183,6 +183,8 @@ namespace Glumer_WinDesktop_CSExample
             GCBuster.Add(debugDump); 
             GCBuster.Add(debugDumpBool);
             GCBuster.Add(glumerShapesGo);
+            GCBuster.Add(getCommit);
+            GCBuster.Add(glumerShapesStart);
 
             var rotatingCube = Glumer.CreatePolyhedron(0.2f, Glumer.cPolyhedronType.Octahedron, -0.8f, 0.0f, -1.0f, debugDump);
             var rotatingText = Glumer.CreateConsole(2f, 0.0f, 1.0f, 0.0f);
