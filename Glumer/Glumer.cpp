@@ -597,7 +597,7 @@ extern "C" DLL_PUBLIC bool STDCALL AddOrientation(unsigned int id, float angle, 
 //}
 
 // to reset pass anchor same as id
-extern "C" DLL_PUBLIC bool STDCALL SetAnchorRotation(unsigned int id, unsigned int anchor)
+extern "C" DLL_PUBLIC bool STDCALL SetAnchorMatchingRotationTo(unsigned int id, unsigned int anchor)
 {
 	try
 	{
@@ -608,13 +608,13 @@ extern "C" DLL_PUBLIC bool STDCALL SetAnchorRotation(unsigned int id, unsigned i
 
 		if (id == anchor)
 		{
-			thing.FactoryGetCenter().SetAnchorRotation(NULL);
+			thing.FactoryGetCenter().SetAnchorMatchingRotationTo(NULL);
 		}
 		else
 		{
 			cGlumShapeBase *pAnchorThing = factory.Get(anchor).ptr;
 			if (pAnchorThing == NULL) return false;
-			thing.FactoryGetCenter().SetAnchorRotation(dynamic_cast<cObjectMoveableBase*>(pAnchorThing));
+			thing.FactoryGetCenter().SetAnchorMatchingRotationTo(dynamic_cast<cObjectMoveableBase*>(pAnchorThing));
 		}
 		return true;
 	}
@@ -655,7 +655,7 @@ extern "C" DLL_PUBLIC bool STDCALL SetAnchorRotation(unsigned int id, unsigned i
 
 
 // to reset pass anchor same as id
-extern "C" DLL_PUBLIC bool STDCALL SetAnchor(unsigned int id, unsigned int anchor)
+extern "C" DLL_PUBLIC bool STDCALL SetAnchorTo(unsigned int id, unsigned int anchor)
 {
 	try
 	{
@@ -667,7 +667,7 @@ extern "C" DLL_PUBLIC bool STDCALL SetAnchor(unsigned int id, unsigned int ancho
 
 		if (id == anchor)
 		{
-			thing.FactoryGetCenter().SetAnchor(NULL);
+			thing.FactoryGetCenter().SetAnchorTo(NULL);
 		}
 		else
 		{
@@ -675,7 +675,7 @@ extern "C" DLL_PUBLIC bool STDCALL SetAnchor(unsigned int id, unsigned int ancho
 			if (pAnchorThing == NULL) return false;
 
 			cGluperCenter *anchorCenter = &(pAnchorThing->FactoryGetCenter());
-			thing.FactoryGetCenter().SetAnchor(anchorCenter);
+			thing.FactoryGetCenter().SetAnchorTo(anchorCenter);
 		}
 		return true;
 	}

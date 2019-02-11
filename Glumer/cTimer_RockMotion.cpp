@@ -11,12 +11,13 @@ namespace Glumer
 	{
 		mCommon->AddToCenter(mCommon->GetDirection());
 		mCommon->FactoryGetOrientation().AddToAngle(mCommon->GetOrientation().GetAngleIncrement());
-
-		const float threshold = 360.0f;
-		float angle = mCommon->GetOrientation().GetAngle();
-		if (angle >= threshold)
-		{
-			mCommon->FactoryGetOrientation().FactorySetAngle(angle - threshold);
-		}
+		mCommon->NormaliseOrientation();
+		mCommon->NormaliseDirection();
+		//const float threshold = 360.0f;
+		//float angle = mCommon->GetOrientation().GetAngle();
+		//if (angle >= threshold)
+		//{
+		//	mCommon->FactoryGetOrientation().FactorySetAngle(angle - threshold);
+		//}
 	}
 }

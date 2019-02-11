@@ -12,9 +12,9 @@
 namespace Glumer
 {
 
-// adapt a cGlumShapeBase type (to give the camera 'game space coordinates') and adapt into a cMovementBase for possitioning world items
-class cMovement_Camera : public cGlumShapeBase, public cMovementBase, private TimerWrapper::cTimerWrapper
-{
+	// adapt a cGlumShapeBase type (to give the camera 'game space coordinates') and adapt into a cMovementBase for possitioning world items
+	class cMovement_Camera : public cGlumShapeBase, public cMovementBase, private TimerWrapper::cTimerWrapper
+	{
 	private:
 		/*cTimerWrapper::*/void EventTimer(void);
 
@@ -28,10 +28,10 @@ class cMovement_Camera : public cGlumShapeBase, public cMovementBase, private Ti
 			}
 		} PTR;
 
-	  void Init(unsigned int callbackDelay)
-	  {
+		void Init(unsigned int callbackDelay)
+		{
 			/*TimerWrapper::cTimerWrapper::*/FactorySetDelay(callbackDelay);
-    }
+		}
 
 		virtual void Start(cMovementBase *world_offset)
 		{
@@ -42,7 +42,7 @@ class cMovement_Camera : public cGlumShapeBase, public cMovementBase, private Ti
 		~cMovement_Camera(void) {};
 
 		void /*cMovementBase::*/EventPossition(void);
-};
+	};
 
 }
 

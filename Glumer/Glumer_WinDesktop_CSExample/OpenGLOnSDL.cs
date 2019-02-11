@@ -39,7 +39,8 @@ namespace Glumer_WinDesktop_CSExample
                 //Before creating the window we need the specify the version we want. We want OpenGL 2.1 so we call SDL_GL_SetAttribute to set the major version to 2 and the minor version to 1.After the version is set we can create an OpenGL window by passing the SDL_WINDOW_OPENGL flag to SDL_CreateWindow.
                 else
                 {
-                    Gl.Initialize();
+                    Gl.Initialize(); // this is the right place for this call
+
                     //Create context
                     gContext = SDL.SDL_GL_CreateContext(gWindow);
                     if (gContext == IntPtr.Zero)

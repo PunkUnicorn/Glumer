@@ -49,7 +49,7 @@ namespace Glumer
 		{
 			TimerWrapper::cTimerWrapper::FactorySetDelay(60);
 			//cTimerWrapper::AddTimer(this);
-			TimerWrapper::cTimerWrapper::AddThread(this);
+			TimerWrapper::cTimerWrapper::AddTimer(this);
 		}
 		inline ~cTimer_PistonMotion(void) {}
 

@@ -14,10 +14,38 @@ namespace Glumer_WinDesktop_CSExample
         private const float WORLD_DIAMITER = WORLD_RADIUS * 2.0f;
         private const float WORLD_RADIUS_DISPLAY_CLIPPING = 500.0f;
         private const float farDistance = WORLD_RADIUS - WORLD_RADIUS_DISPLAY_CLIPPING;
-        static private List<object> GCBuster = new List<object>();
         private const int xres = 640; 
         private const int yres = 480;
+
         static void Main(string[] args)
+        {
+            using (var game = new GlumerStartup(xres, yres, farDistance))
+            {
+                var boxList = new List<uint>();
+                boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, 0.7f, -0.8f, -5f, null));//game.DebugDump));
+                boxList.Add(Glumer.CreatePolyhedron(0.2f, Glumer.cPolyhedronType.Octahedron, -0.8f, 0.0f, -3.0f, null));//
+                
+                boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, -0.7f, -0.8f, -5f, null));//game.DebugDump));
+                boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, -0.7f, -0.8f, -5f, null));//game.DebugDump));
+                boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, 0.7f, 0.8f, -5f, null));//game.DebugDump));
+                boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, 0.7f, 0.8f, -5f, null));//game.DebugDump));
+
+                float count = 1.25f;
+                foreach (var box in boxList)
+                {
+                    Glumer.SetOrientation(box, 25f + count, 0.0f + count, 0.0f + count, 0.10f + count, 2f + count);
+                    count += 0.085f;
+                }
+
+                game.Start();
+            }
+        }
+        
+        
+
+
+        static private List<object> GCBuster = new List<object>();
+        private static void Testbed()
         {
             // Init SDL window and GL engine
             OpenGLOnSDL.Init(xres, yres, farDistance, out IntPtr gWindow, out IntPtr gContext);
@@ -72,7 +100,7 @@ namespace Glumer_WinDesktop_CSExample
                     Glumer.GetLocation(it, out float x, out float y, out float z);
                     if (z < -15f || z > 1.5f)
                     {
-                        Glumer.GetDirection(it, ref x, ref y, ref z);
+                        Glumer.GetDirection(it, out x, out y, out z);
                         Glumer.SetDirection(it, x, y, -z);
                     }
                 }
@@ -104,7 +132,8 @@ namespace Glumer_WinDesktop_CSExample
                 }
             };
             var commitPresenter = new TextCommitPresenter();// ConsoleCommitPresenter();
-            Glumer.OnClicked getCommit = (id) => {
+            Glumer.OnClicked getCommit = (id) =>
+            {
                 debugDump(id);
                 LibGit2Gist.CommitTests(@"C:\Users\cg1\Documents\Glummer", commitPresenter);
             };
@@ -158,8 +187,8 @@ namespace Glumer_WinDesktop_CSExample
                 Gl.End();
 
                 Gl.Begin(PrimitiveType.Quads);
-                for (int z = -(int)WORLD_RADIUS; z<WORLD_RADIUS; z+= gapSize)
-                { 
+                for (int z = -(int)WORLD_RADIUS; z < WORLD_RADIUS; z += gapSize)
+                {
                     Gl.Vertex3(x, -WORLD_RADIUS, z);
                     Gl.Vertex3(x, WORLD_RADIUS, z);
                     Gl.Vertex3(x, WORLD_RADIUS, z);
@@ -180,7 +209,7 @@ namespace Glumer_WinDesktop_CSExample
             //Add function pointers that have been passed into unmanaged code, add them also to a managed list 
             //otherwise these functions (otherwise only passed into unmanaged code) are invisible to C#, and GC 
             //accidentally disposes them but putting them in a managed list stops GC accidentally disposing them 
-            GCBuster.Add(debugDump); 
+            GCBuster.Add(debugDump);
             GCBuster.Add(debugDumpBool);
             GCBuster.Add(glumerShapesGo);
             GCBuster.Add(getCommit);
@@ -194,10 +223,9 @@ namespace Glumer_WinDesktop_CSExample
             Glumer.AddOrientation(rotatingText, 3f, 0f, 1f, 0f, 2f);
             var rotatingSwitch = Glumer.CreateButton(0.5f, 1f, 0f, 0f, debugDump);
             Glumer.AddOrientation(rotatingSwitch, 1f, 0f, 1f, 0f, 2f);
-            var win = Glumer.SetAnchor(rotatingText, boxList[0]);
-            win = Glumer.SetAnchorRotation(rotatingCube, boxList[0]);
-            win = Glumer.SetAnchor(rotatingSwitch, boxList[0]);
-            
+            var win = Glumer.SetAnchorTo(rotatingText, boxList[0]);
+            win = Glumer.SetAnchorMatchingRotationTo(rotatingCube, boxList[0]);
+            win = Glumer.SetAnchorTo(rotatingSwitch, boxList[0]);
 
             Gl.Enable(EnableCap.DepthTest | EnableCap.LineSmooth);
             Gl.DepthRange(0.1d, 0.9d);
@@ -254,20 +282,5 @@ namespace Glumer_WinDesktop_CSExample
             //Disable text input
             SDL.SDL_StopTextInput();
         }
-        
-        //void handleKeys(byte key, int x, int y)
-        //{
-        //    //Toggle quad
-        //    if (key == 'q')
-        //    {
-        //        gRenderQuad = !gRenderQuad;
-        //    }
-        //}
-
-        static void update()
-        {
-            //No per frame update needed
-        }
-
     }
 }
