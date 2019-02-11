@@ -7,7 +7,7 @@ namespace Glumer_WinDesktop_CSExample
 {
     public class GlumerStartup : IDisposable
     {
-        private readonly uint cameraId;
+        private uint cameraId;
         private readonly IntPtr gWindow;
         private readonly IntPtr gContext;
         private Lazy<uint> debugText = new Lazy<uint>(() => Glumer.CreateConsole(0.3f, -0.4f, -0.4f, -2f));
@@ -15,11 +15,22 @@ namespace Glumer_WinDesktop_CSExample
 
         public delegate bool SdlCallback(ref bool quit, SDL.SDL_Event e);
 
-        public GlumerStartup(int xres, int yres, float farDistance)
+        public GlumerStartup(float farDistance, SDL.SDL_WindowFlags additional = 0)
         {
             // Init SDL window and GL engine
-            OpenGLOnSDL.Init(xres, yres, farDistance, out gWindow, out gContext);
+            OpenGLOnSDL.Init(farDistance, out gWindow, out gContext, out int xres, out int yres, additional);
+            GlumerStartupInternal(xres, yres, farDistance);
 
+        }
+        public GlumerStartup(int xres, int yres, float farDistance, SDL.SDL_WindowFlags additional = 0)
+        { 
+            // Init SDL window and GL engine
+            OpenGLOnSDL.Init(xres, yres, farDistance, out gWindow, out gContext, additional);
+            GlumerStartupInternal(xres, yres, farDistance);
+        }
+
+        private void GlumerStartupInternal(int xres, int yres, float farDistance)
+        {
             // Init Glumer engine
             Glumer.InitGlumer();
             cameraId = Glumer.CreateCamera();
@@ -52,7 +63,7 @@ namespace Glumer_WinDesktop_CSExample
             Glumer.AddConsoleCode(DebugText, code4(id, z), (uint)code1(id).Length);
         }
 
-        public void Start(SdlCallback callback = null)
+        public void RunForever(SdlCallback callback = null)
         {
             bool quit = false;
             int mouse_x = 0;
@@ -83,12 +94,20 @@ namespace Glumer_WinDesktop_CSExample
 
                     switch (e.type)
                     {
+                        
                         case SDL.SDL_EventType.SDL_QUIT:
                             quit = true;
                             break;
 
-                        case SDL.SDL_EventType.SDL_TEXTINPUT:
-                            SDL.SDL_GetMouseState(out int x, out int y);
+                        //case SDL.SDL_EventType.SDL_TEXTINPUT:
+                            //SDL.SDL_GetMouseState(out int x, out int y);
+                        case SDL.SDL_EventType.SDL_KEYDOWN:
+                            switch (e.key.keysym.sym)
+                            {
+                                case SDL.SDL_Keycode.SDLK_ESCAPE:
+                                    quit=true;
+                                    break;
+                            }
                             break;
 
                         case SDL.SDL_EventType.SDL_MOUSEMOTION:
@@ -104,7 +123,7 @@ namespace Glumer_WinDesktop_CSExample
                 }
 
                 // yield to the threading system
-                SDL.SDL_Delay(1);
+                SDL.SDL_Delay(30);
             }
         }
 

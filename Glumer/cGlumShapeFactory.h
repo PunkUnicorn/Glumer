@@ -26,7 +26,7 @@ private:
    cMovementBase *mCurrentCamera;
    TimerWrapper::cMutexWrapper mFactoryLock;
    cGlumShapeFactoryState mFactoryState;
-
+   bool mIsBuffered;
 public:
 	static const unsigned int RESERVE_FACTORYLIST = 1000;
 	//lock factory lock first, then EITHER of

@@ -28,7 +28,7 @@ namespace Glumer_WinDesktop_CSExample
             //var random1 = (float)random.NextDouble() / 400f;
             //var random2 = (float)random.NextDouble() / 400f;
             //var random3 = (float)random.NextDouble() / 40f;
-            Glumer.AddDirection(commitId, -0.0025f, 0f, 0f);
+            Glumer.AddDirection(commitId, -0.025f, 0f, 0f);
             //Glumer.SetOrientation(commitId, 5f, random1, random2, random3, 0.2f);
         }
     }

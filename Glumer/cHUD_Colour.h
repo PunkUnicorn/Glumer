@@ -11,18 +11,18 @@ namespace Glumer
 class cHUD_Colour
 {
 	private:
-		inline int GetAltColour(int original, int addition)
+		inline int GetAltColour(int original, int addition) const
 		{
 			if (original + addition > 255)
 				return original - addition;
 
 			return original + addition;
-		};
+		} ;
 
     public:
-		int GetSecondRed(void) { return GetAltColour(m_red, 100);  }
-		int GetSecondGreen(void) { return GetAltColour(m_green, 100); }
-		int GetSecondBlue(void) { return GetAltColour(m_blue, 100); }
+		int GetSecondRed(void) const { return GetAltColour(m_red, 100);  }
+		int GetSecondGreen(void) const { return GetAltColour(m_green, 100); }
+		int GetSecondBlue(void) const { return GetAltColour(m_blue, 100); }
 		int m_red, m_green, m_blue;
         cHUD_Colour(void) : m_red(0), m_green(0), m_blue(0) {}
 };

@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using System.Diagnostics;
 
 namespace GlumerLib
 {
     public class Glumer
     {
-        static public class cPolyhedronType
+        public enum cPolyhedronType : int
         {
-            public const int Unknown = 0;
-            public const int Cube = 400;
-            public const int Octahedron = 800;
-            public const int GlCommand = 1600;
-            public const int GlCompiledName = 32000;
+            Unknown = 0,
+            Cube = 400,
+            Octahedron = 800,
+            GlCommand = 1600,
+            GlCompiledName = 32000,
         }
         public delegate void GetCoordsFunc(uint engineId, uint id, ref float x, ref float y, ref float z);
         public delegate void OnClickedBool(uint raiser, bool state); 
@@ -25,7 +20,7 @@ namespace GlumerLib
         // Add function pointers that have been passed into unmanaged code, add them also to a managed list 
         // otherwise these functions (otherwise only passed into unmanaged code) are invisible to C#, and GC 
         // accidentally disposes them but putting them in a managed list stops GC accidentally disposing them 
-        private static List<object> GCBuster = new List<object>();
+        internal static List<object> GCBuster = new List<object>();
 
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern bool InitGlumer();
@@ -57,8 +52,8 @@ namespace GlumerLib
         public static extern void SetInvisible(uint glumid, bool visible);
 
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall, EntryPoint = "CreatePolyhedron")]
-        public static extern uint CreatePolyhedronInternal(float scale, int type, float x, float y, float z, OnClicked onClicked);
-        public static uint CreatePolyhedron(float scale, int type, float x, float y, float z, OnClicked onClicked)
+        public static extern uint CreatePolyhedronInternal(float scale, cPolyhedronType type, float x, float y, float z, OnClicked onClicked);
+        public static uint CreatePolyhedron(float scale, cPolyhedronType type, float x, float y, float z, OnClicked onClicked)
         {
             GCBuster.Add(onClicked);
             return CreatePolyhedronInternal(scale, type, x, y, z, onClicked);

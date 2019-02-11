@@ -14,34 +14,44 @@ namespace Glumer_WinDesktop_CSExample
         private const float WORLD_DIAMITER = WORLD_RADIUS * 2.0f;
         private const float WORLD_RADIUS_DISPLAY_CLIPPING = 500.0f;
         private const float farDistance = WORLD_RADIUS - WORLD_RADIUS_DISPLAY_CLIPPING;
-        private const int xres = 640; 
-        private const int yres = 480;
+        private static int xres = 640; 
+        private static int yres = 480;
 
         static void Main(string[] args)
         {
-            using (var game = new GlumerStartup(xres, yres, farDistance))
+            Testbed();
+            //Game();
+        }
+
+        private static async void Game()
+        {
+            var commitPresenter = new TextCommitPresenter();// ConsoleCommitPresenter();
+            var commits = LibGit2Gist.CommitTests(@"C:\Users\cg1\Documents\Glummer", commitPresenter);
+
+            using (var game = new GlumerStartup(farDistance, SDL.SDL_WindowFlags.SDL_WINDOW_FULLSCREEN_DESKTOP))
             {
                 var boxList = new List<uint>();
-                boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, 0.7f, -0.8f, -5f, null));//game.DebugDump));
-                boxList.Add(Glumer.CreatePolyhedron(0.2f, Glumer.cPolyhedronType.Octahedron, -0.8f, 0.0f, -3.0f, null));//
-                
-                boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, -0.7f, -0.8f, -5f, null));//game.DebugDump));
-                boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, -0.7f, -0.8f, -5f, null));//game.DebugDump));
-                boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, 0.7f, 0.8f, -5f, null));//game.DebugDump));
-                boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, 0.7f, 0.8f, -5f, null));//game.DebugDump));
+                boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, 0.7f, -0.8f, -5f, game.DebugDump));
+                boxList.Add(Glumer.CreatePolyhedron(0.2f, Glumer.cPolyhedronType.Octahedron, -0.8f, 0.0f, -3.0f, game.DebugDump));
+
+                boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, -0.7f, -0.8f, -5f, game.DebugDump));
+                boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, -0.7f, -0.8f, -5f, game.DebugDump));
+                boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, 0.7f, 0.8f, -5f, game.DebugDump));
+                boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, 0.7f, 0.8f, -5f, game.DebugDump));
 
                 float count = 1.25f;
                 foreach (var box in boxList)
                 {
-                    Glumer.SetOrientation(box, 25f + count, 0.0f + count, 0.0f + count, 0.10f + count, 2f + count);
+                    Glumer.SetOrientation(box, 25f + count, 0.0f + count, 0.0f + count, 0.10f + count, count);
                     count += 0.085f;
                 }
 
-                game.Start();
+                await commits;
+
+                game.RunForever();
             }
         }
-        
-        
+
 
 
         static private List<object> GCBuster = new List<object>();

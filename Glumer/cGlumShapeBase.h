@@ -28,10 +28,11 @@ namespace Glumer
 		bool mInvisible;
 		bool mMarkedForDelete;
 		Uint32 mDeletedAt;
+		bool mIsBuffered;
 
 	public:
-		static const unsigned int MOVEMENT_UPDATE_INTERVAL = 30;
-		static const unsigned int MOVEMENT_UPDATE_INTERVAL_END = 50;
+		static const unsigned int MOVEMENT_UPDATE_INTERVAL = 10;
+		static const unsigned int MOVEMENT_UPDATE_INTERVAL_END = 30;
 		static const unsigned int MOVEMENT_UPDATE_INTERVAL_STEP = 10;
 		inline bool IsShown(void) const { return (mInvisible || mMarkedForDelete) == false; }
 		virtual void Start(cMovementBase *world_offset) { };
@@ -93,14 +94,14 @@ namespace Glumer
 		}
 
 		inline void GetCoords(float &x, float &y, float &z) const { if (mMarkedForDelete == false) mCenter.GetXYZ(x, y, z); else x = y = z = 0.0f; };
-		inline const cGluperCenter &GetCenter(void) const { return mBufferedCenter; };
+		inline const cGluperCenter &GetCenter(void) const { return mIsBuffered ? mBufferedCenter : mCenter; };
 		inline cGluperCenter &FactoryGetCenter(void) { cGluperCenter &center = mCenter; return center; };
 		inline void AddToCenter(const cGluperDirection &addMe) { mCenter += addMe; };
 
-		inline const cGluperDirection &GetDirection(void) const { return mBufferedDirection; };
+		inline const cGluperDirection &GetDirection(void) const { return mIsBuffered ? mBufferedDirection : mDirection; };
 		inline cGluperDirection &FactoryGetDirection(void) { cGluperDirection &direction = mDirection; return direction; };
 
-		inline const cGluperOrientation &GetOrientation(void) const { return mBufferedOrientation; };
+		inline const cGluperOrientation &GetOrientation(void) const { return mIsBuffered ? mBufferedOrientation : mOrientation; };
 		inline cGluperOrientation &FactoryGetOrientation(void) { cGluperOrientation &orientation = mOrientation; return orientation; };
 
 		inline unsigned int GetID() const { return mID; };
@@ -118,7 +119,7 @@ namespace Glumer
 			cGlumShapeBase *ptr;
 		} PTR;
 
-		cGlumShapeBase(unsigned int id = 0) : mCenter(), mDirection(), mOrientation(), mID(id), mInvisible(false), mMarkedForDelete(false), mDeletedAt(0) {};
+		cGlumShapeBase(unsigned int id = 0) : mCenter(), mDirection(), mOrientation(), mID(id), mInvisible(false), mMarkedForDelete(false), mDeletedAt(0), mIsBuffered(false) {};
 		virtual ~cGlumShapeBase(void) {};
 	};
 

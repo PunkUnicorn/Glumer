@@ -32,7 +32,7 @@ class cTimer_RockMotion : public TimerWrapper::cTimerWrapper
 			FactorySetDelay(delay);
 			
 			//TimerWrapper::cTimerWrapper::
-			AddTimer(this);
+			AddThread(this);
 		};
 
 		inline ~cTimer_RockMotion(void) {}

@@ -43,7 +43,8 @@ namespace Glumer
 
 	cGlumShapeFactory::cGlumShapeFactory(void) : mNextFreeID(0), mCurrentCamera(NULL),
 		mFactoryLock(),
-		mFactoryState(RESERVE_FACTORYLIST)
+		mFactoryState(RESERVE_FACTORYLIST), 
+		mIsBuffered(false)
 	{
 
 	}
@@ -65,6 +66,8 @@ namespace Glumer
 
 	void cGlumShapeFactory::DoubleBufferCoordinates(void)
 	{
+		if (this->mIsBuffered == false) return;
+
 		TimerWrapper::cMutexWrapper::Lock lock(mFactoryState.GetGlumShapeMapLock());
 		std::vector<unsigned int>::iterator renderId = mFactoryState.GetGlumShapeList().begin();
 		for (; renderId != mFactoryState.GetGlumShapeList().end(); renderId++)

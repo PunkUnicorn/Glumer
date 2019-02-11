@@ -112,9 +112,10 @@ float const cPolyLetter::DOTf[]        = {0.5f, 0.1f, 0.0f,   0.6f, 0.1f, 0.0f, 
 float const cPolyLetter::ERROR0f[]     = {0.0f, 0.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, 0.0f,   cPolyLetter_ENDSTROKE};
 #endif
 
-static void Shape(const float **pstroke0, const float **pstroke1, const float **pstroke2)
+static void Shape(const cHUD_Colour *const mHUD_Colour, const float **pstroke0, const float **pstroke1, const float **pstroke2)
 {
    const float charSizeScale = 4.0f;
+   glColor3ub(mHUD_Colour->m_red, mHUD_Colour->m_green, mHUD_Colour->m_blue);
    glBegin(GL_LINE_STRIP);
    if (*pstroke0 != NULL)
    {
@@ -123,6 +124,7 @@ static void Shape(const float **pstroke0, const float **pstroke1, const float **
    }
    glEnd();
     
+   glColor3ub(mHUD_Colour->GetSecondRed(), mHUD_Colour->GetSecondGreen(), mHUD_Colour->GetSecondBlue());
    glBegin(GL_LINE_STRIP);
    if (*pstroke1 != NULL)
    {
@@ -131,6 +133,7 @@ static void Shape(const float **pstroke0, const float **pstroke1, const float **
    }
    glEnd();
     
+   glColor3ub(mHUD_Colour->m_red, mHUD_Colour->m_green, mHUD_Colour->m_blue);
    glBegin(GL_LINE_STRIP);
    if (*pstroke2 != NULL)
    {
@@ -144,20 +147,21 @@ static void Shape(const float **pstroke0, const float **pstroke1, const float **
 void cPolyLetter::DrawLetterInternal(const cPolyLetter *me, char &letter, const float **pstroke0, const float **pstroke1, const float **pstroke2)
 {
 
-		glPushMatrix();
-		glColor3ub(me->mHUD_Colour->m_red, me->mHUD_Colour->m_green, me->mHUD_Colour->m_blue);
+	//glPushMatrix();
+	//	//glScalef(1.1f, 1.1f, 1.1f);
+	//	glColor3ub(me->mHUD_Colour->GetSecondRed(), me->mHUD_Colour->GetSecondGreen(), me->mHUD_Colour->GetSecondBlue());
+	//	glLineWidth(0.9f);
+	//	Shape(pstroke0, pstroke1, pstroke2);
+	//glPopMatrix();
 
-	    glLineWidth(5.0f);
-   		Shape(pstroke0, pstroke1, pstroke2);
+	glPushMatrix();
+		//glScalef(1.1f, 1.1f, 1.1f);
+		//glColor3ub(me->mHUD_Colour->m_red, me->mHUD_Colour->m_green, me->mHUD_Colour->m_blue);
+	    glLineWidth(1.0f);
+   		Shape(me->mHUD_Colour, pstroke0, pstroke1, pstroke2);
 
-
-		glColor3ub(0, 0, 0);
-		const float defaultLineWidth = 2.f;
-	     glLineWidth(defaultLineWidth);
-
-   		   Shape(pstroke0, pstroke1, pstroke2);
-   
-
+		const float defaultLineWidth = 2.f;   
+		glLineWidth(defaultLineWidth);
     glPopMatrix();                        
 }
             
