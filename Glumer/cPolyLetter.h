@@ -55,6 +55,7 @@ public:
             DrawLetterInternal(this, letter, pstroke0, pstroke1, pstroke2);
          else 
             glCallList(cPolyLetter::mDrawLists[letter]);
+
       glPopMatrix();
       mLeftToRightIndex++;
       return true;

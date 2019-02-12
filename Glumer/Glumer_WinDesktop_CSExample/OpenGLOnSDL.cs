@@ -45,7 +45,7 @@ namespace Glumer_WinDesktop_CSExample
         static public void GetBestMode(out int xres, out int yres)
         {
             var reses = GetModes();
-            var bestOne = reses.Max(res => res.h);
+            var bestOne = reses.First(f => f.h == 480).h;  //reses.Max(res => res.h); 
             xres = reses.First(w => w.h == bestOne).w;
             yres = reses.First(w => w.h == bestOne).h;
         }
@@ -70,7 +70,7 @@ namespace Glumer_WinDesktop_CSExample
             {
 
                 GetBestMode(out xres, out yres);
-                success = InitInternal(xres, yres, farDistance, out gWindow, out gContext);
+                success = InitInternal(xres, yres, farDistance, out gWindow, out gContext, additionalSDL_WindowFlags);
             }
             return success;
         }
@@ -91,7 +91,7 @@ namespace Glumer_WinDesktop_CSExample
             }
             else
             {
-                success = InitInternal(xres, yres, farDistance, out gWindow, out gContext);
+                success = InitInternal(xres, yres, farDistance, out gWindow, out gContext, additionalSDL_WindowFlags);
             }
             return success;
         }
@@ -120,9 +120,9 @@ namespace Glumer_WinDesktop_CSExample
                 gWindow = SDL.SDL_CreateWindow("SDL W/ OpenGl",
                     SDL.SDL_WINDOWPOS_UNDEFINED, SDL.SDL_WINDOWPOS_UNDEFINED,
                     //SDL.SDL_WINDOWPOS_UNDEFINED, SDL.SDL_WINDOWPOS_UNDEFINED,
-                    xres, yres, 
-                    SDL.SDL_WindowFlags.SDL_WINDOW_OPENGL | SDL.SDL_WindowFlags.SDL_WINDOW_SHOWN 
-                        | additionalSDL_WindowFlags);
+                    xres, yres,
+                    SDL.SDL_WindowFlags.SDL_WINDOW_OPENGL | SDL.SDL_WindowFlags.SDL_WINDOW_SHOWN );
+                        //| additionalSDL_WindowFlags);
 
                 if (gWindow == IntPtr.Zero)
                 {

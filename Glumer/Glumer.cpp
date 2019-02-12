@@ -542,7 +542,7 @@ extern "C" DLL_PUBLIC bool STDCALL SetOrientation(unsigned int id, float angle, 
       orientation.FactorySetAngleXYZ(x, y, z);
       orientation.FactorySetAngle(angle);
       orientation.FactorySetAngleIncrement(angleIncrement);
-      thing.CopyBuffer();
+      //thing.CopyBuffer();
 
       return true;
    }

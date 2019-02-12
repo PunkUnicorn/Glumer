@@ -35,14 +35,14 @@ namespace Glumer
 
 		inline void FactorySetAngleXYZ(float x, float y, float z) { mAngleX = x; mAngleY = y; mAngleZ = z; };
 		inline void FactorySetAngle(float newVal) { mAngle =newVal; };
-		inline void FactorySetAngleIncrement(float newVal) { mAngleIncrement =newVal; };
+		inline void FactorySetAngleIncrement(float newVal) { mAngleIncrement = newVal; };
 
 		typedef struct
 		{
 			cGluperOrientation *ptr;
 		} PTR;
 
-		cGluperOrientation(float X = 0.0f, float Y = 0.0f, float Z = 0.0f)
+		cGluperOrientation(float X = 0.0f, float Y = 1.0f, float Z = 0.0f)
 			: mAngleX(X), mAngleY(Y), mAngleZ(Z), mAngle(0.0f), mAngleIncrement(0.0f) {};
 
 		virtual ~cGluperOrientation(void) {};

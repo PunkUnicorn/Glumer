@@ -75,6 +75,7 @@ namespace Glumer
 
 		inline void CopyBuffer(void)
 		{
+			if (!mIsBuffered) return;
 			if (mMarkedForDelete) return;
 			float x, y, z;
 			mCenter.GetXYZ(x, y, z);

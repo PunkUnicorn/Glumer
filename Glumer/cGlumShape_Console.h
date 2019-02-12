@@ -182,19 +182,19 @@ public:
 		glPushMatrix();
 		glColor3ub(mHUD_Colour->m_red, mHUD_Colour->m_green, mHUD_Colour->m_blue);
 
-		glScalef(mScale, mScale, mScale);
+			glScalef(mScale, mScale, mScale);
 
-		const float mLineWidth = 1.0f;
-		const float mDefaultLineWidth = 0.1f;
+			const float mLineWidth = 1.0f;
+			const float mDefaultLineWidth = 0.1f;
 
-		glLineWidth(0.01f);
-		mTopToBottomIndex = 0;
-		int end = copyOfLines.size() - 1;
-		if (end != -1)
-			for (int i = 0; i <= end; i++)
-			{
-				DrawLine(copyOfLines[i]);
-			}
+			glLineWidth(0.01f);
+			mTopToBottomIndex = 0;
+			int end = copyOfLines.size() - 1;
+			if (end != -1)
+				for (int i = 0; i <= end; i++)
+				{
+					DrawLine(copyOfLines[i]);
+				}
 
 		glPopMatrix();
 	}};
