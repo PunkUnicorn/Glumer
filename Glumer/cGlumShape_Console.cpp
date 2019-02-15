@@ -16,7 +16,7 @@ namespace Glumer
 
 cGlumShape_Console::cGlumShape_Console(unsigned int id, cHUD_Colour *hud_colour, float scale/*=1.0f*/) 
    : cGlumShapeBase(id), cObjectMoveableBase(), mHUD_Colour(hud_colour), mLeftToRightIndex(0), mTopToBottomIndex(0), mDelay(cGlumShapeBase::MOVEMENT_UPDATE_INTERVAL), mTimer(NULL),
-   /*mActionThread0(), mActionThread1(), mActionThread2(), mActionThreadIndex(0), */mMessageLines(), mScale(scale), debug_lock()
+   /*mActionThread0(), mActionThread1(), mActionThread2(), mActionThreadIndex(0), */mMessageLines(), mScale(scale), debug_lock(), mListName(0), mIsCompiled(false)
 {
    cObjectMoveableBase::mObject = this;
 	mMessageLines.reserve(25);

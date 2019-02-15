@@ -6,6 +6,7 @@
 #ifndef TIMERWRAPPER_H
 #define TIMERWRAPPER_H
 #include <SDL.h>
+#include <vector>
 
 namespace TimerWrapper
 {

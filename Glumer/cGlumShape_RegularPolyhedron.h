@@ -279,7 +279,25 @@ public:
 	inline void FactorySetGlCompiledName(int compiledName) { mGlCommand = new cGlumGlCommand(compiledName); };
 	inline unsigned int GetDelay(void) const { return mDelay; }
 
-	virtual void NormaliseDirection(void) 
+	void cGlumShapeBase::AnimationStart(void)
+	{
+		if (mTimer != NULL) return;
+		mTimer = new cTimer_RockMotion(this, mDelay);
+	}
+
+	void cGlumShapeBase::AnimationStop(void)
+	{
+		if (mTimer == NULL) return;
+		cTimer_RockMotion *deleteme = mTimer;
+		mTimer = NULL;
+		deleteme->Abort();
+		while (deleteme->HasAborted() == false)
+			SDL_Delay(1);
+
+		delete deleteme;
+	}
+
+	virtual void NormaliseDirection(void)
 	{
 		// if mBufferedDirection different to mDirection
 		// see if vector needs normalising and the rock motion inverval increased or decreased
@@ -288,6 +306,7 @@ public:
 	virtual void Start(cMovementBase *world_offset);
 	virtual void Stop(void) 
 	{ 
+		if (mTimer == NULL) return;
 		mTimer->SetPause(true);
 		mTimer->Abort();
 	}
@@ -301,7 +320,7 @@ public:
 		{
 			mTimer->Abort();
 			while (mTimer->HasAborted() == false)
-			SDL_Delay(1);
+				SDL_Delay(1);
 
 			delete mTimer;
 		}

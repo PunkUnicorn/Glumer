@@ -22,7 +22,7 @@ namespace Glumer
 			radius < 128.0f ? lineWidths[4] :
 			lineWidths[5];
 
-		mTimer = new cTimer_RockMotion(this, mDelay);
+		//mTimer = new cTimer_RockMotion(this, mDelay);
 	}
 
 }

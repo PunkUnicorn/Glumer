@@ -143,6 +143,10 @@ namespace Glumer
 		float mLineWidth, mDefaultLineWidth;
 
 	public:
+		void cGlumShapeBase::AnimationStart(void) { };
+		void cGlumShapeBase::AnimationStop(void) { };
+
+
 		inline cGlumShape_SwitchGadget(unsigned int id, cHUD_Colour *hud_colour)
 			: cGlumShapeBase(id),
 			cObjectMoveableBase(),

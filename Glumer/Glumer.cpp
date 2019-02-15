@@ -10,6 +10,7 @@
 #include <SDL.h>
 #include "cGlumShapeFactory.h"
 #include "STDCALL.h"
+#include "CameraMovement.h"
 
 #include "DLL_PUBLIC.h"
 #include "Glumer.h"
@@ -341,12 +342,32 @@ extern "C" DLL_PUBLIC bool STDCALL ScrollConsoleText(unsigned int id, unsigned i
    }
 }
 
+extern "C" DLL_PUBLIC bool STDCALL CompileConsoleText(unsigned int id, const char *text, unsigned int text_size)
+{
+	try
+	{
+		TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
+		bool haveFound = false;
+		cGlumShape_Console::PTR found = *(factory.mConsole.Get(id, haveFound));
+		if (haveFound)
+		{
+			found.ptr->CompileMessage(text);
+		}
+		return haveFound;
+	}
+	catch (...)
+	{
+		return false;
+	}
+}
+
 extern "C" DLL_PUBLIC void STDCALL Start(unsigned int cameraId)
 {
    try
    {
       TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
       factory.Start(cameraId);
+	  CameraMovement::SetCameraId(cameraId);
    }
    catch (...)
    { }     
@@ -379,6 +400,17 @@ extern "C" DLL_PUBLIC void STDCALL HitTest(unsigned int mouse_x, unsigned int mo
    }
    catch (...)
    { }
+}
+
+extern "C" DLL_PUBLIC void STDCALL PointerMotionChange(unsigned int mouse_x, unsigned int mouse_y, int mouse_z)
+{
+	try
+	{
+		CameraMovement::PointerMotionChange(mouse_x, mouse_y, mouse_z);
+	}
+	catch (...)
+	{
+	}
 }
 
 static void STDCALL GetCoords(unsigned int engineId, unsigned int bubbleId, float &X, float &Y, float &Z)
@@ -482,6 +514,10 @@ extern "C" DLL_PUBLIC bool STDCALL SetDirection(unsigned int id, float x, float 
       cGlumShapeBase &thing  = *pthing;
       cGluperDirection &direction = thing.FactoryGetDirection();
       direction.FactorySetXYZ(x, y, z);
+	  if (thing.IsAnimated())
+		  thing.AnimationStart();
+	  else
+		  thing.AnimationStop();
       //direction.FactorySetVelocity(velocity);
       thing.CopyBuffer();
 
@@ -503,7 +539,11 @@ extern "C" DLL_PUBLIC bool STDCALL AddDirection(unsigned int id, float x, float 
       cGlumShapeBase &thing  = *pthing;
       cGluperDirection &direction = thing.FactoryGetDirection();
       direction.AddToXYZ(x, y, z);
-      //direction.AddToVelocity(velocity);
+	  if (thing.IsAnimated())
+		  thing.AnimationStart();
+	  else
+		  thing.AnimationStop();
+	  //direction.AddToVelocity(velocity);
       return true;
    }
    catch (...)
@@ -542,7 +582,11 @@ extern "C" DLL_PUBLIC bool STDCALL SetOrientation(unsigned int id, float angle, 
       orientation.FactorySetAngleXYZ(x, y, z);
       orientation.FactorySetAngle(angle);
       orientation.FactorySetAngleIncrement(angleIncrement);
-      //thing.CopyBuffer();
+	  if (thing.IsAnimated())
+		  thing.AnimationStart();
+	  else
+		  thing.AnimationStop();
+	  //thing.CopyBuffer();
 
       return true;
    }
@@ -564,7 +608,11 @@ extern "C" DLL_PUBLIC bool STDCALL AddOrientation(unsigned int id, float angle, 
       orientation.AddToAngleXYZ(x, y, z);
       orientation.AddToAngle(angle);
       orientation.AddToAngleIncrement(angleIncrement);
-      return true;
+	  if (thing.IsAnimated())
+		  thing.AnimationStart();
+	  else
+		  thing.AnimationStop();
+	  return true;
    }
    catch (...)
    {

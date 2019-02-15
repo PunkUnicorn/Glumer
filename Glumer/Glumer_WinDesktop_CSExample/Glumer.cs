@@ -105,15 +105,14 @@ namespace GlumerLib
         public static extern uint CreateConsole(float scale, float x, float y, float z);
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern bool SetConsoleText(uint id, [MarshalAs(UnmanagedType.LPStr)] string text, uint text_size);
-
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern bool AddConsoleText(uint id, [MarshalAs(UnmanagedType.LPStr)] string text, uint text_size);
-
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern bool AddConsoleCode(uint id, string text, uint text_size);
-
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern bool ScrollConsoleText(uint id, uint lines);
+        [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
+        public static extern bool CompileConsoleText(uint id, [MarshalAs(UnmanagedType.LPStr)] string text, uint text_size);
 
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern uint CreateCamera();

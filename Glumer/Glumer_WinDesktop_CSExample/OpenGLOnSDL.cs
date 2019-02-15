@@ -174,7 +174,7 @@ namespace Glumer_WinDesktop_CSExample
             //Initialize Projection Matrix
             Gl.MatrixMode(MatrixMode.Projection);
             Gl.LoadIdentity();
-            Glumer.glPerspective(45, (float)xres / (float)yres, 0.01f, farDistance);
+            Glumer.glPerspective(45, (float)xres / (float)yres, 1.00f, farDistance);
 
             //Check for error
             error = Gl.GetError();

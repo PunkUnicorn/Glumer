@@ -32,10 +32,12 @@ namespace Glumer_WinDesktop_CSExample
         private static async void Game(string gitPath)
         {
             var commitPresenter = new BoxCommitPresenter(-3f, -3f, -10f);//TextCommitPresenter();// ConsoleCommitPresenter();
-            var commits = LibGit2Gist.CommitTests(gitPath, commitPresenter);
+            //await commits;
 
             using (var game = new GlumerStartup(farDistance, 0))// SDL.SDL_WindowFlags.SDL_WINDOW_FULLSCREEN_DESKTOP))
             {
+                var commits = LibGit2Gist.CommitTests(gitPath, commitPresenter);
+
                 var boxList = new List<uint>();
                 boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, 0.7f, -1.2f, -5f, game.DebugDump));
                 //boxList.Add(Glumer.CreatePolyhedron(0.2f, Glumer.cPolyhedronType.Octahedron, -0.8f, 0.0f, -3.0f, game.DebugDump));
@@ -52,7 +54,9 @@ namespace Glumer_WinDesktop_CSExample
                     count += 0.085f;
                 }
 
-                await commits;
+                var t = Glumer.CreateConsole(0.3f, -0.4f, -0.4f, -2f);
+                var tt = "TEST";
+                Glumer.CompileConsoleText(t, tt, (uint) tt.Length);
 
                 game.RunForever(TakeSdlEvents);
             }
@@ -60,7 +64,32 @@ namespace Glumer_WinDesktop_CSExample
 
         private static bool TakeSdlEvents(ref bool quit, SDL.SDL_Event e)
         {
-            Console.WriteLine(e.ToString());
+            //Console.WriteLine(e.ToString());
+            switch (e.type)
+            {
+
+                case SDL.SDL_EventType.SDL_QUIT:
+                    break;
+
+                case SDL.SDL_EventType.SDL_KEYDOWN:
+                    switch (e.key.keysym.sym)
+                    {
+                        case SDL.SDL_Keycode.SDLK_ESCAPE:
+                            break;
+                    }
+                    break;
+
+                case SDL.SDL_EventType.SDL_MOUSEMOTION:
+                    break;
+
+                case SDL.SDL_EventType.SDL_MOUSEBUTTONDOWN:
+                    break;
+
+                case SDL.SDL_EventType.SDL_MOUSEWHEEL:
+                    Console.WriteLine($"{e.wheel.x}, {e.wheel.y}, {e.wheel.type}, {e.wheel.which}");
+                    //Glumer.
+                    break;
+            }
             return true;
         }
     } 

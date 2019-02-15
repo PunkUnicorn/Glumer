@@ -31,9 +31,15 @@ namespace Glumer
 		bool mIsBuffered;
 
 	public:
-		static const unsigned int MOVEMENT_UPDATE_INTERVAL = 10;
-		static const unsigned int MOVEMENT_UPDATE_INTERVAL_END = 30;
-		static const unsigned int MOVEMENT_UPDATE_INTERVAL_STEP = 10;
+		virtual void AnimationStart() = 0;
+		virtual void AnimationStop() = 0;
+		static const unsigned int MOVEMENT_UPDATE_INTERVAL = 20;
+		static const unsigned int MOVEMENT_UPDATE_INTERVAL_END = 40;
+		static const unsigned int MOVEMENT_UPDATE_INTERVAL_STEP = 5;
+		inline bool IsAnimated()
+		{
+			return mDirection.IsAnimated() || mOrientation.IsAnimated();
+		}
 		inline bool IsShown(void) const { return (mInvisible || mMarkedForDelete) == false; }
 		virtual void Start(cMovementBase *world_offset) { };
 		virtual void Stop(void) { };
@@ -120,7 +126,7 @@ namespace Glumer
 			cGlumShapeBase *ptr;
 		} PTR;
 
-		cGlumShapeBase(unsigned int id = 0) : mCenter(), mDirection(), mOrientation(), mID(id), mInvisible(false), mMarkedForDelete(false), mDeletedAt(0), mIsBuffered(false) {};
+		cGlumShapeBase(unsigned int id = 0) : mCenter(), mDirection(), mOrientation(), mID(id), mInvisible(false), mMarkedForDelete(false), mDeletedAt(0), mIsBuffered(false){};
 		virtual ~cGlumShapeBase(void) {};
 	};
 

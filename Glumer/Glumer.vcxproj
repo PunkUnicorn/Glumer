@@ -116,6 +116,7 @@ REM xcopy "$(SolutionDir)$(ConfigurationName)\$(TargetName).*" "$(SolutionDir)..
     <ClInclude Include="..\Shared\Glumer.h" />
     <ClInclude Include="..\Shared\STDCALL.h" />
     <ClInclude Include="..\Shared\TraceFunc.h" />
+    <ClInclude Include="CameraMovement.h" />
     <ClInclude Include="cGlumGlCommand.h" />
     <ClInclude Include="cGlumShapeFactoryState.h" />
     <ClInclude Include="cGlumShape_RegularPolyhedron.h" />
@@ -141,6 +142,7 @@ REM xcopy "$(SolutionDir)$(ConfigurationName)\$(TargetName).*" "$(SolutionDir)..
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Shared\TimerWrapper.cpp" />
+    <ClCompile Include="CameraMotion.cpp" />
     <ClCompile Include="cGlumShapeFactory.cpp" />
     <ClCompile Include="cGlumShape_RegularPolyhedron.cpp" />
     <ClCompile Include="cGlumShape_SwitchGadget.cpp" />

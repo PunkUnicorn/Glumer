@@ -19,7 +19,10 @@ namespace Glumer
 		inline void GetXYZ(float &x, float &y, float &z) const { x = mX; y = mY; z = mZ; };
 		inline void AddToXYZ(float x, float y, float z) { mX += x; mY += y; mZ += z; };
 		inline void FactorySetXYZ(float x, float y, float z) { mX = x; mY = y; mZ = z; };
-
+		inline bool IsAnimated()
+		{
+			return !( (mX == 0.0f) && (mY == 0.0f) && (mZ == 0.0f) );
+		}
 		typedef struct
 		{
 			cGluperDirection *ptr;

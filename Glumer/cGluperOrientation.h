@@ -18,6 +18,11 @@ namespace Glumer
 		float mAngle, mAngleIncrement;
 
 	public:
+		inline bool IsAnimated()
+		{
+			return (mAngleIncrement > 0.0f || mAngleIncrement < 0.0f);
+		}
+
 		inline void GetXYZAngleAndIncrement(float &angle, float &x, float &y, float &z, float &angleIncrement) const
 		{
 			angle = mAngle;

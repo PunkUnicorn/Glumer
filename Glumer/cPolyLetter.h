@@ -21,40 +21,87 @@ private:
     int &mLeftToRightIndex;
     int &mTopToBottomIndex;
     int &mTabIndex;
-    static std::map<char /*glyph*/, GLuint /*drawlistID*/> mDrawLists;
-    void static DrawLetterInternal(const cPolyLetter *me, char &letter, const float **pstroke0, const float **pstroke1, const float **pstroke2);
+    static std::map<const char /*glyph*/, GLuint /*drawlistID*/> mDrawLists;
+    void static DrawLetterInternal(cHUD_Colour *hud_colour, char &letter, const float **pstroke0, const float **pstroke1, const float **pstroke2);
     void static LoadStrokes(char &letter, int &mLeftToRightIndex, int &mTopToBottomIndex, int &mTabIndex, const float **pstroke0, const float **pstroke1, const float **pstroke2);
 
 public:     
-    cPolyLetter(cHUD_Colour *hud_colour, int &ltr, int &ttb, int &tabIndex) : mHUD_Colour(hud_colour), mLeftToRightIndex(ltr), mTopToBottomIndex(ttb), mTabIndex(tabIndex) {}
+	cPolyLetter(cHUD_Colour *hud_colour, int &ltr, int &ttb, int &tabIndex) : mHUD_Colour(hud_colour), mLeftToRightIndex(ltr), mTopToBottomIndex(ttb), mTabIndex(tabIndex)
+	{
+	}
+
+	static void CompileLetter(cHUD_Colour *hud_colour, char letter)
+	{
+		const float *one = NULL, *two = NULL, *three = NULL;
+		const float **pstroke0 = &one;
+		const float **pstroke1 = &two;
+		const float **pstroke2 = &three;
+		int dummy = 0;
+		LoadStrokes(letter, dummy, dummy, dummy, pstroke0, pstroke1, pstroke2);
+		const char cletter = letter;
+		cPolyLetter::mDrawLists[cletter] = glGenLists(1);
+		glNewList(cPolyLetter::mDrawLists[cletter], GL_COMPILE);
+			DrawLetterInternal(hud_colour, letter, pstroke0, pstroke1, pstroke2);
+		glEndList();
+	}
+	static void CompileAlphabet(cHUD_Colour *hud_colour, char startLetter)
+	{
+		for (int i = 0; i < 26/*a-z*/; i++)
+		{
+			char letter = startLetter + i;
+			CompileLetter(hud_colour, letter);
+		}
+	}
+
+	static void CompileLetters(cHUD_Colour *hud_colour)
+	{
+		const char supportedNonAlphaNumerics[] = { '.','-' };
+		const char startLetter[] = { 'a','A' };
+		for (int i=0; i < sizeof(startLetter); i++)
+			CompileAlphabet(hud_colour, startLetter[i]);
+
+		for (int i = 0; i < sizeof(supportedNonAlphaNumerics); i++)
+			CompileLetter(hud_colour, supportedNonAlphaNumerics[i]);
+
+		for (int i=0; i<10; i++)
+			CompileLetter(hud_colour, '0' + i);
+	}
 
 	inline result_type operator () (argument_type letter) const
 	{
-      const float *one=NULL, *two=NULL, *three=NULL;
-      const float **pstroke0=&one;
-      const float **pstroke1=&two;
-      const float **pstroke2=&three;
-      LoadStrokes(letter, mLeftToRightIndex, mTopToBottomIndex, mTabIndex, pstroke0, pstroke1, pstroke2);
-
       glPushMatrix();
          glScalef(0.6f, 0.9f, 0.9f);
 
          const float charSize = 0.4f;      
          glTranslatef(charSize * mLeftToRightIndex, -charSize * mTopToBottomIndex, 0.0f); //charSize /*whu?*/);
 
-         if (cPolyLetter::mDrawLists.find(letter) == cPolyLetter::mDrawLists.end())
-         {
-            cPolyLetter::mDrawLists[letter] = glGenLists(1);
+		 const char cletter = letter;
+		 //std::map<const char, GLuint>::iterator found = cPolyLetter::mDrawLists.end();
+		 //if (mNoCompiled == true)
+			//found = cPolyLetter::mDrawLists.find(cletter); //== cPolyLetter::mDrawLists.end()
 
-            glNewList(cPolyLetter::mDrawLists[letter], GL_COMPILE);
-               DrawLetterInternal(this, letter, pstroke0, pstroke1, pstroke2);
-            glEndList();
+   //      if (mNoCompiled ||
+			//  found == cPolyLetter::mDrawLists.end()
+			// || found->second == 0)
+		 if (cPolyLetter::mDrawLists.find(cletter) == cPolyLetter::mDrawLists.end()
+			 || cPolyLetter::mDrawLists[cletter] == 0)
+         {				 
+			 const float *one = NULL, *two = NULL, *three = NULL;
+			 const float **pstroke0 = &one;
+			 const float **pstroke1 = &two;
+			 const float **pstroke2 = &three;
+			 LoadStrokes(letter, mLeftToRightIndex, mTopToBottomIndex, mTabIndex, pstroke0, pstroke1, pstroke2);
+
+			 DrawLetterInternal(mHUD_Colour, letter, pstroke0, pstroke1, pstroke2);
+            //cPolyLetter::mDrawLists[letter] = glGenLists(1);
+
+            //glNewList(cPolyLetter::mDrawLists[letter], GL_COMPILE_AND_EXECUTE);
+            //   DrawLetterInternal(this, letter, pstroke0, pstroke1, pstroke2);
+            //glEndList();
          }
-     
-         if (cPolyLetter::mDrawLists[letter] == 0)  //true if cant compile, but whu?
-            DrawLetterInternal(this, letter, pstroke0, pstroke1, pstroke2);
-         else 
-            glCallList(cPolyLetter::mDrawLists[letter]);
+		 else {
+			glCallList(cPolyLetter::mDrawLists[cletter]);
+		 }
 
       glPopMatrix();
       mLeftToRightIndex++;

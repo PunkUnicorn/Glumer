@@ -2,6 +2,8 @@
 using OpenGL;
 using SDL2;
 using System;
+using System.Diagnostics;
+using System.Threading;
 
 namespace Glumer_WinDesktop_CSExample
 {
@@ -71,17 +73,25 @@ namespace Glumer_WinDesktop_CSExample
             if (callback == null)
                 callback = (ref bool a, SDL.SDL_Event b) => true;
 
+
+            var debug = Glumer.CreateConsole(2.0f, -2.5f, 1f, -5f);
+
+            var sw = new Stopwatch();
             while (!quit)
             {
                 #region Render Screen
                 Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
                 Glumer.gluLookAt(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f);
 
+                sw.Reset();
+                sw.Start();
                 Gl.PushMatrix();
                 Glumer.DrawScene(0, 177, 64);
                 Gl.PopMatrix();
                 Gl.Flush();
-
+                sw.Stop();
+                var msg = $"{sw.Elapsed.TotalMilliseconds}";
+                Glumer.SetConsoleText(debug, msg, (uint) msg.Length);
                 //Update screen
                 SDL.SDL_GL_SwapWindow(gWindow);
                 #endregion Render Screen
@@ -123,7 +133,7 @@ namespace Glumer_WinDesktop_CSExample
                 }
 
                 // yield to the threading system
-                SDL.SDL_Delay(30);
+                SDL.SDL_Delay(1);
             }
         }
 

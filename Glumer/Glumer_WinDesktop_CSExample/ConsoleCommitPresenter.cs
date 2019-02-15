@@ -77,7 +77,8 @@ namespace Glumer_WinDesktop_CSExample
             private void RotateBitBox_Elapsed(object sender, ElapsedEventArgs e)
             {
                 float x,y,z;
-                angle += 2.5f;
+                const float step = 1f;
+                angle += step;
                 if (angle >= 360f)
                     angle = 0f;
 
@@ -93,7 +94,7 @@ namespace Glumer_WinDesktop_CSExample
                 Elapsed += RotateBitBox_Elapsed;
                 AutoReset = true;
                 Enabled = true;
-                Interval = 30;
+                Interval = 20;
             }
         }
 
@@ -132,6 +133,8 @@ namespace Glumer_WinDesktop_CSExample
             {
                 Glumer.GetOrientation(box, out float angle, out float x, out float y, out float z, out float angleIncrement);
                 angleIncrement = (box == id) ? 2f : 0f;
+                angle = (box == id) ? angle : 0f;
+
                 Glumer.SetOrientation(box, angle, x, y, z, angleIncrement);
 
                 if (box == id)
@@ -163,13 +166,13 @@ namespace Glumer_WinDesktop_CSExample
                 orbitBitBox = new BitBoxTimer(bitBox1, bitBox2);
                 anchorInit = true;
             }
-            var rand = new Random((int)me + 317);
+            //var rand = new Random((int)me + 317);
             //Glumer.SetOrientation(me, 25f, (float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble()*10f);
             boxes.Add(me);
 
             boxeToText.Add(me, Glumer.CreateConsole(3f, 1f, 0f, 0f));
             Glumer.SetOrientation(boxeToText[me], 45f, 1f, 0f, 0f, 0f);
-            Glumer.SetConsoleText(boxeToText[me], c.MessageShort, (uint)c.MessageShort.Length);
+            Glumer.CompileConsoleText(boxeToText[me], c.MessageShort, (uint)c.MessageShort.Length);
             Glumer.SetAnchorTo(boxeToText[me], me);
 
             anchor = me;

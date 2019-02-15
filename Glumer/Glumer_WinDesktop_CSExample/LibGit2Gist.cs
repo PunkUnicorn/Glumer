@@ -10,33 +10,51 @@ namespace Glumer_WinDesktop_CSExample
     public static class LibGit2Gist
     {
         public static Repository repo = null;
-        public static Task<List<Commit>> CommitTests(string gitRepositoryPath, IPresentCommit commitPresenter)
+        public static List<Commit> CommitTests(string gitRepositoryPath, IPresentCommit commitPresenter)
         {
-            List<Commit> commits = null;
-            if (repo == null)
+            repo = new Repository(gitRepositoryPath);
+
+            var commits = repo.Commits.QueryBy(new CommitFilter
             {
-                repo = new Repository(gitRepositoryPath);
+                SortBy = CommitSortStrategies.Topological
+            })
+            .Take(400)
+            .ToList();
+
+            foreach (Commit commit in commits)
+            {
+                commitPresenter.Present(commit);
             }
-
-            var getCommit = Task< List<Commit> >.Run(delegate ()
-                {
-                    commits = repo.Commits.QueryBy(new CommitFilter
-                    {
-                        SortBy = CommitSortStrategies.Topological
-                    }).ToList();
-                    return commits;
-                })
-                .ContinueWith(delegate (Task<List<Commit>> task)
-                {
-                    foreach (Commit commit in commits)
-                    {
-                        commitPresenter.Present(commit);
-                    }
-                    return commits;
-                });
-
-            return getCommit;
+            return commits;
         }
+
+        //    List<Commit> commits = null;
+        //    if (repo == null)
+        //    {
+        //        repo = new Repository(gitRepositoryPath);
+        //    }
+
+        //    var getCommit = Task< List<Commit> >.Run(delegate ()
+        //        {
+        //            commits = repo.Commits.QueryBy(new CommitFilter
+        //            {
+        //                SortBy = CommitSortStrategies.Topological
+        //            })
+        //            .Take(10)
+        //            .ToList();
+        //            return commits;
+        //        })
+        //        .ContinueWith(delegate (Task<List<Commit>> task)
+        //        {
+        //            foreach (Commit commit in commits)
+        //            {
+        //                commitPresenter.Present(commit);
+        //            }
+        //            return commits;
+        //        });
+
+        //    return getCommit;
+        //}
     
 
         public static void Gist(string gitRepositoryPath)

@@ -7,12 +7,14 @@
 
 namespace TimerWrapper
 {
-
 	/*
 	base class to encapsulate the SDL timer
 	*/
 
-	cTimerWrapper::cTimerWrapper(void) : mAbort(false), mThisTribbleIsDead(false), mPaused(false), mTimerID(0), mThreadID(NULL), mEventCallbackDelay(120) {};
+	cTimerWrapper::cTimerWrapper(void) : mAbort(false), mThisTribbleIsDead(false), mPaused(false), mTimerID(0), mThreadID(NULL), mEventCallbackDelay(120)
+	{
+	};
+
 	cTimerWrapper::~cTimerWrapper(void)
 	{
 		mAbort = true;
@@ -88,11 +90,10 @@ namespace TimerWrapper
 		cTimerWrapper *timer = (cTimerWrapper *)data;
 
 		Uint32 startTime = SDL_GetTicks();
-		Uint32 delayTime = DecelerateTowardsEvent(timer->mEventCallbackDelay);
+		Uint32 delayTime = timer->mEventCallbackDelay;// DecelerateTowardsEvent(timer->mEventCallbackDelay);
 
 		while (timer->mAbort == false)
 		{
-			//SDL_Delay(0);
 			if (timer->mPaused)
 			{
 				static const Uint32 GIVE_IT_A_MONKEY = 200;
@@ -105,8 +106,7 @@ namespace TimerWrapper
 				while ((SDL_GetTicks() - startTime) < timer->mEventCallbackDelay)
 				{
 					SDL_Delay(delayTime);
-					//if (timer->mAbort) break;
-					delayTime = DecelerateTowardsEvent(delayTime);
+					//delayTime = DecelerateTowardsEvent(delayTime);
 				}
 				if (timer->mAbort) break;
 				if (timer->mPaused) continue;
@@ -115,6 +115,7 @@ namespace TimerWrapper
 			try
 			{
 				timer->EventTimer();
+				SDL_Delay(1);
 			}
 			catch (...)
 			{
@@ -122,8 +123,7 @@ namespace TimerWrapper
 			}
 
 			startTime = SDL_GetTicks();
-			delayTime = DecelerateTowardsEvent(timer->mEventCallbackDelay);
-		}
+			delayTime = DecelerateTowardsEvent(timer->mEventCallbackDelay);		}
 
 		try
 		{

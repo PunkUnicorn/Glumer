@@ -13,7 +13,7 @@ static const int tabSize = 6;
 
 static void LoadStrokes(char &letter, int &mLeftToRightIndex, int &mTopToBottomIndex, const float **pstroke0, const float **pstroke1, const float **pstroke2);
 
-std::map<char /*glyph*/, GLuint /*drawlistID*/> cPolyLetter::mDrawLists;
+std::map<const char /*glyph*/, GLuint /*drawlistID*/> cPolyLetter::mDrawLists;
 
 #define region
 #ifdef region
@@ -144,7 +144,7 @@ static void Shape(const cHUD_Colour *const mHUD_Colour, const float **pstroke0, 
 }
 
 // static class member        
-void cPolyLetter::DrawLetterInternal(const cPolyLetter *me, char &letter, const float **pstroke0, const float **pstroke1, const float **pstroke2)
+void cPolyLetter::DrawLetterInternal(cHUD_Colour *hud_colour, char &letter, const float **pstroke0, const float **pstroke1, const float **pstroke2)
 {
 
 	//glPushMatrix();
@@ -158,7 +158,7 @@ void cPolyLetter::DrawLetterInternal(const cPolyLetter *me, char &letter, const 
 		//glScalef(1.1f, 1.1f, 1.1f);
 		//glColor3ub(me->mHUD_Colour->m_red, me->mHUD_Colour->m_green, me->mHUD_Colour->m_blue);
 	    glLineWidth(1.0f);
-   		Shape(me->mHUD_Colour, pstroke0, pstroke1, pstroke2);
+   		Shape(hud_colour, pstroke0, pstroke1, pstroke2);
 
 		const float defaultLineWidth = 2.f;   
 		glLineWidth(defaultLineWidth);

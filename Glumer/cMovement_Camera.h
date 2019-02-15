@@ -28,6 +28,10 @@ namespace Glumer
 			}
 		} PTR;
 
+		void AnimationStart(void) { };
+		void AnimationStop(void) { };
+
+
 		void Init(unsigned int callbackDelay)
 		{
 			/*TimerWrapper::cTimerWrapper::*/FactorySetDelay(callbackDelay);
