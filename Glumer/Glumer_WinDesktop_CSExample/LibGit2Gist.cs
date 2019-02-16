@@ -18,7 +18,7 @@ namespace Glumer_WinDesktop_CSExample
             {
                 SortBy = CommitSortStrategies.Topological
             })
-            .Take(400)
+            .Take(250)
             .ToList();
 
             foreach (Commit commit in commits)

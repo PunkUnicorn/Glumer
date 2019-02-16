@@ -117,9 +117,6 @@
     <ClInclude Include="cGlumShape_RegularPolyhedron.h">
       <Filter>Header Files\Glum</Filter>
     </ClInclude>
-    <ClInclude Include="..\Bubbles\Shared\TimerWrapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="cGlumGlCommand.h">
       <Filter>Source Files\Glum</Filter>
     </ClInclude>

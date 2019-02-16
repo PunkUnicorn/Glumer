@@ -7,24 +7,34 @@ using System.Threading;
 
 namespace Glumer_WinDesktop_CSExample
 {
-    public class GlumerStartup : IDisposable
+    public class GlumerContext : IDisposable
     {
+        public interface ICallLookAt
+        {
+            void CallLookAt();
+        }
+
+        public interface IPeekSdlEvents
+        {
+            bool SdlCallback(ref bool quit, int mouse_x, int mouse_y, int mouse_z, SDL.SDL_Event e);
+        }
+
         private uint cameraId;
         private readonly IntPtr gWindow;
         private readonly IntPtr gContext;
         private Lazy<uint> debugText = new Lazy<uint>(() => Glumer.CreateConsole(0.3f, -0.4f, -0.4f, -2f));
         private uint DebugText => debugText.Value;
 
-        public delegate bool SdlCallback(ref bool quit, SDL.SDL_Event e);
+        //public delegate bool SdlCallback(ref bool quit, int mouse_x, int mouse_y, int mouse_z, SDL.SDL_Event e);
 
-        public GlumerStartup(float farDistance, SDL.SDL_WindowFlags additional = 0)
+        public GlumerContext(float farDistance, SDL.SDL_WindowFlags additional = 0)
         {
             // Init SDL window and GL engine
             OpenGLOnSDL.Init(farDistance, out gWindow, out gContext, out int xres, out int yres, additional);
             GlumerStartupInternal(xres, yres, farDistance);
 
         }
-        public GlumerStartup(int xres, int yres, float farDistance, SDL.SDL_WindowFlags additional = 0)
+        public GlumerContext(int xres, int yres, float farDistance, SDL.SDL_WindowFlags additional = 0)
         { 
             // Init SDL window and GL engine
             OpenGLOnSDL.Init(xres, yres, farDistance, out gWindow, out gContext, additional);
@@ -65,41 +75,44 @@ namespace Glumer_WinDesktop_CSExample
             Glumer.AddConsoleCode(DebugText, code4(id, z), (uint)code1(id).Length);
         }
 
-        public void RunForever(SdlCallback callback = null)
+        public void RunForever(IPeekSdlEvents sdlCallback = null, ICallLookAt iCallLookAt = null)
         {
             bool quit = false;
             int mouse_x = 0;
             int mouse_y = 0;
-            if (callback == null)
-                callback = (ref bool a, SDL.SDL_Event b) => true;
+            //if (sdlCallback == null)
+            //    callback = (ref bool a, int x, int y, int z, SDL.SDL_Event b) => true;
 
 
-            var debug = Glumer.CreateConsole(2.0f, -2.5f, 1f, -5f);
+            var debug = Glumer.CreateConsole(0.8f, -2.5f, 1f, -5f);
+            var fpsSw = new Stopwatch();
+            var delaySw = new Stopwatch();
 
-            var sw = new Stopwatch();
+            int fpsCount = 1;
+            fpsSw.Start();
             while (!quit)
             {
+                delaySw.Reset();
+                delaySw.Start();
                 #region Render Screen
                 Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-                Glumer.gluLookAt(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f);
+                
+                iCallLookAt?.CallLookAt();
 
-                sw.Reset();
-                sw.Start();
                 Gl.PushMatrix();
                 Glumer.DrawScene(0, 177, 64);
                 Gl.PopMatrix();
                 Gl.Flush();
-                sw.Stop();
-                var msg = $"{sw.Elapsed.TotalMilliseconds}";
-                Glumer.SetConsoleText(debug, msg, (uint) msg.Length);
+
                 //Update screen
                 SDL.SDL_GL_SwapWindow(gWindow);
+                fpsCount++;
                 #endregion Render Screen
 
                 //Handle events on queue
                 while (SDL.SDL_PollEvent(out SDL.SDL_Event e) != 0)
                 {
-                    if (!callback(ref quit, e))
+                    if (!sdlCallback?.SdlCallback(ref quit, mouse_x, mouse_y, 0, e) ?? true)
                         continue;
 
                     switch (e.type)
@@ -109,8 +122,6 @@ namespace Glumer_WinDesktop_CSExample
                             quit = true;
                             break;
 
-                        //case SDL.SDL_EventType.SDL_TEXTINPUT:
-                            //SDL.SDL_GetMouseState(out int x, out int y);
                         case SDL.SDL_EventType.SDL_KEYDOWN:
                             switch (e.key.keysym.sym)
                             {
@@ -131,9 +142,30 @@ namespace Glumer_WinDesktop_CSExample
                             break;
                     }
                 }
+                delaySw.Stop();
+
+                if (fpsSw.ElapsedMilliseconds > 1000)
+                {
+                    var fpsMsg = $"FPS {fpsCount}";
+                    Glumer.AddConsoleCode(debug, fpsMsg, (uint)fpsMsg.Length);
+                    fpsSw.Reset();
+                    fpsCount = 0;
+                    fpsSw.Start();
+                }
+
+                var msg = $"DRW {delaySw.Elapsed.TotalMilliseconds}";
+                Glumer.AddConsoleCode(debug, msg, (uint)msg.Length);
+
+                const uint fpsThreshold = 76; //13 fps
+                const uint delayMinThreshold = 10;
+                var delay = fpsThreshold - (uint)delaySw.Elapsed.TotalMilliseconds;
+                delay = delay < delayMinThreshold || delay > fpsThreshold ? delayMinThreshold : delay;
+
+                msg = $"DLY {delay}";
+                Glumer.AddConsoleCode(debug, msg, (uint)msg.Length);
 
                 // yield to the threading system
-                SDL.SDL_Delay(1);
+                SDL.SDL_Delay(delay);
             }
         }
 

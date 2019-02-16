@@ -121,6 +121,11 @@ namespace GlumerLib
         public static extern bool Delete(uint id);
 
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
+        public static extern bool SetAnchorMatchingRotationTo(uint id, uint anchor);
+        [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
+        public static extern bool SetAnchorTo(uint id, uint anchor);
+
+        [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern void Start(uint cameraId);
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern void DrawScene(int r, int g, int b);
@@ -129,11 +134,8 @@ namespace GlumerLib
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern uint GetRenderCount();
 
-
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
-        public static extern bool SetAnchorMatchingRotationTo(uint id, uint anchor);
-        [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
-        public static extern bool SetAnchorTo(uint id, uint anchor);
+        public static extern bool PointerMotionChange(uint mouse_x, uint mouse_y, uint mouse_z);
 
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall, EntryPoint = "gluLookAtProxy")]
         public static extern void gluLookAt(float eyex, float eyey, float eyez, float centerx, float centery, float centerz, float upx, float upy, float upz);

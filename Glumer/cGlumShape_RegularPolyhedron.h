@@ -217,7 +217,7 @@ glVertex3f( -radius, -radius, -radius );
 		case cPolyhedronType::Octahedron:
 			glLineWidth(mDefaultLineWidth);
 			// black inner shape
-			glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
+			//glColor3ub(mHUDColour->GetSecondRed(), mHUDColour->GetSecondGreen(), mHUDColour->GetSecondBlue());
 			glPushMatrix();
 				glScalef(0.92f, 0.92f, 0.92f);
 				glBegin(GL_TRIANGLES);// GL_POLYGON);

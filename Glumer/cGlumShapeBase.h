@@ -33,9 +33,9 @@ namespace Glumer
 	public:
 		virtual void AnimationStart() = 0;
 		virtual void AnimationStop() = 0;
-		static const unsigned int MOVEMENT_UPDATE_INTERVAL = 20;
-		static const unsigned int MOVEMENT_UPDATE_INTERVAL_END = 40;
-		static const unsigned int MOVEMENT_UPDATE_INTERVAL_STEP = 5;
+		static const unsigned int MOVEMENT_UPDATE_INTERVAL = 10;
+		static const unsigned int MOVEMENT_UPDATE_INTERVAL_END = 30;
+		static const unsigned int MOVEMENT_UPDATE_INTERVAL_STEP = 2;
 		inline bool IsAnimated()
 		{
 			return mDirection.IsAnimated() || mOrientation.IsAnimated();

@@ -75,13 +75,13 @@ namespace TimerWrapper
 		return envoke->mEventCallbackDelay;
 	}
 
-	inline static Uint32 DecelerateTowardsEvent(Uint32 delayTime)
+	inline static Uint32 DecelerateTowardsEvent(Uint32 delayTime, unsigned int power)
 	{
-		//static const int MINIMUM_DELAY = 0;
-		//Uint32 newDelayTime = delayTime >> 1;
-		//if (newDelayTime < MINIMUM_DELAY) newDelayTime = MINIMUM_DELAY;
-		//return newDelayTime;
-		return delayTime;
+		static const int MINIMUM_DELAY = 0;
+		Uint32 newDelayTime = delayTime >> power;
+		if (newDelayTime < MINIMUM_DELAY) newDelayTime = MINIMUM_DELAY;
+		return newDelayTime;
+		//return delayTime;
 	}
 
 	// static class function
@@ -90,7 +90,7 @@ namespace TimerWrapper
 		cTimerWrapper *timer = (cTimerWrapper *)data;
 
 		Uint32 startTime = SDL_GetTicks();
-		Uint32 delayTime = timer->mEventCallbackDelay;// DecelerateTowardsEvent(timer->mEventCallbackDelay);
+		Uint32 delayTime = timer->mEventCallbackDelay;
 
 		while (timer->mAbort == false)
 		{
@@ -105,8 +105,8 @@ namespace TimerWrapper
 			{
 				while ((SDL_GetTicks() - startTime) < timer->mEventCallbackDelay)
 				{
+					delayTime = DecelerateTowardsEvent(delayTime, 1);
 					SDL_Delay(delayTime);
-					//delayTime = DecelerateTowardsEvent(delayTime);
 				}
 				if (timer->mAbort) break;
 				if (timer->mPaused) continue;
@@ -115,15 +115,15 @@ namespace TimerWrapper
 			try
 			{
 				timer->EventTimer();
-				SDL_Delay(1);
 			}
 			catch (...)
 			{
 				if (timer->mAbort == false) throw;
 			}
-
 			startTime = SDL_GetTicks();
-			delayTime = DecelerateTowardsEvent(timer->mEventCallbackDelay);		}
+			delayTime = timer->mEventCallbackDelay;
+			SDL_Delay(timer->mEventCallbackDelay);
+		}
 
 		try
 		{

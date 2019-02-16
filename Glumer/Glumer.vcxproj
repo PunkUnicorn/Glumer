@@ -110,7 +110,6 @@ REM xcopy "$(SolutionDir)$(ConfigurationName)\$(TargetName).*" "$(SolutionDir)..
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Bubbles\Shared\TimerWrapper.h" />
     <ClInclude Include="..\Shared\CoordCallback.h" />
     <ClInclude Include="..\Shared\DLL_PUBLIC.h" />
     <ClInclude Include="..\Shared\Glumer.h" />
