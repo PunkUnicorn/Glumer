@@ -130,6 +130,8 @@ namespace GlumerLib
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern void DrawScene(int r, int g, int b);
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
+        public static extern void SetDrawClipWidth(float clipwidth);
+        [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern bool HitTest(uint mouse_x, uint mouse_y, uint mouse_z);
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern uint GetRenderCount();

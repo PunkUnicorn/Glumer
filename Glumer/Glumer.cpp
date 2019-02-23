@@ -392,6 +392,16 @@ extern "C" DLL_PUBLIC void STDCALL DrawScene(int r, int g, int b)
    { }
 }
 
+extern "C" DLL_PUBLIC void STDCALL SetDrawClipWidth(float clipwidth)
+{
+	try
+	{
+		factory.SetDrawClipWidth(clipwidth);
+	}
+	catch (...)
+	{
+	}
+}
 extern "C" DLL_PUBLIC void STDCALL HitTest(unsigned int mouse_x, unsigned int mouse_y, int mouse_z)
 {
    try
@@ -662,7 +672,13 @@ extern "C" DLL_PUBLIC bool STDCALL SetAnchorMatchingRotationTo(unsigned int id, 
 		{
 			cGlumShapeBase *pAnchorThing = factory.Get(anchor).ptr;
 			if (pAnchorThing == NULL) return false;
-			thing.FactoryGetCenter().SetAnchorMatchingRotationTo(dynamic_cast<cObjectMoveableBase*>(pAnchorThing));
+
+			cObjectMoveableBase *moveable = dynamic_cast<cObjectMoveableBase*>(pAnchorThing);
+			thing.FactoryGetCenter().SetAnchorMatchingRotationTo(moveable);
+
+			// set both anchors !!
+			cGluperCenter *anchorCenter = &(pAnchorThing->FactoryGetCenter());
+			thing.FactoryGetCenter().SetAnchorTo(anchorCenter);
 		}
 		return true;
 	}

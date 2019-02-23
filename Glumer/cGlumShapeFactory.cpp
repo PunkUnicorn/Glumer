@@ -41,10 +41,11 @@ namespace Glumer
 	template<> TimerWrapper::cMutexWrapper cGlumShapeFactory_ShapeContainer<cMovement_Camera>::mReadWriteLock;
 
 
-	cGlumShapeFactory::cGlumShapeFactory(void) : mNextFreeID(0), mCurrentCamera(NULL),
+	cGlumShapeFactory::cGlumShapeFactory(void) : mNextFreeID(0), mCurrentCamera(NULL), mMovement_Camera(NULL),
 		mFactoryLock(),
 		mFactoryState(RESERVE_FACTORYLIST), 
-		mIsBuffered(false)
+		mIsBuffered(false),
+		mClipWidth(500.0f)
 	{
 
 	}
@@ -55,6 +56,7 @@ namespace Glumer
 		cMovement_Camera::PTR camera = *(mCamera.Get(cameraId, found));
 		if (found)
 		{
+			mMovement_Camera = camera.ptr;
 			mCurrentCamera = camera.ptr;
 			camera.ptr->Init(cGlumShapeBase::MOVEMENT_UPDATE_INTERVAL);
 			camera.ptr->Start(NULL);
@@ -79,9 +81,75 @@ namespace Glumer
 		}
 	}
 
+	void cGlumShapeFactory::GetClosest(
+		std::vector<Bubbles::cBubbleDimensionCracker::TRILATERATION_DATA> &data, 
+		float clippingWidth, 
+		cMovement_Camera::PTR &center, 
+		std::vector<Bubbles::cBubbleDimensionCracker::COLLISION_RESULT> &results)
+	{
+		try
+		{
+			std::vector<cGlumShapeBase::PTR> pimps;
+
+			/*lock scope*/
+			{
+				TimerWrapper::cMutexWrapper::Lock lock(mFactoryState.GetGlumShapeMapLock());
+
+				std::vector<unsigned int> list(mFactoryState.GetGlumShapeList());
+				pimps.reserve((mFactoryState.GetGlumShapeList().size()));
+				GetGlumShapes(list, pimps);
+			}
+
+			//unsigned int clippingWidth = 1000;
+			std::for_each(pimps.begin(), pimps.end(),
+				Bubbles::cBubbleDimensionCracker(pimps, data, clippingWidth, center));
+
+			//unsigned int clippingWidth = 1000;
+			//std::for_each(pimps.begin(), pimps.end(),
+			//	std::bind1st(Bubbles::cBubbleDimensionCracker(pimps, data, clippingWidth), center));
+
+			//std::vector<Bubbles::cBubbleDimensionCracker::COLLISION_RESULT> results;
+
+			Bubbles::cBubbleFindCollisions::GetCollisionResults(results, data, center, clippingWidth);
+			
+		}
+		catch (int code)
+		{
+			throw code;
+		}
+	};
+	
+	void cGlumShapeFactory::MakeDrawList(std::vector<Bubbles::cBubbleDimensionCracker::COLLISION_RESULT> source, cGlumShapeFactoryState::DrawList &drawList)
+	{
+		unsigned int size = source.size();
+		for (unsigned int i = 0; i < size; i += 1)
+		{
+			cObjectMoveableBase::PTR pimp = mFactoryState.GetDrawListMap()[source[i].mDistanceUnits->id];
+			drawList.push_back(pimp);
+		}
+	}
+
 	void cGlumShapeFactory::DrawScene(cHUD_Colour *hud_colour)
 	{
-		std::for_each(mFactoryState.GetDrawList().begin(), mFactoryState.GetDrawList().end(),
+
+		//const int limit = 1500;
+		//unsigned int limitSize = mFactoryState.GetDrawList().size();
+		//limitSize = limitSize > limit ? limit : limitSize;
+
+		// clip these in order of distance from the camera, then show a clipped list to reduce drawing far away objects
+		std::vector<Bubbles::cBubbleDimensionCracker::TRILATERATION_DATA> data;
+
+		cMovement_Camera::PTR cc;
+		cc.ptr = mMovement_Camera;
+		std::vector<Bubbles::cBubbleDimensionCracker::COLLISION_RESULT> results;
+		GetClosest(data, mClipWidth, cc, results);
+
+		cGlumShapeFactoryState::DrawList newDrawList;
+		MakeDrawList(results, newDrawList);
+		/*std::for_each(mFactoryState.GetDrawList().begin(), mFactoryState.GetDrawList().end(), 
+			cObjectMoveableBase::FireEventShow);
+*/
+		std::for_each(newDrawList.begin(), newDrawList.end(),
 			cObjectMoveableBase::FireEventShow);
 	}
 

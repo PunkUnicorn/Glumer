@@ -87,7 +87,7 @@ namespace Glumer_WinDesktop_CSExample
             var debug = Glumer.CreateConsole(0.8f, -2.5f, 1f, -5f);
             var fpsSw = new Stopwatch();
             var delaySw = new Stopwatch();
-
+            Glumer.SetDrawClipWidth(70f);
             int fpsCount = 1;
             fpsSw.Start();
             while (!quit)
@@ -155,11 +155,19 @@ namespace Glumer_WinDesktop_CSExample
 
                 var msg = $"DRW {delaySw.Elapsed.TotalMilliseconds}";
                 Glumer.AddConsoleCode(debug, msg, (uint)msg.Length);
+                
+                // add control over fps via the UI
+                
+                // anchor the HUD to the camera
 
-                const uint fpsThreshold = 76; //13 fps
-                const uint delayMinThreshold = 10;
+                const uint fpsThreshold = 60; //13 fps is 76ms, 17 fps is 60ms
+                const uint delayMinThreshold = 9;
                 var delay = fpsThreshold - (uint)delaySw.Elapsed.TotalMilliseconds;
-                delay = delay < delayMinThreshold || delay > fpsThreshold ? delayMinThreshold : delay;
+                delay = delay < delayMinThreshold 
+                            ? delayMinThreshold 
+                            : delay > fpsThreshold 
+                                ? delayMinThreshold 
+                                : delay;
 
                 msg = $"DLY {delay}";
                 Glumer.AddConsoleCode(debug, msg, (uint)msg.Length);

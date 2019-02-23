@@ -33,9 +33,9 @@ namespace Glumer
 	public:
 		virtual void AnimationStart() = 0;
 		virtual void AnimationStop() = 0;
-		static const unsigned int MOVEMENT_UPDATE_INTERVAL = 10;
-		static const unsigned int MOVEMENT_UPDATE_INTERVAL_END = 30;
-		static const unsigned int MOVEMENT_UPDATE_INTERVAL_STEP = 2;
+		static const unsigned int MOVEMENT_UPDATE_INTERVAL = 12;
+		static const unsigned int MOVEMENT_UPDATE_INTERVAL_END = 21;
+		static const unsigned int MOVEMENT_UPDATE_INTERVAL_STEP = 3;
 		inline bool IsAnimated()
 		{
 			return mDirection.IsAnimated() || mOrientation.IsAnimated();
@@ -100,7 +100,34 @@ namespace Glumer
 			mBufferedDirection.FactorySetXYZ(x, y, z);
 		}
 
-		inline void GetCoords(float &x, float &y, float &z) const { if (mMarkedForDelete == false) mCenter.GetXYZ(x, y, z); else x = y = z = 0.0f; };
+		/*inline void GetCoords(float &x, float &y, float &z) const 
+		{ 
+			if (mMarkedForDelete == false) 
+				mCenter.GetXYZ(x, y, z); 
+			else x = y = z = 0.0f; 
+
+			cObjectMoveableBase* anchor1 = mCenter.GetAnchor1();
+
+			if (anchor1 != NULL)
+			{
+				cGlumShapeBase *base = (cGlumShapeBase *)(mCenter.GetAnchor1()->GetGlumShapeBase());
+				float x2, y2, z2;
+				base->GetCenter().GetXYZ(x2, y2, z2);
+				x += x2;
+				y += y2;
+				z += z2;
+			}
+			else if (mCenter.GetAnchor2() != NULL)
+			{
+				cGlumShapeBase *base = dynamic_cast<cGlumShapeBase *>(mCenter.GetAnchor2());
+				
+				float x2, y2, z2;
+				base->GetCenter().GetXYZ(x2, y2, z2);
+				x += x2;
+				y += y2;
+				z += z2;
+			}
+		};*/
 		inline const cGluperCenter &GetCenter(void) const { return mIsBuffered ? mBufferedCenter : mCenter; };
 		inline cGluperCenter &FactoryGetCenter(void) { cGluperCenter &center = mCenter; return center; };
 		inline void AddToCenter(const cGluperDirection &addMe) { mCenter += addMe; };

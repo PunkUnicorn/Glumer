@@ -76,8 +76,23 @@ namespace Glumer
 		TimerWrapper::cMutexWrapper debug_lock;
 
 	public:
-		void cGlumShapeBase::AnimationStart(void) { };
-		void cGlumShapeBase::AnimationStop(void) { };
+		void cGlumShapeBase::AnimationStart(void)
+		{
+			if (mTimer != NULL) return;
+			mTimer = new cTimer_RockMotion(this, mDelay);
+		}
+
+		void cGlumShapeBase::AnimationStop(void)
+		{
+			if (mTimer == NULL) return;
+			cTimer_RockMotion *deleteme = mTimer;
+			mTimer = NULL;
+			deleteme->Abort();
+			while (deleteme->HasAborted() == false)
+				SDL_Delay(1);
+
+			delete deleteme;
+		}
 
 		virtual void Start(cMovementBase *world_offset)
 		{

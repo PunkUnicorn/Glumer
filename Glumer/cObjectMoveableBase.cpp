@@ -12,7 +12,7 @@ namespace Glumer
 /*
 composite class to encapsulate a stack of movement actions against a single object
 */
-cObjectMoveableBase::cObjectMoveableBase(cObjectBase *make_moveable) : mObject(make_moveable), mMovementStack() 
+cObjectMoveableBase::cObjectMoveableBase(cObjectBase *make_moveable, void *glumShapeBase) : mObject(make_moveable), mGlumShapeBase(glumShapeBase), mMovementStack()
 {
 	mMovementStack.reserve(5);
 }

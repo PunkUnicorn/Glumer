@@ -250,7 +250,7 @@ namespace Glumer_WinDesktop_CSExample
                     }
                 }
 
-                //SDL.SDL_Delay(1);
+                SDL.SDL_Delay(10);
             }
 
             //Disable text input

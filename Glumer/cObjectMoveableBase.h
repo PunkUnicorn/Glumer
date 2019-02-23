@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <Windows.h>
 #include <gl/GL.h>
+#include <sdl.h>
 
 namespace Glumer
 {
@@ -23,15 +24,17 @@ namespace Glumer
 	protected:
 		cObjectBase *mObject;
 		std::vector<cMovementBase::PTR> mMovementStack;
+		void *mGlumShapeBase;
 
 	public:
+		inline void *GetGlumShapeBase() { return mGlumShapeBase; }
 		static inline void FireEventPossition(cMovementBase::PTR &envoke_me) { envoke_me.ptr->EventPossition(); }
 		typedef struct
 		{
 			cObjectMoveableBase *ptr;
 		} PTR;
 
-		cObjectMoveableBase(cObjectBase *make_moveable = NULL);
+		cObjectMoveableBase(cObjectBase *make_moveable = NULL, void *glumShapeBase = NULL);
 		virtual ~cObjectMoveableBase(void) {};
 
 		inline void EventPossition(void)

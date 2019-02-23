@@ -17,6 +17,10 @@ namespace Glumer
 	{
 	private:
 		/*cTimerWrapper::*/void EventTimer(void);
+		//float mX;
+		//float mY;
+		//float mZ;
+		float mLookingAt[3];
 
 	public:
 		typedef struct
@@ -31,6 +35,8 @@ namespace Glumer
 		void AnimationStart(void) { };
 		void AnimationStop(void) { };
 
+		inline void GetXYZ(float &x,float &y, float &z) const { GetCenter().GetXYZ(x, y, z); }
+		inline void GetLookingAt(float &x, float &y, float &z) const { x = mLookingAt[0]; y = mLookingAt[1]; z = mLookingAt[2]; }
 
 		void Init(unsigned int callbackDelay)
 		{
@@ -42,7 +48,9 @@ namespace Glumer
 			/*TimerWrapper::cTimerWrapper::*/AddThread(this);
 		}
 
-		cMovement_Camera(unsigned int id, void *hud_colour) : cGlumShapeBase(id) { };
+		cMovement_Camera(unsigned int id, void *hud_colour) 
+			: cGlumShapeBase(id), mLookingAt{ 0.0f, 0.0f, 0.0f } { };
+
 		~cMovement_Camera(void) {};
 
 		void /*cMovementBase::*/EventPossition(void);

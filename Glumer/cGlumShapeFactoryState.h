@@ -20,6 +20,7 @@ public:
    typedef std::map<unsigned int/*glum shape ID*/, cGlumShapeBase::PTR> GlumShapeMap;
    typedef std::vector<unsigned int/*glum shape ID*/> FactoryList;
 
+   typedef std::map<unsigned int/*glum shape ID*/, cObjectMoveableBase::PTR> DrawListMap;
    typedef std::vector<cObjectMoveableBase::PTR> DrawList;
    typedef std::vector<unsigned int/*glum Id*/> DrawListIndex;
 
@@ -32,6 +33,7 @@ private:
    FactoryList mGlumShapeList;   
    
    // these two are unguarded
+   DrawListMap mDrawListMap;
    DrawList mDrawList;
    DrawListIndex mDrawListIndex;
 
@@ -44,6 +46,7 @@ public:
    inline GlumShapeMap &GetGlumShapeMap(void) { return mGlumShapeMap; };
    inline FactoryList &GetGlumShapeList(void) { return mGlumShapeList; };
 
+   inline DrawListMap &GetDrawListMap(void) { return mDrawListMap;  };
    inline DrawList &GetDrawList(void) { return mDrawList; };
 
    inline TimerWrapper::cMutexWrapper *GetSelectableDrawListLock(void) { return &mSelectableDrawListLock; };
@@ -51,7 +54,7 @@ public:
    inline SelectableDrawListIndex &GetSelectableDrawListIndex(void) { return mSelectableDrawListIndex; }
 
    cGlumShapeFactoryState(unsigned int reserveSize) 
-      : mGlumShapeMapLock(), mGlumShapeMap(), mGlumShapeList(), mDrawList(), mDrawListIndex(), 
+      : mGlumShapeMapLock(), mGlumShapeMap(), mGlumShapeList(), mDrawListMap(), mDrawList(), mDrawListIndex(),
       mSelectableDrawListLock(), mSelectableDrawList(), mSelectableDrawListIndex()
    {
       mGlumShapeList.reserve(reserveSize);
@@ -78,6 +81,7 @@ public:
 
    inline void DrawListAdd(cObjectMoveableBase::PTR add, unsigned int glumId)
    {
+	  mDrawListMap[glumId] = add;
       mDrawList.push_back(add);
       mDrawListIndex.push_back(glumId);
    }
@@ -92,7 +96,8 @@ public:
 
       std::vector<unsigned int>::iterator intIt = std::find(mDrawListIndex.begin(), mDrawListIndex.end(), glumId);
       std::swap(*intIt, mDrawListIndex.back());
-	   mDrawListIndex.pop_back();
+	  mDrawListIndex.pop_back();
+	  mDrawListMap.erase(glumId);
    }
 
    inline void SelectableDrawListAdd(cObjectBase *add, unsigned int glumId)

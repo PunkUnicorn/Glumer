@@ -15,6 +15,8 @@
 #include "TimerWrapper.h"
 #include "cGlumShapeFactoryState.h"
 #include <map>
+//#include "BubbleDimensionCracker.h"
+#include "BubbleFindCollisions.h"
 
 namespace Glumer
 {
@@ -22,11 +24,13 @@ namespace Glumer
 class cGlumShapeFactory
 {
 private:
-	unsigned int mNextFreeID;
+   unsigned int mNextFreeID;
    cMovementBase *mCurrentCamera;
+   cMovement_Camera *mMovement_Camera;
    TimerWrapper::cMutexWrapper mFactoryLock;
    cGlumShapeFactoryState mFactoryState;
    bool mIsBuffered;
+   float mClipWidth;
 public:
 	static const unsigned int RESERVE_FACTORYLIST = 1000;
 	//lock factory lock first, then EITHER of
@@ -54,12 +58,15 @@ public:
 			mCamera.ListSize() + 
 			mRegularPolyhedron.ListSize();
 	}
+	void MakeDrawList(std::vector<Bubbles::cBubbleDimensionCracker::COLLISION_RESULT> source, cGlumShapeFactoryState::DrawList & drawList);
+	void GetClosest(std::vector<Bubbles::cBubbleDimensionCracker::TRILATERATION_DATA> &data, float quantity, cMovement_Camera::PTR &center, std::vector<Bubbles::cBubbleDimensionCracker::COLLISION_RESULT> &results);
 
 	void Init(void) { };
 	void Start(unsigned int cameraId);
 
 	void DoubleBufferCoordinates(void);
 	void DrawScene(cHUD_Colour *hud_colour);
+	void SetDrawClipWidth(float clipwidth) { mClipWidth = clipwidth; }
 	inline bool HitTest(unsigned int mouse_x, unsigned int mouse_y, unsigned int mouse_z)
 	{
 		return cSelectableBase::EventClick(mFactoryState.GetSelectableDrawListLock(), mFactoryState.GetSelectableDrawList(), mFactoryState.GetSelectableDrawListIndex(), mouse_x, mouse_y, mouse_z);
@@ -79,6 +86,33 @@ public:
 		const cGluperCenter &center = mFactoryState.GetGlumShapeMap()[bubbleId].ptr->GetCenter();
 		center.GetXYZ(X, Y, Z);
 	}
+
+	void GetGlumShapes(std::vector<unsigned int> bubbleIds, std::vector<cGlumShapeBase::PTR> &pimps)
+	{
+		TimerWrapper::cMutexWrapper::Lock lock(mFactoryState.GetGlumShapeMapLock());
+
+		int size = bubbleIds.size();
+		float X, Y, Z;
+		for (int i = 0; i < size; i++)
+		{
+			unsigned int bubbleId = bubbleIds[i];
+			X = Y = Z = 0.0f;
+
+			if (mFactoryState.GetGlumShapeMap().find(bubbleId) == mFactoryState.GetGlumShapeMap().end())
+				continue;
+
+			if (mFactoryState.GetGlumShapeMap()[bubbleId].ptr->IsMarkedForDelete())
+				continue;
+
+			const cGlumShapeBase::PTR &pimp = mFactoryState.GetGlumShapeMap()[bubbleId];
+			pimps.push_back(pimp);
+			//center.GetXYZ(X, Y, Z);
+			//Xv.push_back(X);
+			//Yv.push_back(Y);
+			//Zv.push_back(Z);
+		}
+	}
+
 
 	cGlumShape_RegularPolyhedron::PTR CreateRegularPolyhedron(cHUD_Colour *hud_colour, PolyhedronType type, float scale, bool start, Glumer::GlumerOnClicked *onClicked);
 	cGlumShape_RegularPolyhedron::PTR CreateGLCommand(cHUD_Colour *hud_colour, float scale, int GL_BEGIN_MODE_TYPE, float floats[], unsigned int floatCount, Glumer::GlumerOnClicked *onClicked);
