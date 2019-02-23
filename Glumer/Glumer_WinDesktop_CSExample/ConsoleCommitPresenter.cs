@@ -151,7 +151,7 @@ namespace Glumer_WinDesktop_CSExample
             uint me;
             if (anchorInit)
             { 
-                me = Glumer.CreatePolyhedron(boxwidth, Glumer.cPolyhedronType.Octahedron, 0f, boxwidth, -boxwidth*2f, DebugDump);
+                me = Glumer.CreatePolyhedron(boxwidth, Glumer.cPolyhedronType.Octahedron, 0f, 0f, -boxwidth*2f, DebugDump);
                 Glumer.SetAnchorTo(me, anchor);
             }
             else

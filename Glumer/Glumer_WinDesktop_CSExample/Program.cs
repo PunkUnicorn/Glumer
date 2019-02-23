@@ -2,6 +2,7 @@
 using SDL2;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Glumer_WinDesktop_CSExample
 {
@@ -33,6 +34,19 @@ namespace Glumer_WinDesktop_CSExample
                         {
                             case SDL.SDL_Keycode.SDLK_ESCAPE:
                                 break;
+
+                            case SDL.SDL_Keycode.SDLK_UP:
+                                Glumer.FirstPersonForwardMove(0.0002f);
+                                break;
+
+                            case SDL.SDL_Keycode.SDLK_DOWN:
+                                Glumer.FirstPersonBackMove(0.0002f);
+                                break;
+
+                            case SDL.SDL_Keycode.SDLK_SPACE:
+                                Glumer.FirstPersonStop();
+                                break;
+
                         }
                         break;
 
@@ -76,6 +90,7 @@ namespace Glumer_WinDesktop_CSExample
 
         private static async void Game(string gitPath)
         {
+            var clipWidth = 70f;
             var commitPresenter = new BoxCommitPresenter(-3f, -3f, -10f);
             var callbacks = new EventsCallback();
             using (var game = new GlumerContext(farDistance, 0)) // SDL.SDL_WindowFlags.SDL_WINDOW_FULLSCREEN_DESKTOP))
@@ -83,9 +98,16 @@ namespace Glumer_WinDesktop_CSExample
                 var commits = LibGit2Gist.CommitTests(gitPath, commitPresenter);
 
                 var boxList = new List<uint>();
-                boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, 0.7f, -1.2f, -5f, game.DebugDump));
+                //boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, 0.7f, -1.2f, -5f, game.DebugDump));
                 boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, 0.7f, 1f, -5f, game.DebugDump));
                 boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, 0.7f, 1f, -5f, game.DebugDump));
+
+                var buttonList = new List<uint>();
+                buttonList.Add(Glumer.CreateButton(0.3f, -0.9f, 1.2f, -5f, (state) => Glumer.SetDrawClipWidth(clipWidth += 10f)));
+                buttonList.Add(Glumer.CreateButton(0.2f, -0.2f, 1.2f, -5f, (state) => Glumer.SetDrawClipWidth(clipWidth -= 10f)));
+
+                foreach (var thing in boxList.Concat(buttonList))
+                    Glumer.SetAnchorMatchingRotationTo(thing, game.CameraId);
 
                 float count = 1.25f;
                 foreach (var box in boxList)

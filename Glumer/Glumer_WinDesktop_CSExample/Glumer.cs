@@ -144,5 +144,12 @@ namespace GlumerLib
 
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall, EntryPoint = "glPerspectiveProxy")]
         public static extern void glPerspective(float fovyInDegrees, float aspectRatio, float znear, float zfar);
+
+        [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
+        public static extern void FirstPersonForwardMove(float step);
+        [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
+        public static extern void FirstPersonBackMove(float step);
+        [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
+        public static extern void FirstPersonStop();
     }
 }

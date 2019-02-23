@@ -34,6 +34,7 @@ namespace Glumer
 			previousDirection = cMovementDirection::Right;
 			movementStep += 1.0f;
 		}
+
 		void FirstPersonStrafeLeft(float step)
 		{
 			if (previousDirection != cMovementDirection::Left)
@@ -43,6 +44,7 @@ namespace Glumer
 			previousDirection = cMovementDirection::Left;
 			movementStep += 1.0f;
 		}
+
 		void FirstPersonForwardMove(float step)
 		{
 			if (previousDirection != cMovementDirection::Forward)
@@ -62,6 +64,7 @@ namespace Glumer
 			previousDirection = cMovementDirection::Backwards;
 			movementStep += 1.0f;
 		}
+
 		void FirstPersonDownMove(float step)
 		{
 			if (previousDirection != cMovementDirection::Down)
@@ -71,6 +74,7 @@ namespace Glumer
 			previousDirection = cMovementDirection::Down;
 			movementStep += 1.0f;
 		}
+
 		void FirstPersonUpMove(float step)
 		{
 			if (previousDirection != cMovementDirection::Up)
@@ -80,6 +84,7 @@ namespace Glumer
 			previousDirection = cMovementDirection::Up;
 			movementStep += 1.0f;
 		}
+
 		void FirstPersonStop(void)
 		{
 			Glumer::SetDirection(movement_cameraID, 0.0f, 0.0f, 0.0f);
@@ -88,10 +93,12 @@ namespace Glumer
 			movementStep = movementFirst;
 			lookAngle = 0.0f;
 		}
+
 		void FirstPersonAngleChange(float heading_angle_x, float heading_angle_y, float forward_unit = 0.0f)
 		{
 			Glumer::AddDirection(movement_cameraID, heading_angle_x, 0.0f, 0.0f);
 		}
+
 		void FirstPersonLeftTurn(float step)
 		{
 			if (lookAngle < 0.0f)

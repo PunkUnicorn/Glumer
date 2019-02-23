@@ -423,6 +423,39 @@ extern "C" DLL_PUBLIC void STDCALL PointerMotionChange(unsigned int mouse_x, uns
 	}
 }
 
+extern "C" DLL_PUBLIC void STDCALL FirstPersonForwardMove(float step)
+{
+	try
+	{
+		CameraMovement::FirstPersonForwardMove(step);
+	}
+	catch (...)
+	{
+	}
+}
+
+extern "C" DLL_PUBLIC void STDCALL FirstPersonBackMove(float step)
+{
+	try
+	{
+		CameraMovement::FirstPersonBackMove(step);
+	}
+	catch (...)
+	{
+	}
+}
+
+extern "C" DLL_PUBLIC void STDCALL FirstPersonStop()
+{
+	try
+	{
+		CameraMovement::FirstPersonStop();
+	}
+	catch (...)
+	{
+	}
+}
+
 static void STDCALL GetCoords(unsigned int engineId, unsigned int bubbleId, float &X, float &Y, float &Z)
 {
    try

@@ -190,6 +190,11 @@ namespace Glumer
 		virtual void Start(cMovementBase *world_offset)
 		{
 			if (mPistonMotion != NULL) throw - 321;
+
+			cMovementBase::PTR world_offset_ptr;
+			world_offset_ptr.ptr = world_offset;
+			mMovementStack.insert(mMovementStack.begin(), world_offset_ptr);
+
 			mPistonMotion = new cTimer_PistonMotion(this, mOnPistonValueChanged);
 			mPistonMotion->Reset(minFIXED, maxFIXED, incFIXED, mPistonMotion->CalculateInitialValue(minFIXED, maxFIXED), true);
 		};

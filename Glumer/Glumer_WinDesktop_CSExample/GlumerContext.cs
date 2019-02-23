@@ -25,6 +25,8 @@ namespace Glumer_WinDesktop_CSExample
         private Lazy<uint> debugText = new Lazy<uint>(() => Glumer.CreateConsole(0.3f, -0.4f, -0.4f, -2f));
         private uint DebugText => debugText.Value;
 
+        public uint CameraId => cameraId;
+
         //public delegate bool SdlCallback(ref bool quit, int mouse_x, int mouse_y, int mouse_z, SDL.SDL_Event e);
 
         public GlumerContext(float farDistance, SDL.SDL_WindowFlags additional = 0)
@@ -80,11 +82,12 @@ namespace Glumer_WinDesktop_CSExample
             bool quit = false;
             int mouse_x = 0;
             int mouse_y = 0;
-            //if (sdlCallback == null)
-            //    callback = (ref bool a, int x, int y, int z, SDL.SDL_Event b) => true;
 
 
             var debug = Glumer.CreateConsole(0.8f, -2.5f, 1f, -5f);
+            Glumer.SetAnchorMatchingRotationTo(debug, cameraId);
+
+
             var fpsSw = new Stopwatch();
             var delaySw = new Stopwatch();
             Glumer.SetDrawClipWidth(70f);
