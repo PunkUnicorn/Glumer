@@ -46,7 +46,10 @@ private:
       public:
          inline result_type operator () (const first_argument_type& otherThing, const second_argument_type& width) const
          {
-            return width < (otherThing.abs_dist - otherThing.width);
+			if (otherThing.dist < -2) 
+				return true;
+            else 
+				return width < (otherThing.abs_dist - otherThing.width);
          };
    };
 

@@ -25,7 +25,7 @@ namespace Glumer_WinDesktop_CSExample
             OpenGLOnSDL.Init(xres, yres, farDistance, out IntPtr gWindow, out IntPtr gContext);
 
             // Init Glumer engine
-            Glumer.InitGlumer();
+            Glumer.InitGlumer(0, 177, 64);
             var cameraID = Glumer.CreateCamera();
             Glumer.SetLocation(cameraID, 0.0f, 0.0f, 0.0f);
             Glumer.Start(cameraID);
@@ -215,7 +215,7 @@ namespace Glumer_WinDesktop_CSExample
                 Glumer.gluLookAt(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f);
 
                 Gl.PushMatrix();
-                Glumer.DrawScene(0, 177, 64);
+                Glumer.DrawScene();//0, 177, 64
                 Gl.PopMatrix();
 
                 Gl.Flush();

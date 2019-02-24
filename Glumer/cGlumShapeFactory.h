@@ -31,6 +31,9 @@ private:
    cGlumShapeFactoryState mFactoryState;
    bool mIsBuffered;
    float mClipWidth;
+   cHUD_Colour mHud_colour;
+   std::vector<Bubbles::cBubbleDimensionCracker::TRILATERATION_DATA> mRenderClipWidthData;
+
 public:
 	static const unsigned int RESERVE_FACTORYLIST = 1000;
 	//lock factory lock first, then EITHER of
@@ -59,17 +62,29 @@ public:
 			mRegularPolyhedron.ListSize();
 	}
 	void MakeDrawList(std::vector<Bubbles::cBubbleDimensionCracker::COLLISION_RESULT> source, cGlumShapeFactoryState::DrawList & drawList);
-	void GetClosest(std::vector<Bubbles::cBubbleDimensionCracker::TRILATERATION_DATA> &data, float quantity, cMovement_Camera::PTR &center, std::vector<Bubbles::cBubbleDimensionCracker::COLLISION_RESULT> &results);
+	void MakeDrawList(std::vector<Bubbles::cBubbleDimensionCracker::COLLISION_RESULT> source, std::vector<cObjectBase *> &drawList);
+	void GetClosest(std::vector<Bubbles::cBubbleDimensionCracker::TRILATERATION_DATA> &data, float quantity, cMovement_Camera::PTR &center, std::vector<Bubbles::cBubbleDimensionCracker::COLLISION_RESULT> &results, bool selectableOnly);
 
-	void Init(void) { };
+	void Init(byte r, byte b, byte g) { mHud_colour.m_red = r; mHud_colour.m_blue = b; mHud_colour.m_green = g; };
 	void Start(unsigned int cameraId);
 
 	void DoubleBufferCoordinates(void);
-	void DrawScene(cHUD_Colour *hud_colour);
+	void DrawScene(void);
 	void SetDrawClipWidth(float clipwidth) { mClipWidth = clipwidth; }
 	inline bool HitTest(unsigned int mouse_x, unsigned int mouse_y, unsigned int mouse_z)
 	{
-		return cSelectableBase::EventClick(mFactoryState.GetSelectableDrawListLock(), mFactoryState.GetSelectableDrawList(), mFactoryState.GetSelectableDrawListIndex(), mouse_x, mouse_y, mouse_z);
+		std::vector<Bubbles::cBubbleDimensionCracker::TRILATERATION_DATA> data;
+		data.reserve(128);
+
+		cMovement_Camera::PTR cc;
+		cc.ptr = mMovement_Camera;
+		std::vector<Bubbles::cBubbleDimensionCracker::COLLISION_RESULT> results;
+		GetClosest(data, mClipWidth, cc, results, true);
+
+		std::vector<cObjectBase *> newDrawList;
+		MakeDrawList(results, newDrawList);
+
+		return cSelectableBase::EventClick(newDrawList, mFactoryState.GetSelectableDrawListIndex(), mFactoryState.GetDrawListMap(), mouse_x, mouse_y, mouse_z);
 	}
 
 	void GetCoords(unsigned int bubbleId, float &X, float &Y, float &Z)
@@ -114,12 +129,12 @@ public:
 	}
 
 
-	cGlumShape_RegularPolyhedron::PTR CreateRegularPolyhedron(cHUD_Colour *hud_colour, PolyhedronType type, float scale, bool start, Glumer::GlumerOnClicked *onClicked);
-	cGlumShape_RegularPolyhedron::PTR CreateGLCommand(cHUD_Colour *hud_colour, float scale, int GL_BEGIN_MODE_TYPE, float floats[], unsigned int floatCount, Glumer::GlumerOnClicked *onClicked);
-	cGlumShape_RegularPolyhedron::PTR CreateGLCompiledName(cHUD_Colour *hud_colour, float scale, unsigned int compiledName, Glumer::GlumerOnClicked *onClicked);
+	cGlumShape_RegularPolyhedron::PTR CreateRegularPolyhedron(PolyhedronType type, float scale, bool start, Glumer::GlumerOnClicked *onClicked);
+	cGlumShape_RegularPolyhedron::PTR CreateGLCommand(float scale, int GL_BEGIN_MODE_TYPE, float floats[], unsigned int floatCount, Glumer::GlumerOnClicked *onClicked);
+	cGlumShape_RegularPolyhedron::PTR CreateGLCompiledName(float scale, unsigned int compiledName, Glumer::GlumerOnClicked *onClicked);
 
-	cGlumShape_SwitchGadget::PTR CreateSwitchGadget(cHUD_Colour *hud_colour, float scale, cTimer_PistonMotion::PistonValueChanged *onpistonchange, GlumerOnClickedBool *onclickedbool, GlumerOnClicked *onclicked);
-	cGlumShape_Console::PTR CreateConsole(cHUD_Colour *hud_colour, float scale);
+	cGlumShape_SwitchGadget::PTR CreateSwitchGadget(float scale, cTimer_PistonMotion::PistonValueChanged *onpistonchange, GlumerOnClickedBool *onclickedbool, GlumerOnClicked *onclicked);
+	cGlumShape_Console::PTR CreateConsole(float scale);
 	cMovement_Camera::PTR CreateCamera(void);
    
 private:

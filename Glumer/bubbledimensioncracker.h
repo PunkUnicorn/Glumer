@@ -16,7 +16,7 @@
 
 namespace Bubbles 
 {
-#pragma message("BOOOOO")
+
 /* The purpose of this class is to take a game object with an ID and use subtraction and the less than operator to discover distances of items from each other.
    Find the distance for each of items x, y and z dimensions: each axis on their own individual plane taking a 3D object and reducing it to a series of 1D intersections */
 class cBubbleDimensionCracker : public std::unary_function<Glumer::cGlumShapeBase::PTR, void>
@@ -32,6 +32,7 @@ typedef struct
 	//float rel_coord; //value of the axis (value of x, y or z)
 	float width;
 	unsigned int id;
+	float dist;
 } TRILATERATION_DATA;
 
 typedef struct
@@ -61,7 +62,7 @@ public:
          new_unit.abs_dist = (universeCenterX) - (from_this_shapeX);
       else
          new_unit.abs_dist = (from_this_shapeX) - (universeCenterX);
-
+	  new_unit.dist = from_this_shapeX - universeCenterX;
 	  mDistanceList.push_back(new_unit);
    }
 

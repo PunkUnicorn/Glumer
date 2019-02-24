@@ -43,11 +43,13 @@ namespace Glumer
 
 	cGlumShapeFactory::cGlumShapeFactory(void) : mNextFreeID(0), mCurrentCamera(NULL), mMovement_Camera(NULL),
 		mFactoryLock(),
-		mFactoryState(RESERVE_FACTORYLIST), 
+		mFactoryState(RESERVE_FACTORYLIST),
 		mIsBuffered(false),
-		mClipWidth(500.0f)
+		mClipWidth(500.0f),
+		mHud_colour(),
+		mRenderClipWidthData()
 	{
-
+		mRenderClipWidthData.reserve(500);
 	}
 
 	void cGlumShapeFactory::Start(unsigned int cameraId)
@@ -85,18 +87,29 @@ namespace Glumer
 		std::vector<Bubbles::cBubbleDimensionCracker::TRILATERATION_DATA> &data, 
 		float clippingWidth, 
 		cMovement_Camera::PTR &center, 
-		std::vector<Bubbles::cBubbleDimensionCracker::COLLISION_RESULT> &results)
+		std::vector<Bubbles::cBubbleDimensionCracker::COLLISION_RESULT> &results,
+		bool selectableOnly)
 	{
 		try
 		{
 			std::vector<cGlumShapeBase::PTR> pimps;
+			pimps.reserve(128);
 
 			/*lock scope*/
+			if (!selectableOnly)
 			{
 				TimerWrapper::cMutexWrapper::Lock lock(mFactoryState.GetGlumShapeMapLock());
 
 				std::vector<unsigned int> list(mFactoryState.GetGlumShapeList());
 				pimps.reserve((mFactoryState.GetGlumShapeList().size()));
+				GetGlumShapes(list, pimps);
+			}
+			else
+			{
+				TimerWrapper::cMutexWrapper::Lock lock(mFactoryState.GetSelectableDrawListLock());
+				
+				std::vector<unsigned int> list(mFactoryState.GetSelectableDrawListIndex());
+				pimps.reserve((mFactoryState.GetSelectableDrawListIndex().size()));
 				GetGlumShapes(list, pimps);
 			}
 
@@ -129,34 +142,37 @@ namespace Glumer
 		}
 	}
 
-	void cGlumShapeFactory::DrawScene(cHUD_Colour *hud_colour)
+	void cGlumShapeFactory::MakeDrawList(std::vector<Bubbles::cBubbleDimensionCracker::COLLISION_RESULT> source, std::vector<cObjectBase *> &drawList)
 	{
+		unsigned int size = source.size();
+		for (unsigned int i = 0; i < size; i += 1)
+		{
+			cObjectMoveableBase::PTR pimp = mFactoryState.GetDrawListMap()[source[i].mDistanceUnits->id];
+			drawList.push_back((cObjectBase *)pimp.ptr);
+		}
+	}
 
-		//const int limit = 1500;
-		//unsigned int limitSize = mFactoryState.GetDrawList().size();
-		//limitSize = limitSize > limit ? limit : limitSize;
-
+	void cGlumShapeFactory::DrawScene(void)
+	{
 		// clip these in order of distance from the camera, then show a clipped list to reduce drawing far away objects
-		std::vector<Bubbles::cBubbleDimensionCracker::TRILATERATION_DATA> data;
+		mRenderClipWidthData.clear();
 
 		cMovement_Camera::PTR cc;
 		cc.ptr = mMovement_Camera;
 		std::vector<Bubbles::cBubbleDimensionCracker::COLLISION_RESULT> results;
-		GetClosest(data, mClipWidth, cc, results);
+		GetClosest(mRenderClipWidthData, mClipWidth, cc, results, false);
 
 		cGlumShapeFactoryState::DrawList newDrawList;
 		MakeDrawList(results, newDrawList);
-		/*std::for_each(mFactoryState.GetDrawList().begin(), mFactoryState.GetDrawList().end(), 
-			cObjectMoveableBase::FireEventShow);
-*/
+
 		std::for_each(newDrawList.begin(), newDrawList.end(),
 			cObjectMoveableBase::FireEventShow);
 	}
 
-	cGlumShape_RegularPolyhedron::PTR cGlumShapeFactory::CreateRegularPolyhedron(cHUD_Colour *hud_colour, PolyhedronType type, float scale, bool start, Glumer::GlumerOnClicked *onClicked)
+	cGlumShape_RegularPolyhedron::PTR cGlumShapeFactory::CreateRegularPolyhedron(PolyhedronType type, float scale, bool start, Glumer::GlumerOnClicked *onClicked)
 	{
 		cGlumShape_RegularPolyhedron::PTR new_one;
-		new_one = mRegularPolyhedron.CreateNew(++mNextFreeID, hud_colour);
+		new_one = mRegularPolyhedron.CreateNew(++mNextFreeID, &mHud_colour);
 		new_one.ptr->FactorySetShape(type);
 		new_one.ptr->FactorySetOnCliced(onClicked);
 
@@ -179,10 +195,10 @@ namespace Glumer
 		return new_one;
 	}
 
-	cGlumShape_RegularPolyhedron::PTR cGlumShapeFactory::CreateGLCommand(cHUD_Colour *hud_colour, float scale, int GL_BEGIN_MODE_TYPE, float floats[], unsigned int floatCount, Glumer::GlumerOnClicked *onClicked)
+	cGlumShape_RegularPolyhedron::PTR cGlumShapeFactory::CreateGLCommand(float scale, int GL_BEGIN_MODE_TYPE, float floats[], unsigned int floatCount, Glumer::GlumerOnClicked *onClicked)
 	{
 		cGlumShape_RegularPolyhedron::PTR new_one;
-		new_one = mRegularPolyhedron.CreateNew(++mNextFreeID, hud_colour);
+		new_one = mRegularPolyhedron.CreateNew(++mNextFreeID, &mHud_colour);
 		new_one.ptr->FactorySetShape(cPolyhedronType::GLCommand);
 		new_one.ptr->FactorySetGlCommand(GL_BEGIN_MODE_TYPE, floats, floatCount);
 		new_one.ptr->FactorySetOnCliced(onClicked);
@@ -205,10 +221,10 @@ namespace Glumer
 		return new_one;
 	}
 
-	cGlumShape_RegularPolyhedron::PTR cGlumShapeFactory::CreateGLCompiledName(cHUD_Colour *hud_colour, float scale, unsigned int compiledName, Glumer::GlumerOnClicked *onClicked)
+	cGlumShape_RegularPolyhedron::PTR cGlumShapeFactory::CreateGLCompiledName(float scale, unsigned int compiledName, Glumer::GlumerOnClicked *onClicked)
 	{
 		cGlumShape_RegularPolyhedron::PTR new_one;
-		new_one = mRegularPolyhedron.CreateNew(++mNextFreeID, hud_colour);
+		new_one = mRegularPolyhedron.CreateNew(++mNextFreeID, &mHud_colour);
 		new_one.ptr->FactorySetShape(cPolyhedronType::GlCompiledName);
 		new_one.ptr->FactorySetGlCompiledName(compiledName);
 		new_one.ptr->FactorySetOnCliced(onClicked);
@@ -231,10 +247,10 @@ namespace Glumer
 		return new_one;
 	}
 
-	cGlumShape_SwitchGadget::PTR cGlumShapeFactory::CreateSwitchGadget(cHUD_Colour *hud_colour, float scale, cTimer_PistonMotion::PistonValueChanged *onpistonchange, GlumerOnClickedBool *onclickedbool, GlumerOnClicked *onclicked)
+	cGlumShape_SwitchGadget::PTR cGlumShapeFactory::CreateSwitchGadget(float scale, cTimer_PistonMotion::PistonValueChanged *onpistonchange, GlumerOnClickedBool *onclickedbool, GlumerOnClicked *onclicked)
 	{
 		cGlumShape_SwitchGadget::PTR new_one;
-		new_one = mSwitchGadget.CreateNew(++mNextFreeID, hud_colour);
+		new_one = mSwitchGadget.CreateNew(++mNextFreeID, &mHud_colour);
 		new_one.ptr->Init(scale, onpistonchange, onclickedbool, onclicked);
 
 		cGlumShapeBase::PTR gsbPimp = { (cGlumShapeBase*)new_one.ptr };
@@ -247,10 +263,10 @@ namespace Glumer
 		return new_one;
 	}
 
-	cGlumShape_Console::PTR cGlumShapeFactory::CreateConsole(cHUD_Colour *hud_colour, float scale)
+	cGlumShape_Console::PTR cGlumShapeFactory::CreateConsole(float scale)
 	{
 		cGlumShape_Console::PTR new_one;
-		new_one = mConsole.CreateNew(++mNextFreeID, hud_colour);
+		new_one = mConsole.CreateNew(++mNextFreeID, &mHud_colour);
 		cGlumShapeBase::PTR gsbPimp = { (cGlumShapeBase*)new_one.ptr };
 		cObjectMoveableBase::PTR pimp = { dynamic_cast<cObjectMoveableBase *>(new_one.ptr) };
 		new_one.ptr->SetScale(scale);

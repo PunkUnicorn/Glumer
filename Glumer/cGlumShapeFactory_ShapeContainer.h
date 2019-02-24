@@ -97,11 +97,11 @@ namespace Glumer
 
 		static void Start(cMovementBase *world_offset)
 		{
-			cHUD_Colour hudcol;
-			hudcol.m_red = 0;
-			hudcol.m_blue = 112;
-			hudcol.m_green = 112;
-			cPolyLetter::CompileLetters(&hudcol);
+			//cHUD_Colour hudcol;
+			//hudcol.m_red = 0;
+			//hudcol.m_blue = 112;
+			//hudcol.m_green = 112;
+			//cPolyLetter::CompileLetters(&hudcol);
 			for (typename std::vector<typename T_GAMESHAPE::PTR>::iterator item = mList.begin();
 				item != mList.end(); item++)
 			{

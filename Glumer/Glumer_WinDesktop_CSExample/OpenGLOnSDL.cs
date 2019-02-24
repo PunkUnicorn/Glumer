@@ -61,7 +61,7 @@ namespace Glumer_WinDesktop_CSExample
             bool success = true;
 
             //Initialize SDL
-            if (SDL.SDL_Init(SDL.SDL_INIT_VIDEO) < 0)
+            if (SDL.SDL_Init(SDL.SDL_INIT_VIDEO | SDL.SDL_INIT_TIMER) < 0)
             {
                 Console.WriteLine("SDL could not initialize! SDL Error: {0}\n", SDL.SDL_GetError());
                 success = false;

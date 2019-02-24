@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace GlumerLib
@@ -21,9 +23,17 @@ namespace GlumerLib
         // otherwise these functions (otherwise only passed into unmanaged code) are invisible to C#, and GC 
         // accidentally disposes them but putting them in a managed list stops GC accidentally disposing them 
         internal static List<object> GCBuster = new List<object>();
+        internal static ConcurrentDictionary<int, object> GCBusterDict = new ConcurrentDictionary<int, object>();
+        private static void GCProtect(int funcPtr, object func)
+        {
+            if (GCBusterDict.TryGetValue(funcPtr, out object value) == false)
+                GCBusterDict.TryAdd(funcPtr, func);
+
+            GCBuster.Add(func);
+        }
 
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
-        public static extern bool InitGlumer();
+        public static extern bool InitGlumer(byte r, byte b, byte g);
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern void UnInitGlumer();
 
@@ -55,7 +65,7 @@ namespace GlumerLib
         public static extern uint CreatePolyhedronInternal(float scale, cPolyhedronType type, float x, float y, float z, OnClicked onClicked);
         public static uint CreatePolyhedron(float scale, cPolyhedronType type, float x, float y, float z, OnClicked onClicked)
         {
-            GCBuster.Add(onClicked);
+            GCProtect(onClicked.Method.GetHashCode(), onClicked);
             return CreatePolyhedronInternal(scale, type, x, y, z, onClicked);
         }
 
@@ -63,14 +73,14 @@ namespace GlumerLib
         public static extern uint CreateGLCommandInternal(float scale, int GL_BEGIN_MODE_TYPE, float x, float y, float z, float[] floats, uint floatCount, OnClicked onClicked);
         public static uint CreateGLCommand(float scale, int GL_BEGIN_MODE_TYPE, float x, float y, float z, float[] floats, uint floatCount, OnClicked onClicked)
         {
-            GCBuster.Add(onClicked);
+            GCProtect(onClicked.Method.GetHashCode(), onClicked);
             return CreateGLCommandInternal(scale, GL_BEGIN_MODE_TYPE, x, y, z, floats, floatCount, onClicked);
         }
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall, EntryPoint = "CreateGLCompiledName")]
         public static extern uint CreateGLCompiledNameInternal(float scale, uint glName, float x, float y, float z, OnClicked onClicked);
         public static uint CreateGLCompiledName(float scale, uint glName, float x, float y, float z, OnClicked onClicked)
         {
-            GCBuster.Add(onClicked);
+            GCProtect(onClicked.Method.GetHashCode(), onClicked);
             return CreateGLCompiledNameInternal(scale, glName, x, y, z, onClicked);
         }
 
@@ -78,7 +88,7 @@ namespace GlumerLib
         public static extern bool SetPolyhedronOnClickedInternal(uint id, OnClicked onClicked);
         public static bool SetPolyhedronOnClicked(uint id, OnClicked onClicked)
         {
-            GCBuster.Add(onClicked);
+            GCProtect(onClicked.Method.GetHashCode(), onClicked);
             return SetPolyhedronOnClicked(id, onClicked);
         }
 
@@ -89,7 +99,7 @@ namespace GlumerLib
         public static extern uint CreateSwitchInternal(float scale, float x, float y, float z, bool pulseWhenOn, OnClickedBool onClickedBool);
         public static uint CreateSwitch(float scale, float x, float y, float z, bool pulseWhenOn, OnClickedBool onClickedBool)
         {
-            GCBuster.Add(onClickedBool);
+            GCProtect(onClickedBool.Method.GetHashCode(), onClickedBool);
             return CreateSwitchInternal(scale, x, y, z, pulseWhenOn, onClickedBool);
         }
 
@@ -97,7 +107,7 @@ namespace GlumerLib
         public static extern uint CreateButtonInternal(float scale, float x, float y, float z, OnClicked onClicked);
         public static uint CreateButton(float scale, float x, float y, float z, OnClicked onClicked)
         {
-            GCBuster.Add(onClicked);
+            GCProtect(onClicked.Method.GetHashCode(), onClicked);
             return CreateButtonInternal(scale, x, y, z, onClicked);
         }
 
@@ -128,7 +138,7 @@ namespace GlumerLib
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern void Start(uint cameraId);
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
-        public static extern void DrawScene(int r, int g, int b);
+        public static extern void DrawScene();
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern void SetDrawClipWidth(float clipwidth);
         [DllImport("Glumer", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]

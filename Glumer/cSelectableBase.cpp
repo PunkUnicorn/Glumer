@@ -55,7 +55,7 @@ cSelectableBase::cSelectableBase(unsigned int id)
 	copywrite nehe productions
 */
 // static class function
-bool cSelectableBase::EventClick(TimerWrapper::cMutexWrapper *lock, std::vector<cObjectBase *> &draw_selectable, std::vector<unsigned int/*glum Id*/> &index, unsigned int mouse_x, unsigned int mouse_y, int mouse_z)
+bool cSelectableBase::EventClick(std::vector<cObjectBase *> &draw_selectable, std::vector<unsigned int/*glum Id*/> &index, std::map<unsigned int/*glum shape ID*/, cObjectMoveableBase::PTR> &drawListMap , unsigned int mouse_x, unsigned int mouse_y, int mouse_z)
 {
     GLint	viewport[4];
     GLuint	*buffer;
@@ -108,6 +108,7 @@ bool cSelectableBase::EventClick(TimerWrapper::cMutexWrapper *lock, std::vector<
             {
               found_name = buffer[3];					// Make Our Selection The First Object
               depth = buffer[1];
+			  break;
             }
 			   // If This Object Is Closer To Us Than The One We Have Selected
             if (buffer[loop*4+1] < GLuint(depth))
@@ -121,27 +122,35 @@ bool cSelectableBase::EventClick(TimerWrapper::cMutexWrapper *lock, std::vector<
         if (hits != 0 && found_name != 0)
         {     
             TimerWrapper::cMutexWrapper::Lock lock(&mSelectableLock);
+			cObjectBase* drawItem = (cObjectBase *) (drawListMap[found_name].ptr);
+			cSelectableBase *selectable = dynamic_cast<cSelectableBase *>(drawItem);
+			if (selectable != NULL)
+			{
+				hit = true;
+				selectable->EventSelected();
+			}
 
-            std::vector<unsigned int>::iterator selected;
-            std::vector<cObjectBase *>::iterator drawItem = draw_selectable.begin();
-            for (
-                   selected = index.begin();
-            	    selected != index.end();
-            	    selected++
-                )
-            {
-               if (*selected == found_name)
-				   {
-                  cSelectableBase *selectable = dynamic_cast<cSelectableBase *>(*drawItem);
-                  if (selectable != NULL)
-                  {
-					  hit = true;
-                     selectable->EventSelected();
-                     break; // the EventSelected may have changed the draw_selectable iterator so get out of here
-                  }
-				   }
-               drawItem++;
-            }
+   //         std::vector<unsigned int>::iterator selected;
+   //         std::vector<cObjectBase *>::iterator drawItem = draw_selectable.begin();
+
+			//for (
+			//	selected = index.begin();
+			//	selected != index.end();
+			//	selected++
+			//	)
+			//{
+			//	if (*selected == found_name)
+			//	{
+			//		cSelectableBase *selectable = dynamic_cast<cSelectableBase *>(*drawItem);
+			//		if (selectable != NULL)
+			//		{
+			//			hit = true;
+			//			selectable->EventSelected();
+			//			break; // the EventSelected may have changed the draw_selectable iterator so get out of here
+			//		}
+			//	}
+			//	drawItem++;
+			//}
         }
         
     //glPopName();

@@ -18,7 +18,8 @@
 namespace Glumer
 {
 
-	class MessageCodeFound : public std::binary_function<std::string, std::string, bool> //all I wanted for christmas was to use bind1st
+	class MessageCodeFound
+		: public std::binary_function<std::string, std::string, bool> //all I wanted for christmas was to use bind1st
 	{
 	public:
 		inline result_type operator () (const first_argument_type& code, const second_argument_type& s) const
@@ -96,6 +97,8 @@ namespace Glumer
 
 		virtual void Start(cMovementBase *world_offset)
 		{
+			cPolyLetter::CompileLetters(mHUD_Colour);
+
 			if (mTimer != NULL) throw - 941;
 			//    cObjectMoveableBase::mObject = this;
 				  //cMovementBase::PTR ptr;
@@ -123,26 +126,26 @@ namespace Glumer
 			std::vector<std::string> copyOfLines;
 			copyOfLines.push_back(setMe);
 			mListName = glGenLists(1);
-			glNewList(mListName, GL_COMPILE);				
-				glPushMatrix();
-					glColor3ub(mHUD_Colour->m_red, mHUD_Colour->m_green, mHUD_Colour->m_blue);
-					glScalef(mScale, mScale, mScale);
+			glNewList(mListName, GL_COMPILE);
+			glPushMatrix();
+			glColor3ub(mHUD_Colour->m_red, mHUD_Colour->m_green, mHUD_Colour->m_blue);
+			glScalef(mScale, mScale, mScale);
 
-					const float mLineWidth = 1.0f;
-					const float mDefaultLineWidth = 0.1f;
+			const float mLineWidth = 1.0f;
+			const float mDefaultLineWidth = 0.1f;
 
-					glLineWidth(0.01f);
-					mTopToBottomIndex = 0;
-					int end = copyOfLines.size() - 1;
-					
-					if (end != -1) {
-						for (int i = 0; i <= end; i++)
-						{
-							DrawLine(copyOfLines[i]);
-						}
-					}
+			glLineWidth(0.01f);
+			mTopToBottomIndex = 0;
+			int end = copyOfLines.size() - 1;
 
-				glPopMatrix();
+			if (end != -1) {
+				for (int i = 0; i <= end; i++)
+				{
+					DrawLine(copyOfLines[i]);
+				}
+			}
+
+			glPopMatrix();
 			glEndList();
 			mIsCompiled = true;
 		}
@@ -227,7 +230,7 @@ namespace Glumer
 		virtual void /*cGlumShape_Console::*/EventShow(void)
 		{
 			if (cGlumShapeBase::IsShown() == false) return;
-		
+
 			if (mIsCompiled)
 			{
 				glCallList(mListName);

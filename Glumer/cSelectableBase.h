@@ -9,6 +9,7 @@
 #include "cObjectMoveableBase.h"
 #include "TimerWrapper.h"
 #include <vector>
+#include <map>
 
 namespace Glumer
 {
@@ -63,7 +64,7 @@ namespace Glumer
 		  Thanks to http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=32 (nehe productions, OpenGL tutorials, lesson 32)
 		  copywrite nehe productions
 		*/
-		static bool EventClick(TimerWrapper::cMutexWrapper *lock, std::vector<cObjectBase *> &draw_selectable, std::vector<unsigned int/*glum Id*/> &index, unsigned int mouse_x, unsigned int mouse_y, int mouse_z);
+		static bool EventClick(std::vector<cObjectBase *> &draw_selectable, std::vector<unsigned int/*glum Id*/> &index, std::map<unsigned int/*glum shape ID*/, cObjectMoveableBase::PTR> &drawListMap, unsigned int mouse_x, unsigned int mouse_y, int mouse_z);
 
 		static void FireEventShow(cObjectBase *showme);
 	};

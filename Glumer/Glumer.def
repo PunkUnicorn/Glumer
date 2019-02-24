@@ -1,12 +1,12 @@
 LIBRARY
 EXPORTS
 
-InitGlumer=_InitGlumer@0
+;InitGlumer=_InitGlumer@0
 UnInitGlumer=_UnInitGlumer@0
 Start=_Start@4
 
 HitTest=_HitTest@12
-DrawScene=_DrawScene@12
+;DrawScene=_DrawScene@12
 
 ;CreateRock=_CreateRock@20
 ;CreateBullet=_CreateBullet@28

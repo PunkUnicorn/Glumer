@@ -8,21 +8,37 @@ namespace Glumer_WinDesktop_CSExample
 {
     class Program
     {
-        private class EventsCallback : GlumerContext.IPeekSdlEvents, GlumerContext.ICallLookAt
+        private class EventsCallback : GlumerContext.IPeekSdlEvents, GlumerContext.ICallLookAt1//, GlumerContext.ICallLookAt2
         {
-            public EventsCallback()
+            private float mouse_x;
+            private float mouse_y;
+            private float mouse_z;
+            private float res_x;
+            private float res_y;
+
+            public EventsCallback(int resx, int resy)
             {
-
+                res_x = resx;
+                res_y = resy;
             }
-
-            public void CallLookAt()
+            public void SetMouse(int x, int y, int z)
+            {
+                mouse_x = x;
+                mouse_y = y;
+                mouse_z = z;
+            }
+            public void CallLookAt1()
             {
                 Glumer.gluLookAt(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f);
             }
 
+            //public void CallLookAt2()
+            //{
+            //    Glumer.gluLookAt(-2f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f);
+            //}
+
             public bool SdlCallback(ref bool quit, int mouse_x, int mouse_y, int mouse_z, SDL.SDL_Event e)
             {
-                //Console.WriteLine(e.ToString());
                 switch (e.type)
                 {
 
@@ -51,7 +67,7 @@ namespace Glumer_WinDesktop_CSExample
                         break;
 
                     case SDL.SDL_EventType.SDL_MOUSEMOTION:
-                        Glumer.PointerMotionChange((uint)mouse_x, (uint)mouse_y, (uint)mouse_z);
+                        SetMouse(mouse_x, mouse_y, mouse_z);
                         break;
 
                     case SDL.SDL_EventType.SDL_MOUSEBUTTONDOWN:
@@ -70,8 +86,8 @@ namespace Glumer_WinDesktop_CSExample
         private const float WORLD_DIAMITER = WORLD_RADIUS * 2.0f;
         private const float WORLD_RADIUS_DISPLAY_CLIPPING = 500.0f;
         private const float farDistance = WORLD_RADIUS - WORLD_RADIUS_DISPLAY_CLIPPING;
-        private static int xres;// = 640; 
-        private static int yres;// = 480;
+        private static int xres = 640; 
+        private static int yres = 480;
 
         static int Main(string[] args)
         {
@@ -92,8 +108,8 @@ namespace Glumer_WinDesktop_CSExample
         {
             var clipWidth = 70f;
             var commitPresenter = new BoxCommitPresenter(-3f, -3f, -10f);
-            var callbacks = new EventsCallback();
-            using (var game = new GlumerContext(farDistance, 0)) // SDL.SDL_WindowFlags.SDL_WINDOW_FULLSCREEN_DESKTOP))
+            var callbacks = new EventsCallback(xres, yres);
+            using (var game = new GlumerContext(0, 64, 177, xres, yres, farDistance, 0)) // SDL.SDL_WindowFlags.SDL_WINDOW_FULLSCREEN_DESKTOP))
             {
                 var commits = LibGit2Gist.CommitTests(gitPath, commitPresenter);
 
@@ -116,11 +132,11 @@ namespace Glumer_WinDesktop_CSExample
                     count += 0.085f;
                 }
 
-                var t = Glumer.CreateConsole(0.3f, -0.4f, -0.4f, -2f);
+                var t = Glumer.CreateConsole(3f, -0.4f, -0.4f, -2f);
                 var tt = "TEST";
                 Glumer.CompileConsoleText(t, tt, (uint) tt.Length);
 
-                game.RunForever(callbacks);
+                game.RunForever(callbacks, callbacks);
             }
         }
 

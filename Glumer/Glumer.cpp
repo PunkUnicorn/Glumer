@@ -17,17 +17,18 @@
 
 using namespace Glumer;
 
-static cHUD_Colour hudColour;
+//static cHUD_Colour hudColour;
 static cGlumShapeFactory factory;
 
-extern "C" DLL_PUBLIC bool STDCALL InitGlumer(void)
+extern "C" DLL_PUBLIC bool STDCALL InitGlumer(byte r, byte b, byte g)
 {
 	Uint32 flags = SDL_INIT_TIMER;
-	if (SDL_WasInit(0) != flags)
+	factory.Init(r, b, g);
+	SDL_Init(SDL_WasInit(0) | SDL_INIT_TIMER);
+	if (SDL_WasInit(flags) != flags)
 	{
 		return false;
 	}
-	factory.Init();
 	return true;
 }
 
@@ -101,7 +102,7 @@ extern "C" DLL_PUBLIC unsigned int STDCALL CreatePolyhedron(float scale, Polyhed
    try
    {
       TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
-	  cGlumShape_RegularPolyhedron::PTR shapePimp = factory.CreateRegularPolyhedron(&hudColour, type, scale, false, onClicked);
+	  cGlumShape_RegularPolyhedron::PTR shapePimp = factory.CreateRegularPolyhedron(type, scale, false, onClicked);
       if (shapePimp.ptr == NULL) return 0;
       cGlumShape_RegularPolyhedron &shape = *shapePimp.ptr;
       cGluperCenter &center = shape.FactoryGetCenter();
@@ -123,7 +124,7 @@ extern "C" DLL_PUBLIC unsigned int STDCALL CreateGLCommand(float scale, int GL_B
 	try
 	{
 		TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
-		cGlumShape_RegularPolyhedron::PTR shapePimp = factory.CreateGLCommand(&hudColour, scale, GL_BEGIN_MODE_TYPE, floats, floatCount, onClicked);
+		cGlumShape_RegularPolyhedron::PTR shapePimp = factory.CreateGLCommand(scale, GL_BEGIN_MODE_TYPE, floats, floatCount, onClicked);
 		if (shapePimp.ptr == NULL) return 0;
 		cGlumShape_RegularPolyhedron &shape = *shapePimp.ptr;
 		cGluperCenter &center = shape.FactoryGetCenter();
@@ -145,7 +146,7 @@ extern "C" DLL_PUBLIC unsigned int STDCALL CreateGLCompiledName(float scale, uns
 	try
 	{
 		TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
-		cGlumShape_RegularPolyhedron::PTR shapePimp = factory.CreateGLCompiledName(&hudColour, scale, compiledName, onClicked);
+		cGlumShape_RegularPolyhedron::PTR shapePimp = factory.CreateGLCompiledName(scale, compiledName, onClicked);
 		if (shapePimp.ptr == NULL) return 0;
 		cGlumShape_RegularPolyhedron &shape = *shapePimp.ptr;
 		cGluperCenter &center = shape.FactoryGetCenter();
@@ -202,7 +203,7 @@ extern "C" DLL_PUBLIC unsigned int STDCALL CreateSwitch(float scale, float x, fl
    {
       TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
       cGlumShape_SwitchGadget::PTR switchPimp
-         = factory.CreateSwitchGadget(&hudColour, scale, pulseWhenOn ? &cGlumShape_SwitchGadget::PistonShift_OnOffPulse :
+         = factory.CreateSwitchGadget(scale, pulseWhenOn ? &cGlumShape_SwitchGadget::PistonShift_OnOffPulse :
                                                                        &cGlumShape_SwitchGadget::PistonShift_OnOffClick, onClickedBool, NULL);
 	  if (switchPimp.ptr == NULL) return 0;
       cGlumShape_SwitchGadget &switchG = *switchPimp.ptr;
@@ -227,7 +228,7 @@ extern "C" DLL_PUBLIC unsigned int STDCALL CreateButton(float scale, float x, fl
    {
       TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
       cGlumShape_SwitchGadget::PTR switchPimp
-         = factory.CreateSwitchGadget(&hudColour, scale, &cGlumShape_SwitchGadget::PistonShift_ButtonClick, NULL, onClicked);
+         = factory.CreateSwitchGadget(scale, &cGlumShape_SwitchGadget::PistonShift_ButtonClick, NULL, onClicked);
 
 	  if (switchPimp.ptr == NULL) return 0;
 
@@ -252,7 +253,7 @@ extern "C" DLL_PUBLIC unsigned int STDCALL CreateConsole(float scale, float x, f
 	try
 	{
 		TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
-		cGlumShape_Console::PTR consolePimp = factory.CreateConsole(&hudColour, scale);
+		cGlumShape_Console::PTR consolePimp = factory.CreateConsole(scale);
 		if (consolePimp.ptr == NULL) return 0;
 		cGlumShape_Console &console = *consolePimp.ptr;
 		cGluperCenter &center = console.FactoryGetCenter();
@@ -373,19 +374,19 @@ extern "C" DLL_PUBLIC void STDCALL Start(unsigned int cameraId)
    { }     
 }
 
-extern "C" DLL_PUBLIC void STDCALL DrawScene(int r, int g, int b)
+extern "C" DLL_PUBLIC void STDCALL DrawScene(void)
 {
    try
    {
-      hudColour.m_red = r;
-      hudColour.m_green = g;
-      hudColour.m_blue = b;
+      //hudColour.m_red = r;
+      //hudColour.m_green = g;
+      //hudColour.m_blue = b;
 
       // lock scope
       {
          TimerWrapper::cMutexWrapper::Lock lock(factory.FactoryLock());
          factory.DoubleBufferCoordinates();
-         factory.DrawScene(&hudColour);
+		 factory.DrawScene();// &hudColour);
       }
    }
    catch (...)

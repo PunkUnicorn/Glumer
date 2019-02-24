@@ -9,9 +9,13 @@ namespace Glumer_WinDesktop_CSExample
 {
     public class GlumerContext : IDisposable
     {
-        public interface ICallLookAt
+        public interface ICallLookAt1
         {
-            void CallLookAt();
+            void CallLookAt1();
+        }
+        public interface ICallLookAt2
+        {
+            void CallLookAt2();
         }
 
         public interface IPeekSdlEvents
@@ -29,24 +33,24 @@ namespace Glumer_WinDesktop_CSExample
 
         //public delegate bool SdlCallback(ref bool quit, int mouse_x, int mouse_y, int mouse_z, SDL.SDL_Event e);
 
-        public GlumerContext(float farDistance, SDL.SDL_WindowFlags additional = 0)
+        public GlumerContext(byte r, byte b, byte g, float farDistance, SDL.SDL_WindowFlags additional = 0)
         {
             // Init SDL window and GL engine
             OpenGLOnSDL.Init(farDistance, out gWindow, out gContext, out int xres, out int yres, additional);
-            GlumerStartupInternal(xres, yres, farDistance);
+            GlumerStartupInternal(r, b, g, xres, yres, farDistance);
 
         }
-        public GlumerContext(int xres, int yres, float farDistance, SDL.SDL_WindowFlags additional = 0)
+        public GlumerContext(byte r, byte b, byte g, int xres, int yres, float farDistance, SDL.SDL_WindowFlags additional = 0)
         { 
             // Init SDL window and GL engine
             OpenGLOnSDL.Init(xres, yres, farDistance, out gWindow, out gContext, additional);
-            GlumerStartupInternal(xres, yres, farDistance);
+            GlumerStartupInternal(r, b, g, xres, yres, farDistance);
         }
 
-        private void GlumerStartupInternal(int xres, int yres, float farDistance)
+        private void GlumerStartupInternal(byte r, byte b, byte g, int xres, int yres, float farDistance)
         {
             // Init Glumer engine
-            Glumer.InitGlumer();
+            Glumer.InitGlumer(r, b, g);
             cameraId = Glumer.CreateCamera();
             Glumer.SetLocation(cameraId, 0.0f, 0.0f, 0.0f);
             Glumer.Start(cameraId);
@@ -77,7 +81,7 @@ namespace Glumer_WinDesktop_CSExample
             Glumer.AddConsoleCode(DebugText, code4(id, z), (uint)code1(id).Length);
         }
 
-        public void RunForever(IPeekSdlEvents sdlCallback = null, ICallLookAt iCallLookAt = null)
+        public void RunForever(IPeekSdlEvents sdlCallback = null, ICallLookAt1 iCallLookAt = null, ICallLookAt2 iCallLookAt2 = null)
         {
             bool quit = false;
             int mouse_x = 0;
@@ -87,7 +91,7 @@ namespace Glumer_WinDesktop_CSExample
             var debug = Glumer.CreateConsole(0.8f, -2.5f, 1f, -5f);
             Glumer.SetAnchorMatchingRotationTo(debug, cameraId);
 
-
+            bool duelRender = iCallLookAt2 != null;
             var fpsSw = new Stopwatch();
             var delaySw = new Stopwatch();
             Glumer.SetDrawClipWidth(70f);
@@ -100,11 +104,18 @@ namespace Glumer_WinDesktop_CSExample
                 #region Render Screen
                 Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
                 
-                iCallLookAt?.CallLookAt();
-
+                iCallLookAt?.CallLookAt1();
                 Gl.PushMatrix();
-                Glumer.DrawScene(0, 177, 64);
+                Glumer.DrawScene();
                 Gl.PopMatrix();
+
+                if (duelRender)
+                {
+                    iCallLookAt2.CallLookAt2();
+                    Gl.PushMatrix();
+                    Glumer.DrawScene();
+                    Gl.PopMatrix();
+                }
                 Gl.Flush();
 
                 //Update screen
@@ -137,6 +148,7 @@ namespace Glumer_WinDesktop_CSExample
                         case SDL.SDL_EventType.SDL_MOUSEMOTION:
                             mouse_x = e.motion.x;
                             mouse_y = e.motion.y;
+                            Glumer.PointerMotionChange((uint)mouse_x, (uint)mouse_y, 2);
                             break;
 
                         case SDL.SDL_EventType.SDL_MOUSEBUTTONDOWN:
