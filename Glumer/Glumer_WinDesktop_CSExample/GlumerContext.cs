@@ -91,6 +91,9 @@ namespace Glumer_WinDesktop_CSExample
             var debug = Glumer.CreateConsole(0.8f, -2.5f, 1f, -5f);
             Glumer.SetAnchorMatchingRotationTo(debug, cameraId);
 
+            Glumer.IronPythonConsole(debug);
+
+
             bool duelRender = iCallLookAt2 != null;
             var fpsSw = new Stopwatch();
             var delaySw = new Stopwatch();

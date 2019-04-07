@@ -21,7 +21,7 @@ namespace Glumer_WinDesktop_CSExample
                 res_x = resx;
                 res_y = resy;
             }
-            public void SetMouse(int x, int y, int z)
+            private void SetMouse(int x, int y, int z)
             {
                 mouse_x = x;
                 mouse_y = y;
@@ -111,7 +111,7 @@ namespace Glumer_WinDesktop_CSExample
             var callbacks = new EventsCallback(xres, yres);
             using (var game = new GlumerContext(0, 64, 177, xres, yres, farDistance, 0)) // SDL.SDL_WindowFlags.SDL_WINDOW_FULLSCREEN_DESKTOP))
             {
-                var commits = LibGit2Gist.CommitTests(gitPath, commitPresenter);
+                var commits = await LibGit2Gist.CommitTests(gitPath, commitPresenter);
 
                 var boxList = new List<uint>();
                 //boxList.Add(Glumer.CreatePolyhedron(1f, Glumer.cPolyhedronType.Octahedron, 0.7f, -1.2f, -5f, game.DebugDump));
@@ -131,6 +131,7 @@ namespace Glumer_WinDesktop_CSExample
                     Glumer.SetOrientation(box, 25f + count, 0.0f + count, 0.0f + count, 0.10f + count, count);
                     count += 0.085f;
                 }
+
 
                 var t = Glumer.CreateConsole(3f, -0.4f, -0.4f, -2f);
                 var tt = "TEST";

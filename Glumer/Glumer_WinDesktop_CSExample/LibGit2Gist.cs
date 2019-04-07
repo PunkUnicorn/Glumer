@@ -10,7 +10,7 @@ namespace Glumer_WinDesktop_CSExample
     public static class LibGit2Gist
     {
         public static Repository repo = null;
-        public static List<Commit> CommitTests(string gitRepositoryPath, IPresentCommit commitPresenter)
+        public static async Task<List<Commit>> CommitTests(string gitRepositoryPath, IPresentCommit commitPresenter)
         {
             repo = new Repository(gitRepositoryPath);
 
@@ -28,34 +28,47 @@ namespace Glumer_WinDesktop_CSExample
             return commits;
         }
 
-        //    List<Commit> commits = null;
+        //    //List<Commit> commits = null;
         //    if (repo == null)
         //    {
         //        repo = new Repository(gitRepositoryPath);
         //    }
-
-        //    var getCommit = Task< List<Commit> >.Run(delegate ()
+        //    return await Task<List<Commit>>.Run(delegate ()
+        //    {
+        //        var commits = repo.Commits.QueryBy(new CommitFilter
         //        {
-        //            commits = repo.Commits.QueryBy(new CommitFilter
-        //            {
-        //                SortBy = CommitSortStrategies.Topological
-        //            })
-        //            .Take(10)
-        //            .ToList();
-        //            return commits;
+        //            SortBy = CommitSortStrategies.Topological
         //        })
-        //        .ContinueWith(delegate (Task<List<Commit>> task)
-        //        {
-        //            foreach (Commit commit in commits)
-        //            {
-        //                commitPresenter.Present(commit);
-        //            }
-        //            return commits;
-        //        });
+        //        .ToList();
 
-        //    return getCommit;
+        //        foreach (Commit commit in commits)
+        //        {
+        //            commitPresenter.Present(commit);
+        //        }
+        //        return commits;
+
+        //    });
+
+        //    //var getCommit = await Task<List<Commit>>.Run(delegate ()
+        //    //    {
+        //    //      var commits = repo.Commits.QueryBy(new CommitFilter
+        //    //      {
+        //    //          SortBy = CommitSortStrategies.Topological
+        //    //      })
+        //    //      .ToList();
+        //    //      return commits;
+        //    //    })
+        //    //    .ContinueWith(delegate (Task<List<Commit>> task)
+        //    //    {
+        //    //        foreach (Commit commit in task.Result)
+        //    //        {
+        //    //            commitPresenter.Present(commit);
+        //    //        }
+        //    //        return task;
+        //    //    });
+
+        //    //return await getCommit;
         //}
-    
 
         public static void Gist(string gitRepositoryPath)
         {

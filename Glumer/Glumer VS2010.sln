@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glumer_WinDesktop_CSExample
 		{9E5D98B2-8425-4403-894C-A7EA1326DD6A} = {9E5D98B2-8425-4403-894C-A7EA1326DD6A}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glumer462", "..\Glumer462\Glumer462.csproj", "{E15E25BA-DD65-4522-BB47-FF54F108530F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,14 @@ Global
 		{14AC6B0D-7ABB-4817-92AB-DA467D9799B9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{14AC6B0D-7ABB-4817-92AB-DA467D9799B9}.Release|Win32.ActiveCfg = Release|Any CPU
 		{14AC6B0D-7ABB-4817-92AB-DA467D9799B9}.Release|Win32.Build.0 = Release|Any CPU
+		{E15E25BA-DD65-4522-BB47-FF54F108530F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E15E25BA-DD65-4522-BB47-FF54F108530F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E15E25BA-DD65-4522-BB47-FF54F108530F}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{E15E25BA-DD65-4522-BB47-FF54F108530F}.Debug|Win32.Build.0 = Debug|Any CPU
+		{E15E25BA-DD65-4522-BB47-FF54F108530F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E15E25BA-DD65-4522-BB47-FF54F108530F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E15E25BA-DD65-4522-BB47-FF54F108530F}.Release|Win32.ActiveCfg = Release|Any CPU
+		{E15E25BA-DD65-4522-BB47-FF54F108530F}.Release|Win32.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
